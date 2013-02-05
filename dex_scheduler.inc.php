@@ -160,7 +160,7 @@ Price:
 <?php } ?>     
     <?php if (dex_bccf_get_option('dexcv_enable_captcha', TDE_BCCFDEFAULT_dexcv_enable_captcha) != 'false') { ?> if (form.hdcaptcha_dex_bccf_post.value == '')
     {
-        alert('<?php echo dex_bccf_get_option('cv_text_enter_valid_captcha', TDE_BCCFDEFAULT_dexcv_text_enter_valid_captcha); ?>');
+        alert('<?php echo dex_bccf_get_option('cv_text_enter_valid_captcha', DEX_BCCF_DEFAULT_dexcv_text_enter_valid_captcha); ?>');
         return false;
     }
     // check captcha
@@ -173,7 +173,7 @@ Price:
     if (result == "captchafailed")
     {
         $dexQuery("#dex_bccf_captchaimg").attr('src', $dexQuery("#dex_bccf_captchaimg").attr('src')+'&'+Date());
-        alert('<?php echo dex_bccf_get_option('cv_text_enter_valid_captcha', TDE_BCCFDEFAULT_dexcv_text_enter_valid_captcha); ?>');
+        alert('<?php echo dex_bccf_get_option('cv_text_enter_valid_captcha', DEX_BCCF_DEFAULT_dexcv_text_enter_valid_captcha); ?>');
         return false;
     }
     else <?php } ?>
