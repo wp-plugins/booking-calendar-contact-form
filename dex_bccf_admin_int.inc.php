@@ -191,7 +191,7 @@ if (cp_bccf_is_administrator() || $mycalendarrows[0]->conwer == $current_user->I
  <div id="metabox_basic_settings" class="postbox" >
   <h3 class='hndle' style="padding:5px;"><span>Form Builder</span></h3>
   <div class="inside">
-
+     <em>* Note: The Form Builder is read-only in this version.</em>
      <input type="hidden" name="form_structure" id="form_structure" size="180" value="<?php echo str_replace("\r","",str_replace("\n","",esc_attr(dex_bccf_cleanJSON(dex_bccf_get_option('form_structure', DEX_BCCF_DEFAULT_form_structure))))); ?>" />
 
      <link href="<?php echo plugins_url('css/style.css', __FILE__); ?>" type="text/css" rel="stylesheet" />

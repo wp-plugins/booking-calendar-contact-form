@@ -44,8 +44,7 @@ wp_localize_script('dex_bccf_builder_script', 'dex_bccf_fbuilder_config', array(
 <link href="<?php echo plugins_url('css/stylepublic.css', __FILE__); ?>" type="text/css" rel="stylesheet" />
 <link href="<?php echo plugins_url('css/cupertino/jquery-ui-1.8.20.custom.css', __FILE__); ?>" type="text/css" rel="stylesheet" />
 <form name="dex_bccf_pform" id="dex_bccf_pform" action="<?php get_site_url(); ?>" method="post" onsubmit="return doValidate(this);">
- <input name="dex_bccf_post" type="hidden" id="1" />
- 
+<input name="dex_bccf_post" type="hidden" id="1" />
 <?php if ($option_calendar_enabled != 'false') { ?>
 <link rel="stylesheet" type="text/css" href="<?php echo plugins_url('TDE_RCalendar/all-css.css', __FILE__); ?>" />
 <script>
@@ -93,14 +92,12 @@ var dex_global_start_weekday = '<?php echo dex_bccf_get_option('calendar_weekday
 <?php
   }
 ?>
-
 <div id="bccf_display_price"> 
 Price:          
 </div>
 <?php } else { ?>
   <input name="dex_item" id="dex_item" type="hidden" value="<?php echo $myrows[0]->id; ?>" />
-<?php } ?>      
-      
+<?php } ?>            
 <div id="selddiv" style="font-weight: bold;margin-top:0px;padding-top:0px;padding-right:3px;padding-left:3px;"></div>
 <script type="text/javascript"><?php if ($option_calendar_enabled != 'false') { ?>
  var dex_current_calendar_item;
@@ -134,7 +131,7 @@ Price:
             $dexQuery = jQuery.noConflict();
             $dexQuery.ajax({
               type: "GET",
-              url: "<?php echo cp_bccf_get_site_url(); ?>/?dex_bccf=getcost&dex_item="+dex_current_calendar_item+"&from="+d1+"&to="+d2,
+              url: "<?php echo cp_bccf_get_site_url(); ?>/?dex_bccf=getcost"+String.fromCharCode(38)+"dex_item="+dex_current_calendar_item+""+String.fromCharCode(38)+"from="+d1+""+String.fromCharCode(38)+"to="+d2,
             }).done(function( html ) {
                 $dexQuery("#bccf_display_price").append('<b><?php _e("Cost"); ?>:</b> <?php echo dex_bccf_get_option('currency', DEX_BCCF_DEFAULT_CURRENCY); ?> '+html);
             });
@@ -147,8 +144,7 @@ Price:
         document.getElementById("bccf_display_price").innerHTML = '';
     }    
  } 
- setInterval('updatedate()',200);
-<?php } ?> 
+ setInterval('updatedate()',200);<?php } ?> 
  function doValidate(form)
  {
     document.dex_bccf_pform.dex_bccf_ref_page.value = document.location;<?php if ($option_calendar_enabled != 'false') { ?>    
@@ -156,11 +152,10 @@ Price:
     {
         alert('<?php _e('Please select start and end dates'); ?>.');
         return false;
-    }
-<?php } ?>     
-    <?php if (dex_bccf_get_option('dexcv_enable_captcha', TDE_BCCFDEFAULT_dexcv_enable_captcha) != 'false') { ?> if (form.hdcaptcha_dex_bccf_post.value == '')
+    }<?php } ?>     
+<?php if (dex_bccf_get_option('dexcv_enable_captcha', TDE_BCCFDEFAULT_dexcv_enable_captcha) != 'false') { ?> if (form.hdcaptcha_dex_bccf_post.value == '')
     {
-        alert('<?php echo dex_bccf_get_option('cv_text_enter_valid_captcha', TDE_BCCFDEFAULT_dexcv_text_enter_valid_captcha); ?>');
+        alert('<?php echo dex_bccf_get_option('cv_text_enter_valid_captcha', DEX_BCCF_DEFAULT_dexcv_text_enter_valid_captcha); ?>');
         return false;
     }
     // check captcha
@@ -173,22 +168,17 @@ Price:
     if (result == "captchafailed")
     {
         $dexQuery("#dex_bccf_captchaimg").attr('src', $dexQuery("#dex_bccf_captchaimg").attr('src')+'&'+Date());
-        alert('<?php echo dex_bccf_get_option('cv_text_enter_valid_captcha', TDE_BCCFDEFAULT_dexcv_text_enter_valid_captcha); ?>');
+        alert('<?php echo dex_bccf_get_option('cv_text_enter_valid_captcha', DEX_BCCF_DEFAULT_dexcv_text_enter_valid_captcha); ?>');
         return false;
     }
     else <?php } ?>
         return true;
  }
 </script>
-
-
-  <input type="hidden" name="dex_bccf_pform_process" value="1" />
-  <input type="hidden" name="dex_bccf_id" value="<?php echo CP_BCCF_CALENDAR_ID; ?>" />
-  <input type="hidden" name="dex_bccf_ref_page" value="<?php esc_attr(cp_bccf_get_FULL_site_url); ?>" />
-
-  <input type="hidden" name="form_structure" id="form_structure" size="180" value="<?php echo str_replace("\r","",str_replace("\n","",esc_attr(dex_bccf_cleanJSON(dex_bccf_get_option('form_structure', DEX_BCCF_DEFAULT_form_structure))))); ?>" />
-
-
+<input type="hidden" name="dex_bccf_pform_process" value="1" />
+<input type="hidden" name="dex_bccf_id" value="<?php echo CP_BCCF_CALENDAR_ID; ?>" />
+<input type="hidden" name="dex_bccf_ref_page" value="<?php esc_attr(cp_bccf_get_FULL_site_url); ?>" />
+<input type="hidden" name="form_structure" id="form_structure" size="180" value="<?php echo str_replace("\r","",str_replace("\n","",esc_attr(dex_bccf_cleanJSON(dex_bccf_get_option('form_structure', DEX_BCCF_DEFAULT_form_structure))))); ?>" />
   <div id="fbuilder">
       <div id="formheader"></div>
       <div id="fieldlist"></div>
