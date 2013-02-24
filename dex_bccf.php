@@ -633,10 +633,8 @@ function dex_bccf_check_posted_data()
 
 
     // get form info
-    //---------------------------
-    @include_once dirname( __FILE__ ) . '/JSON.inc.php';
-    $json = new Services_JSON_dex_bccf();
-    $form_data = $json->decode(dex_bccf_cleanJSON(dex_bccf_get_option('form_structure', DEX_BCCF_DEFAULT_form_structure)));
+    //---------------------------    
+    $form_data = json_decode(dex_bccf_cleanJSON(dex_bccf_get_option('form_structure', DEX_BCCF_DEFAULT_form_structure)));
     $fields = array();
     foreach ($form_data[0] as $item)
         $fields[$item->name] = $item->title;
@@ -862,7 +860,7 @@ function dex_bccf_check_IPN_verification() {
 	if ($payment_status != 'Completed' && $payment_type != 'echeck')
 	    return;
 
-	if ($payment_type == 'echeck' && $payment_status == 'Completed')
+	if ($payment_type == 'echeck' && $payment_status != 'Pending')
 	    return;
 
     dex_process_ready_to_go_bccf($_GET["itemnumber"], $payer_email);

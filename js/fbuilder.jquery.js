@@ -1,8 +1,9 @@
+var cpfb_started=false;
 (function($) {
 	$.fn.fbuilderbccfree = function(options){
 		var opt = $.extend({},
 				{
-					typeList:new Array({id:"ftext",name:"Single Line Text"},{id:"fnumber",name:"Number"},{id:"femail",name:"Email"},{id:"fdate",name:"Date"},{id:"ftextarea",name:"Paragraph Text"},{id:"fcheck",name:"Checkboxes"},{id:"fradio",name:"Multiple Choice"},{id:"fdropdown",name:"Dropdown"}),
+	   				typeList:new Array({id:"ftext",name:"Single Line Text"},{id:"fnumber",name:"Number"},{id:"femail",name:"Email"},{id:"fdate",name:"Date"},{id:"ftextarea",name:"Paragraph Text"},{id:"fcheck",name:"Checkboxes"},{id:"fradio",name:"Multiple Choice"},{id:"fdropdown",name:"Dropdown"},{id:"ffile",name:"Upload file"},{id:"fSectionBreak",name:"Section break"},{id:"fPhone",name:"Phone field"},{id:"fCommentArea",name:"Comment Area"}),
 					pub:false,
 					title:""
 				},options, true);
@@ -16,6 +17,8 @@
 						dateddmmyyyy: "Please enter a valid date with this format(dd/mm/yyyy)",
 						number: "Please enter a valid number.",
 						digits: "Please enter only digits.",
+						maxlength: $.validator.format("Please enter no more than {0} characters"),
+                        minlength: $.validator.format("Please enter at least {0} characters."),
 						max: $.validator.format("Please enter a value less than or equal to {0}."),
 						min: $.validator.format("Please enter a value greater than or equal to {0}.")
 					}
@@ -38,78 +41,135 @@
 		var itemSelected = -2;
 		editItem = function(id) {
 			$('#tabs').tabs('select', 1);
-			$('#tabs-2').html(items[id].showAllSettings());
+			try { $('#tabs-2').html(items[id].showAllSettings()); } catch (e) {}
 			itemSelected = id;
 			$("#sTitle").keyup(function(){
-				alert('* Note: The Form Builder is read-only in this version.');
+				var str = $(this).val();
+				items[id].title = str.replace(/\n/g,"<br />");
+				reloadItems();
 			});
 			$("#sName").keyup(function(){
-				alert('* Note: The Form Builder is read-only in this version.');
+				items[id].name = $(this).val(); 
+				reloadItems();
 			});
 			$("#sPredefined").keyup(function(){
-				alert('* Note: The Form Builder is read-only in this version.');
+				items[id].predefined = $(this).val();
+				reloadItems();
 			});
+			$("#sDropdownRange").keyup(function(){
+				items[id].dropdownRange = $(this).val();
+				reloadItems();
+			});			
 			$("#sRequired").click(function(){
-				alert('* Note: The Form Builder is read-only in this version.');
+				items[id].required = $(this).is(':checked');
+				reloadItems();
+			});
+			$("#sShowDropdown").click(function(){
+				items[id].showDropdown = $(this).is(':checked');
+				if ($(this).is(':checked'))
+				    $("#divdropdownRange").css("display","");
+				else
+				    $("#divdropdownRange").css("display","none");    
+				reloadItems();
 			});
 			$("#sSize").change(function(){
-				alert('* Note: The Form Builder is read-only in this version.');
+				items[id].size = $(this).val();
+				reloadItems();
 			});
 			$("#sFormat").change(function(){
-				alert('* Note: The Form Builder is read-only in this version.');
+				items[id].dformat = $(this).val();
+				reloadItems();
 			});
 			$("#sLayout").change(function(){
-				alert('* Note: The Form Builder is read-only in this version.');
+				items[id].layout = $(this).val();
+				reloadItems();
 			});
 			$("#sMin").change(function(){
-				alert('* Note: The Form Builder is read-only in this version.');
+				items[id].min = $(this).val();
+				reloadItems();
 			});
 			$("#sMax").change(function(){
-				alert('* Note: The Form Builder is read-only in this version.');
+				items[id].max = $(this).val();
+				reloadItems();
 			});
 			$(".choice_remove").click(function(){
-				alert('* Note: The Form Builder is read-only in this version.');
+				if (items[id].choices.length==1)
+					items[id].choices[0]="";
+				else
+					items[id].choices.splice($(this).attr("i"),1);
+				if (items[id].ftype=="fcheck")
+				{
+					if (items[id].choiceSelected.length==1)
+						items[id].choiceSelected[0]="";
+					else
+						items[id].choiceSelected.splice($(this).attr("i"),1);
+				}
+				editItem(id);
+				reloadItems();
 			});
 			$(".choice_add").click(function(){
-				alert('* Note: The Form Builder is read-only in this version.');
+				items[id].choices.splice($(this).attr("i")+1,0,"");
+				if (items[id].ftype=="fcheck")
+					items[id].choiceSelected.splice($(this).attr("i")+1,0,false);
+				editItem(id);
+				reloadItems();
 			});
 			$(".choice_text").keyup(function(){
-				alert('* Note: The Form Builder is read-only in this version.');
+				items[id].choices[$(this).attr("i")]= $(this).val();
+				reloadItems();
 			});
 			$(".choice_radio").click(function(){
-				alert('* Note: The Form Builder is read-only in this version.');
+				if ($(this).is(':checked'))
+					items[id].choiceSelected = items[id].choices[$(this).attr("i")];
+				reloadItems();
 			});
 			$(".choice_select").click(function(){
-				alert('* Note: The Form Builder is read-only in this version.');
+				if ($(this).is(':checked'))
+					items[id].choiceSelected = items[id].choices[$(this).attr("i")];
+				reloadItems();
 			});
 			$(".choice_check").click(function(){
-				alert('* Note: The Form Builder is read-only in this version.');
+				if ($(this).is(':checked'))
+					items[id].choiceSelected[$(this).attr("i")] = true;
+				else
+					items[id].choiceSelected[$(this).attr("i")] = false;
+				reloadItems();
 			});
 			$("#sUserhelp").keyup(function(){
-				alert('* Note: The Form Builder is read-only in this version.');
+				items[id].userhelp = $(this).val();
+				reloadItems();
 			});
 			$("#sCsslayout").keyup(function(){
-				alert('* Note: The Form Builder is read-only in this version.');
+				items[id].csslayout = $(this).val();
+				reloadItems();
 			});
 		};
 		editForm = function() {
 			$('#tabs-3').html(theForm.showAllSettings());
 			itemSelected = -1;
 			$("#fTitle").keyup(function(){
-				alert('* Note: The Form Builder is read-only in this version.');
+				theForm.title = $(this).val();
+				reloadItems();
 			});
 			$("#fDescription").keyup(function(){
-				alert('* Note: The Form Builder is read-only in this version.');
+				theForm.description = $(this).val();
+				reloadItems();
 			});
 			$("#fLayout").change(function(){
-				alert('* Note: The Form Builder is read-only in this version.');
+				theForm.formlayout = $(this).val();
+				reloadItems();
 			});
 
 		};
 		removeItem = function(index) {
-			alert('* Note: The Form Builder is read-only in this version.');
+			items.splice(index,1);
+			for (var i=0;i<items.length;i++)
+				items[i].index = i;
+			$('#tabs').tabs('select', 0);
+			reloadItems();
 		}
 		reloadItems = function() {
+		    if (cpfb_started){alert('* Note: The Form Builder is read-only in this version.');return;}else {cpfb_started=true;}
 			for (var i=0;i<showSettings.formlayoutList.length;i++)
 				$("#fieldlist").removeClass(showSettings.formlayoutList[i].id);
 			$("#fieldlist").addClass(theForm.formlayout);
@@ -157,7 +217,7 @@
 				$(this).siblings().removeClass("ui-selected");
 				$(this).addClass("ui-selected");
 			});
-			//ffunct.saveData("form_structure");
+			
 			//email list
 			var str = "";
 			for (var i=0;i<items.length;i++)
@@ -188,15 +248,20 @@
 					$(this).addClass("ui-selected");
 				});
 				if (items[i].ftype=="fdate")
-					$( "#"+items[i].name ).datepicker({dateFormat: items[i].dformat.replace(/yyyy/g,"yy")});
+				{
+				    if (items[i].showDropdown) 				
+					    $( "#"+items[i].name ).datepicker({changeMonth: true,changeYear: true,yearRange: items[i].dropdownRange,dateFormat: items[i].dformat.replace(/yyyy/g,"yy")});
+					else
+					    $( "#"+items[i].name ).datepicker({ dateFormat: items[i].dformat.replace(/yyyy/g,"yy")});
+				}	
+					
 			}
 			if (i>0)
 			{
 
 				//$("#form1").append('<div class="fields"><label>&nbsp;</label><div class="dfield"><input type="submit" class="button submit" id="btnSave" value="Save"/></div><div class="clearer"></div></div>');
 				//$( ".button").button();
-
-				$.validator.addMethod("dateddmmyyyy", function(value, element) {
+                $.validator.addMethod("dateddmmyyyy", function(value, element) {				    
 				  return this.optional(element) || /^(?:[1-9]|0[1-9]|1[0-9]|2[0-9]|3[0-1])[\/\-](?:[1-9]|0[1-9]|1[0-2])[\/\-]\d{4}$/.test(value);
 				});
 
@@ -205,10 +270,7 @@
 				});//{required: true, range: [11, 22]}
 
 
-				$('.checkboxfields div input').click(function() {
-					alert('dfsd');
-				  $("#list0").valid();
-				});
+
 
 			}
 		}
@@ -217,34 +279,35 @@
 			layoutList:new Array({id:"one_column",name:"One Column"},{id:"two_column",name:"Two Column"},{id:"three_column",name:"Three Column"},{id:"side_by_side",name:"Side by Side"}),
 			formlayoutList:new Array({id:"top_aligned",name:"Top Aligned"},{id:"left_aligned",name:"Left Aligned"},{id:"right_aligned",name:"Right Aligned"}),
 			showTitle: function(f,v) {
-				return '<label>Field Type: '+getNameByIdFromType(f)+'</label><br /><br /><label>Field Label</label><textarea readonly class="large" name="sTitle" id="sTitle">'+v+'</textarea>';
+				return '<label>Field Type: '+getNameByIdFromType(f)+'</label><br /><br /><label>Field Label</label><textarea class="large" name="sTitle" id="sTitle">'+v+'</textarea>';
 			},
 			showName: function(v) {
-				return '<label>Field Name</label><input readonly class="large" name="sName" id="sName" value="'+v+'" />';
+				return '<div><label>Field tag for the message (optional):</label><input readonly="readonly" class="large" name="sNametag" id="sNametag" value="&lt;%'+v+'%&gt;" />'+
+				       '<input style="display:none" readonly="readonly" class="large" name="sName" id="sName" value="'+v+'" /></div>';
 			},
 			showPredefined: function(v) {
-				return '<label>Predefined Value</label><textarea readonly class="large" name="sPredefined" id="sPredefined">'+v+'</textarea>';
+				return '<label>Predefined Value</label><textarea class="large" name="sPredefined" id="sPredefined">'+v+'</textarea>';
 			},
 			showRequired: function(v) {
-				return '<div><input type="checkbox" name="sRequired" readonly id="sRequired" '+((v)?"checked":"")+'><label>Required</label></div>';
+				return '<div><input type="checkbox" name="sRequired" id="sRequired" '+((v)?"checked":"")+'><label>Required</label></div>';
 			},
 			showSize: function(v) {
 				var str = "";
 				for (var i=0;i<this.sizeList.length;i++)
 					str += '<option value="'+this.sizeList[i].id+'" '+((this.sizeList[i].id==v)?"selected":"")+'>'+this.sizeList[i].name+'</option>';
-				return '<label>Field Size</label><br /><select readonly name="sSize" id="sSize">'+str+'</select>';
+				return '<label>Field Size</label><br /><select name="sSize" id="sSize">'+str+'</select>';
 			},
 			showLayout: function(v) {
 				var str = "";
 				for (var i=0;i<this.layoutList.length;i++)
 					str += '<option value="'+this.layoutList[i].id+'" '+((this.layoutList[i].id==v)?"selected":"")+'>'+this.layoutList[i].name+'</option>';
-				return '<label>Field Layout</label><br /><select readonly name="sLayout" id="sLayout">'+str+'</select>';
+				return '<label>Field Layout</label><br /><select name="sLayout" id="sLayout">'+str+'</select>';
 			},
 			showUserhelp: function(v) {
-				return '<label>Instruccions for User</label><textarea readonly class="large" name="sUserhelp" id="sUserhelp">'+v+'</textarea>';
+				return '<label>Instruccions for User</label><textarea class="large" name="sUserhelp" id="sUserhelp">'+v+'</textarea>';
 			},
 			showCsslayout: function(v) {
-				return '<label>Add Css Layout Keywords</label><input readonly class="large" name="sCsslayout" id="sCsslayout" value="'+v+'" />';
+				return '<label>Add Css Layout Keywords</label><input class="large" name="sCsslayout" id="sCsslayout" value="'+v+'" />';
 			}
 		};
 		var fform=function(){};
@@ -262,7 +325,7 @@
 					var str = "";
 					for (var i=0;i<showSettings.formlayoutList.length;i++)
 						str += '<option value="'+showSettings.formlayoutList[i].id+'" '+((showSettings.formlayoutList[i].id==this.formlayout)?"selected":"")+'>'+showSettings.formlayoutList[i].name+'</option>';
-					return '<div><label>Form Name</label><input class="large" readonly name="fTitle" id="fTitle" value="'+this.title+'" /></div><div><label>Description</label><textarea readonly class="large" name="fDescription" id="fDescription">'+this.description+'</textarea></div><div><label>Label Placement</label><br /><select readonly name="fLayout" id="fLayout">'+str+'</select></div>';
+					return '<div><label>Form Name</label><input class="large" name="fTitle" id="fTitle" value="'+this.title+'" /></div><div><label>Description</label><textarea class="large" name="fDescription" id="fDescription">'+this.description+'</textarea></div><div><label>Label Placement</label><br /><select name="fLayout" id="fLayout">'+str+'</select></div>';
 				}
 
 		});
@@ -274,8 +337,13 @@
 				ftype:"",
 				userhelp:"",
 				csslayout:"",
-				required:false,
 				init:function(){
+				},
+				showSpecialData:function(){
+					if(typeof this.showSpecialDataInstance != 'undefined')
+						return this.showSpecialDataInstance();
+					else
+						return "";
 				},
 				showPredefined:function(){
 					if(typeof this.predefined != 'undefined')
@@ -284,7 +352,7 @@
 						return "";
 				},
 				showRequired:function(){
-					if(typeof this.required != 'undefined')
+				    if(typeof this.required != 'undefined')
 						return showSettings.showRequired(this.required);
 					else
 						return "";
@@ -328,7 +396,7 @@
 						return showSettings.showCsslayout(this.csslayout);
 				},
 				showAllSettings:function(){
-						return this.showTitle()+this.showName()+this.showSize()+this.showLayout()+this.showFormat()+this.showRange()+this.showRequired()+this.showPredefined()+this.showChoice()+this.showUserhelp()+this.showCsslayout();
+						return this.showTitle()+this.showName()+this.showSize()+this.showLayout()+this.showFormat()+this.showRange()+this.showRequired()+this.showSpecialData()+this.showPredefined()+this.showChoice()+this.showUserhelp()+this.showCsslayout();
 				},
 				showTitle:function(){
 						return showSettings.showTitle(this.ftype,this.title);
@@ -363,10 +431,10 @@
 				required:false,
 				size:"medium",
 				display:function(){
-					return '<div class="fields" id="field-'+this.index+'"><div class="arrow ui-icon ui-icon-play "></div><div class="remove ui-icon ui-icon-trash "></div><label>'+this.title+''+((this.required)?"*":"")+'</label><div class="dfield"><input class="field disabled '+this.size+'" type="text" value="'+this.predefined+'"/></div><div class="clearer"></div></div>';
+					return '<div class="fields" id="field-'+this.index+'"><div class="arrow ui-icon ui-icon-play "></div><div class="remove ui-icon ui-icon-trash "></div><label>'+this.title+''+((this.required)?"*":"")+'</label><div class="dfield"><input class="field disabled '+this.size+'" type="text" value="'+this.predefined+'"/><span class="uh">'+this.userhelp+'</span></div><div class="clearer"></div></div>';
 				},
 				show:function(){
-					return '<div class="fields" id="field-'+this.index+'"><label>'+this.title+''+((this.required)?"*":"")+'</label><div class="dfield"><input id="'+this.name+'" name="'+this.name+'" class="field '+this.size+((this.required)?" required":"")+'" type="text" value="'+this.predefined+'"/></div><div class="clearer"></div></div>';
+					return '<div class="fields" id="field-'+this.index+'"><label>'+this.title+''+((this.required)?"*":"")+'</label><div class="dfield"><input id="'+this.name+'" name="'+this.name+'" class="field '+this.csslayout+' '+this.size+((this.required)?" required":"")+'" type="text" value="'+this.predefined+'"/><span class="uh">'+this.userhelp+'</span></div><div class="clearer"></div></div>';	
 				}
 		});
 		var femail=function(){};
@@ -377,10 +445,10 @@
 				required:false,
 				size:"medium",
 				display:function(){
-					return '<div class="fields" id="field-'+this.index+'"><div class="arrow ui-icon ui-icon-play "></div><div class="remove ui-icon ui-icon-trash "></div><label>'+this.title+''+((this.required)?"*":"")+'</label><div class="dfield"><input class="field disabled '+this.size+'" type="text" value="'+this.predefined+'"/></div><div class="clearer"></div></div>';
+					return '<div class="fields" id="field-'+this.index+'"><div class="arrow ui-icon ui-icon-play "></div><div class="remove ui-icon ui-icon-trash "></div><label>'+this.title+''+((this.required)?"*":"")+'</label><div class="dfield"><input class="field disabled '+this.size+'" type="text" value="'+this.predefined+'"/><span class="uh">'+this.userhelp+'</span></div><div class="clearer"></div></div>';
 				},
 				show:function(){
-					return '<div class="fields" id="field-'+this.index+'"><label>'+this.title+''+((this.required)?"*":"")+'</label><div class="dfield"><input id="'+this.name+'" name="'+this.name+'" class="field email '+this.size+((this.required)?" required":"")+'" type="text" value="'+this.predefined+'"/></div><div class="clearer"></div></div>';
+					return '<div class="fields" id="field-'+this.index+'"><label>'+this.title+''+((this.required)?"*":"")+'</label><div class="dfield"><input id="'+this.name+'" name="'+this.name+'" class="field '+this.csslayout+' email '+this.size+((this.required)?" required":"")+'" type="text" value="'+this.predefined+'"/><span class="uh">'+this.userhelp+'</span></div><div class="clearer"></div></div>';	
 				}
 		});
 		var fnumber=function(){};
@@ -395,10 +463,10 @@
 				dformat:"digits",
 				formats:new Array("digits","number"),
 				display:function(){
-					return '<div class="fields" id="field-'+this.index+'"><div class="arrow ui-icon ui-icon-play "></div><div class="remove ui-icon ui-icon-trash "></div><label>'+this.title+''+((this.required)?"*":"")+'</label><div class="dfield"><input class="field disabled '+this.size+'" type="text" value="'+this.predefined+'"/></div><div class="clearer"></div></div>';
+					return '<div class="fields" id="field-'+this.index+'"><div class="arrow ui-icon ui-icon-play "></div><div class="remove ui-icon ui-icon-trash "></div><label>'+this.title+''+((this.required)?"*":"")+'</label><div class="dfield"><input class="field disabled '+this.size+'" type="text" value="'+this.predefined+'"/><span class="uh">'+this.userhelp+'</span></div><div class="clearer"></div></div>';
 				},
 				show:function(){
-					return '<div class="fields" id="field-'+this.index+'"><label>'+this.title+''+((this.required)?"*":"")+'</label><div class="dfield"><input id="'+this.name+'" name="'+this.name+'" min="'+this.min+'" max="'+this.max+'" class="field '+this.dformat+' '+this.size+((this.required)?" required":"")+'" type="text" value="'+this.predefined+'"/></div><div class="clearer"></div></div>';
+					return '<div class="fields" id="field-'+this.index+'"><label>'+this.title+''+((this.required)?"*":"")+'</label><div class="dfield"><input id="'+this.name+'" name="'+this.name+'" min="'+this.min+'" max="'+this.max+'" class="field '+this.csslayout+' '+this.dformat+' '+this.size+((this.required)?" required":"")+'" type="text" value="'+this.predefined+'"/><span class="uh">'+this.userhelp+'</span></div><div class="clearer"></div></div>';	
 				},
 				showFormatIntance: function() {
 					var str = "";
@@ -418,18 +486,23 @@
 				size:"medium",
 				required:false,
 				dformat:"mm/dd/yyyy",
+				showDropdown:false,
+				dropdownRange:"-10,+10",
 				formats:new Array("mm/dd/yyyy","dd/mm/yyyy"),
 				display:function(){
-					return '<div class="fields" id="field-'+this.index+'"><div class="arrow ui-icon ui-icon-play "></div><div class="remove ui-icon ui-icon-trash "></div><label>'+this.title+''+((this.required)?"*":"")+' ('+this.dformat+')</label><div class="dfield"><input class="field disabled '+this.size+'" type="text" value="'+this.predefined+'"/></div><div class="clearer"></div></div>';
+					return '<div class="fields" id="field-'+this.index+'"><div class="arrow ui-icon ui-icon-play "></div><div class="remove ui-icon ui-icon-trash "></div><label>'+this.title+''+((this.required)?"*":"")+' ('+this.dformat+')</label><div class="dfield"><input class="field disabled '+this.size+'" type="text" value="'+this.predefined+'"/><span class="uh">'+this.userhelp+'</span></div><div class="clearer"></div></div>';
 				},
 				show:function(){
-					return '<div class="fields" id="field-'+this.index+'"><label>'+this.title+''+((this.required)?"*":"")+' ('+this.dformat+')</label><div class="dfield"><input id="'+this.name+'" name="'+this.name+'" class="field date'+this.dformat.replace(/\//g,"")+' '+this.size+((this.required)?" required":"")+'" type="text" value="'+this.predefined+'"/></div><div class="clearer"></div></div>';
+					return '<div class="fields" id="field-'+this.index+'"><label>'+this.title+''+((this.required)?"*":"")+' ('+this.dformat+')</label><div class="dfield"><input id="'+this.name+'" name="'+this.name+'" class="field '+this.csslayout+' date'+this.dformat.replace(/\//g,"")+' '+this.size+((this.required)?" required":"")+'" type="text" value="'+this.predefined+'"/><span class="uh">'+this.userhelp+'</span></div><div class="clearer"></div></div>';	
 				},
 				showFormatIntance: function() {
 					var str = "";
 					for (var i=0;i<this.formats.length;i++)
 						str += '<option value="'+this.formats[i]+'" '+((this.formats[i]==this.dformat)?"selected":"")+'>'+this.formats[i]+'</option>';
 					return '<div><label>Date Format</label><br /><select name="sFormat" id="sFormat">'+str+'</select></div>';
+				},
+				showSpecialDataInstance: function() {
+					return '<div><input type="checkbox" name="sShowDropdown" id="sShowDropdown" '+((this.showDropdown)?"checked":"")+'/><label>Show Dropdown Year and Month</label><div id="divdropdownRange" style="display:'+((this.showDropdown)?"":"none")+'">Year Range: <input type="text" name="sDropdownRange" id="sDropdownRange" value="'+this.dropdownRange+'"/></div></div>';
 				}
 		});
 		var ftextarea=function(){};
@@ -440,10 +513,95 @@
 				required:false,
 				size:"medium",
 				display:function(){
-					return '<div class="fields" id="field-'+this.index+'"><div class="arrow ui-icon ui-icon-play "></div><div class="remove ui-icon ui-icon-trash "></div><label>'+this.title+''+((this.required)?"*":"")+'</label><div class="dfield"><textarea class="field disabled '+this.size+'">'+this.predefined+'</textarea></div><div class="clearer"></div></div>';
+					return '<div class="fields" id="field-'+this.index+'"><div class="arrow ui-icon ui-icon-play "></div><div class="remove ui-icon ui-icon-trash "></div><label>'+this.title+''+((this.required)?"*":"")+'</label><div class="dfield"><textarea class="field disabled '+this.size+'">'+this.predefined+'</textarea><span class="uh">'+this.userhelp+'</span></div><div class="clearer"></div></div>';
 				},
 				show:function(){
-					return '<div class="fields" id="field-'+this.index+'"><label>'+this.title+''+((this.required)?"*":"")+'</label><div class="dfield"><textarea id="'+this.name+'" name="'+this.name+'" class="field '+this.size+((this.required)?" required":"")+'">'+this.predefined+'</textarea></div><div class="clearer"></div></div>';
+					return '<div class="fields" id="field-'+this.index+'"><label>'+this.title+''+((this.required)?"*":"")+'</label><div class="dfield"><textarea id="'+this.name+'" name="'+this.name+'" class="field '+this.csslayout+' '+this.size+((this.required)?" required":"")+'">'+this.predefined+'</textarea><span class="uh">'+this.userhelp+'</span></div><div class="clearer"></div></div>';
+				}
+		});
+		var ffile=function(){};
+		$.extend(ffile.prototype,ffields.prototype,{
+				title:"Untitled",
+				ftype:"ffile",
+				required:false,
+				size:"medium",
+				display:function(){
+					return '<div class="fields" id="field-'+this.index+'"><div class="arrow ui-icon ui-icon-play "></div><div class="remove ui-icon ui-icon-trash "></div><label>'+this.title+''+((this.required)?"*":"")+'</label><div class="dfield"><input type="file" class="field disabled '+this.size+'" /><span class="uh">'+this.userhelp+'</span></div><div class="clearer"></div></div>';
+				},
+				show:function(){
+					return '<div class="fields" id="field-'+this.index+'"><label>'+this.title+''+((this.required)?"*":"")+'</label><div class="dfield"><input type="file" id="'+this.name+'" name="'+this.name+'" class="field '+this.csslayout+' '+this.size+((this.required)?" required":"")+'" /><span class="uh">'+this.userhelp+'</span></div><div class="clearer"></div></div>';
+				}
+		});
+		var fSectionBreak=function(){};
+		$.extend(fSectionBreak.prototype,ffields.prototype,{
+				title:"Section Break",
+				ftype:"fSectionBreak",
+				userhelp:"A description of the section goes here.",
+				display:function(){
+					return '<div class="fields" id="field-'+this.index+'"><div class="arrow ui-icon ui-icon-play "></div><div class="remove ui-icon ui-icon-trash "></div><div class="section_break"></div><label>'+this.title+'</label><span class="uh">'+this.userhelp+'</span><div class="clearer"></div></div>';
+				},
+				show:function(){
+					return '<div class="fields" id="field-'+this.index+'"><div class="section_break"></div><label>'+this.title+'</label><span class="uh">'+this.userhelp+'</span><div class="clearer"></div></div>';
+				}
+		});
+		var fPhone=function(){};
+		$.extend(fPhone.prototype,ffields.prototype,{
+				title:"Phone",
+				ftype:"fPhone",
+				required:false,
+				dformat:"### ### ####",
+				predefined:"888 888 8888",
+				display:function(){
+				    var str = "";
+				    var tmp = this.dformat.split(' ');
+				    var tmpv = this.predefined.split(' ');
+				    for (var i=0;i<tmpv.length;i++)
+				        if ($.trim(tmpv[i])=="")
+				            tmpv.splice(i,1);    
+				    for (var i=0;i<tmp.length;i++)
+				        if ($.trim(tmp[i])!="")
+				            str += '<div class="uh_phone" ><input type="text" class="field disabled" style="width:'+(15*$.trim(tmp[i]).length)+'px" value="'+((tmpv[i])?tmpv[i]:"")+'" maxlength="'+$.trim(tmp[i]).length+'" /><br />'+$.trim(tmp[i])+'</div>';
+					return '<div class="fields" id="field-'+this.index+'"><div class="arrow ui-icon ui-icon-play "></div><div class="remove ui-icon ui-icon-trash "></div><label>'+this.title+''+((this.required)?"*":"")+'</label><div class="dfield">'+str+'<span class="uh">'+this.userhelp+'</span></div><div class="clearer"></div></div>';
+				},
+				show:function(){
+				    var str = "";
+				    var tmp = this.dformat.split(' ');
+				    var tmpv = this.predefined.split(' ');
+				    for (var i=0;i<tmpv.length;i++)
+				        if ($.trim(tmpv[i])=="")
+				            tmpv.splice(i,1);    
+				    for (var i=0;i<tmp.length;i++)
+				        if ($.trim(tmp[i])!="")
+				            str += '<div class="uh_phone" ><input type="text" id="'+this.name+'_'+i+'" name="'+this.name+'_'+i+'" class="field digits '+this.csslayout+' '+((this.required)?" required":"")+'" style="width:'+(15*$.trim(tmp[i]).length)+'px" value="'+((tmpv[i])?tmpv[i]:"")+'" maxlength="'+$.trim(tmp[i]).length+'" minlength="'+$.trim(tmp[i]).length+'"/><br />'+$.trim(tmp[i])+'</div>';
+					return '<div class="fields" id="field-'+this.index+'"><label>'+this.title+''+((this.required)?"*":"")+'</label><div class="dfield"><input type="hidden" id="'+this.name+'" name="'+this.name+'" class="field " />'+str+'<span class="uh">'+this.userhelp+'</span></div><div class="clearer"></div></div>';
+				},
+				showFormatIntance: function() {
+					return '<div><label>Number Format</label><br /><input type="text" name="sFormat" id="sFormat" value="'+this.dformat+'" /></div>';
+				},
+		});
+		var fDate3=function(){};
+		$.extend(fDate3.prototype,ffields.prototype,{
+				title:"Date",
+				ftype:"fDate3",
+				required:false,
+				size:"medium",
+				display:function(){
+					return '<div class="fields" id="field-'+this.index+'"><div class="arrow ui-icon ui-icon-play "></div><div class="remove ui-icon ui-icon-trash "></div><label>'+this.title+''+((this.required)?"*":"")+'</label><div class="dfield"><input type="file" class="field disabled '+this.size+'" /><span class="uh">'+this.userhelp+'</span></div><div class="clearer"></div></div>';
+				},
+				show:function(){
+					return '<div class="fields" id="field-'+this.index+'"><label>'+this.title+''+((this.required)?"*":"")+'</label><div class="dfield"><input type="file" id="'+this.name+'" name="'+this.name+'" class="field '+this.csslayout+' '+this.size+((this.required)?" required":"")+'" /><span class="uh">'+this.userhelp+'</span></div><div class="clearer"></div></div>';
+				}
+		});
+		var fCommentArea=function(){};
+		$.extend(fCommentArea.prototype,ffields.prototype,{
+				title:"Comments here",
+				ftype:"fCommentArea",
+				userhelp:"A description of the section goes here.",
+				display:function(){
+					return '<div class="fields" id="field-'+this.index+'"><div class="arrow ui-icon ui-icon-play "></div><div class="remove ui-icon ui-icon-trash "></div><label>'+this.title+'</label><span class="uh">'+this.userhelp+'</span><div class="clearer"></div></div>';
+				},
+				show:function(){
+					return '<div class="fields" id="field-'+this.index+'"><label>'+this.title+'</label><span class="uh">'+this.userhelp+'</span><div class="clearer"></div></div>';
 				}
 		});
 		var fcheck=function(){};
@@ -460,13 +618,13 @@
 					var str = "";
 					for (var i=0;i<this.choices.length;i++)
 						str += '<div class="'+this.layout+'"><input class="field" disabled="true" type="checkbox" '+((this.choiceSelected[i])?"checked":"")+'/> '+this.choices[i]+'</div>';
-					return '<div class="fields" id="field-'+this.index+'"><div class="arrow ui-icon ui-icon-play "></div><div class="remove ui-icon ui-icon-trash "></div><label>'+this.title+''+((this.required)?"*":"")+'</label><div class="dfield">'+str+'</div><div class="clearer"></div></div>';
+					return '<div class="fields" id="field-'+this.index+'"><div class="arrow ui-icon ui-icon-play "></div><div class="remove ui-icon ui-icon-trash "></div><label>'+this.title+''+((this.required)?"*":"")+'</label><div class="dfield">'+str+'<span class="uh">'+this.userhelp+'</span></div><div class="clearer"></div></div>';
 				},
 				show:function(){
 					var str = "";
 					for (var i=0;i<this.choices.length;i++)
-						str += '<div class="'+this.layout+'"><input name="'+this.name+'[]" id="list'+i+'" class="field group '+((this.required)?" required":"")+'" value="'+this.choices[i]+'" type="checkbox" '+((this.choiceSelected[i])?"checked":"")+'/> <span>'+this.choices[i]+'<span></div>';
-					return '<div class="fields" id="field-'+this.index+'"><label>'+this.title+''+((this.required)?"*":"")+'</label><div class="dfield">'+str+'</div><div class="clearer"></div></div>';
+						str += '<div class="'+this.layout+'"><input name="'+this.name+'[]" id="list'+i+'" class="field '+this.csslayout+' group '+((this.required)?" required":"")+'" value="'+this.choices[i]+'" type="checkbox" '+((this.choiceSelected[i])?"checked":"")+'/> <span>'+this.choices[i]+'<span></div>';
+					return '<div class="fields" id="field-'+this.index+'"><label>'+this.title+''+((this.required)?"*":"")+'</label><div class="dfield">'+str+'<span class="uh">'+this.userhelp+'</span></div><div class="clearer"></div></div>';
 				},
 				showChoiceIntance: function() {
 					var l = this.choices;
@@ -493,13 +651,13 @@
 					var str = "";
 					for (var i=0;i<this.choices.length;i++)
 						str += '<div class="'+this.layout+'"><input class="field" disabled="true" type="radio" i="'+i+'"  '+((this.choices[i]==this.choiceSelected)?"checked":"")+'/> '+this.choices[i]+'</div>';
-					return '<div class="fields" id="field-'+this.index+'"><div class="arrow ui-icon ui-icon-play "></div><div class="remove ui-icon ui-icon-trash "></div><label>'+this.title+''+((this.required)?"*":"")+'</label><div class="dfield">'+str+'</div><div class="clearer"></div></div>';
+					return '<div class="fields" id="field-'+this.index+'"><div class="arrow ui-icon ui-icon-play "></div><div class="remove ui-icon ui-icon-trash "></div><label>'+this.title+''+((this.required)?"*":"")+'</label><div class="dfield">'+str+'<span class="uh">'+this.userhelp+'</span></div><div class="clearer"></div></div>';
 				},
 				show:function(){
 					var str = "";
 					for (var i=0;i<this.choices.length;i++)
-						str += '<div class="'+this.layout+'"><input name="'+this.name+'" class="field group '+((this.required)?" required":"")+'" value="'+this.choices[i]+'" type="radio" i="'+i+'"  '+((this.choices[i]==this.choiceSelected)?"checked":"")+'/> <span>'+this.choices[i]+'</span></div>';
-					return '<div class="fields" id="field-'+this.index+'"><label>'+this.title+''+((this.required)?"*":"")+'</label><div class="dfield">'+str+'</div><div class="clearer"></div></div>';
+						str += '<div class="'+this.layout+'"><input name="'+this.name+'" class="field '+this.csslayout+' group '+((this.required)?" required":"")+'" value="'+this.choices[i]+'" type="radio" i="'+i+'"  '+((this.choices[i]==this.choiceSelected)?"checked":"")+'/> <span>'+this.choices[i]+'</span></div>';
+					return '<div class="fields" id="field-'+this.index+'"><label>'+this.title+''+((this.required)?"*":"")+'</label><div class="dfield">'+str+'<span class="uh">'+this.userhelp+'</span></div><div class="clearer"></div></div>';  
 				},
 				showChoiceIntance: function() {
 					var l = this.choices;
@@ -523,7 +681,7 @@
 					this.choices = new Array("First Choice","Second Choice","Third Choice");
 				},
 				display:function(){
-					return '<div class="fields" id="field-'+this.index+'"><div class="arrow ui-icon ui-icon-play "></div><div class="remove ui-icon ui-icon-trash "></div><label>'+this.title+''+((this.required)?"*":"")+'</label><div class="dfield"><select class="field disabled '+this.size+'" ><option>'+this.choiceSelected+'</option></select></div><div class="clearer"></div></div>';
+					return '<div class="fields" id="field-'+this.index+'"><div class="arrow ui-icon ui-icon-play "></div><div class="remove ui-icon ui-icon-trash "></div><label>'+this.title+''+((this.required)?"*":"")+'</label><div class="dfield"><select class="field disabled '+this.size+'" ><option>'+this.choiceSelected+'</option></select><span class="uh">'+this.userhelp+'</span></div><div class="clearer"></div></div>';
 				},
 				show:function(){
 					var l = this.choices;
@@ -533,7 +691,7 @@
 					{
 						str += '<option '+((this.choiceSelected==l[i])?"selected":"")+' value="'+l[i]+'">'+l[i]+'</option>';
 					}
-					return '<div class="fields" id="field-'+this.index+'"><label>'+this.title+''+((this.required)?"*":"")+'</label><div class="dfield"><select id="'+this.name+'" name="'+this.name+'" class="field '+this.size+((this.required)?" required":"")+'" >'+str+'</select></div><div class="clearer"></div><div class="clearer"></div></div>';
+					return '<div class="fields" id="field-'+this.index+'"><label>'+this.title+''+((this.required)?"*":"")+'</label><div class="dfield"><select id="'+this.name+'" name="'+this.name+'" class="field '+this.csslayout+' '+this.size+((this.required)?" required":"")+'" >'+str+'</select><span class="uh">'+this.userhelp+'</span></div><div class="clearer"></div><div class="clearer"></div></div>';
 				},
 				showChoiceIntance: function() {
 					var l = this.choices;
@@ -554,7 +712,20 @@
 				   ui.item.data('start_pos', start_pos);
 			   },
 			   stop: function(event, ui) {
-				   alert('* Note: The Form Builder is read-only in this version.');
+				   var end_pos = parseInt(ui.item.index());
+				   var start_pos = parseInt(ui.item.data('start_pos'));
+				   var tmp = items[start_pos];
+				   if (end_pos > start_pos)
+				   {
+					   for (var i = start_pos; i<end_pos; i++)
+						   items[i] = items[i+1];
+				   }
+				   else
+				   {
+					   for (var i = start_pos; i>end_pos; i--)
+						   items[i] = items[i-1];
+				   }
+				   items[end_pos] = tmp;
 
 
 				   reloadItems();
@@ -610,7 +781,18 @@
 			   return items;
 		   },
 		   addItem: function(id) {
-			   alert('* Note: The Form Builder is read-only in this version.');
+			   var obj = eval("new "+id+"();")
+			   obj.init();
+			   var n = 0;
+			   for (var i=0;i<items.length;i++)
+			   {
+				   n1 = parseInt(items[i].name.replace(/fieldname/g,""));
+				   if (n1>n)
+					   n = n1;
+			   }
+			   $.extend(obj,{name:"fieldname"+(n+1)});
+			   items[items.length] = obj;
+			   reloadItems();
 		   },
 		   saveData:function(f){
 			   if (f!="")
@@ -648,15 +830,18 @@
 	   return this;
 	}
 
-    if (typeof dex_bccf_fbuilder_config != 'undefined')
-    {
+	if (typeof dex_bccf_fbuilder_config != 'undefined')
+	{
 		var f = $("#fbuilder").fbuilderbccfree($.parseJSON(dex_bccf_fbuilder_config.obj));
-		f.fBuild.loadData("form_structure");
+	  	f.fBuild.loadData("form_structure");
 		$("#dex_bccf_pform").validate({
 			errorElement: "div",
 			errorPlacement: function(e, element) {
 				if (element.hasClass('group')){
-					element = element.parent().siblings(":last");
+					if (element.parent().siblings().size() > 0)
+						element = element.parent().siblings(":last");
+					else
+						element = element.parent();	
 				}
 				offset = element.offset();
 				e.insertBefore(element)
@@ -666,6 +851,6 @@
 				e.css('top',element.outerHeight());
 			}
 		});
-	}	
+	}
 })(jQuery);
 $contactFormPPQuery = jQuery.noConflict();
