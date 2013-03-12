@@ -43,7 +43,7 @@ wp_localize_script('dex_bccf_builder_script', 'dex_bccf_fbuilder_config', array(
 ?>
 <link href="<?php echo plugins_url('css/stylepublic.css', __FILE__); ?>" type="text/css" rel="stylesheet" />
 <link href="<?php echo plugins_url('css/cupertino/jquery-ui-1.8.20.custom.css', __FILE__); ?>" type="text/css" rel="stylesheet" />
-<form name="dex_bccf_pform" id="dex_bccf_pform" action="<?php get_site_url(); ?>" method="post" onsubmit="return doValidate(this);">
+<form class="cpp_form" name="dex_bccf_pform" id="dex_bccf_pform" action="<?php get_site_url(); ?>" method="post" onsubmit="return doValidate(this);">
 <input name="dex_bccf_post" type="hidden" id="1" />
 <?php if ($option_calendar_enabled != 'false') { ?>
 <link rel="stylesheet" type="text/css" href="<?php echo plugins_url('TDE_RCalendar/all-css.css', __FILE__); ?>" />

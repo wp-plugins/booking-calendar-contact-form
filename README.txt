@@ -12,11 +12,11 @@ Booking Calendar Contact Form creates a booking form with a reservation calendar
 
 == Description ==
 
-With the Booking Calendar Contact Form you can create a classic contact form or a booking form with a reservation calendar, connected to a PayPal payment button. The reservation calendar lets the customer select the start (ex: check-in) and end (ex: checkout) dates.
+With the **Booking Calendar Contact Form** you can create a **classic contact form** or a **booking form with a reservation calendar**, connected to a PayPal payment button. The reservation calendar lets the customer select the start (ex: check-in) and end (ex: checkout) dates.
 
-The reservation calendar is an optional item, so it can be disabled to create a general purpose contact form.
+The **reservation calendar** is an optional item, so it can be disabled to create a **general purpose contact form**.
 
-There are two types of bookings available in the calendar configuration: full day bookings or partial day bookings. With full day bookings the whole day is blocked / reserved while in partial day bookings the start and end dates are partially blocked as used for example in room/hotel bookings.
+There are two types of bookings available in the calendar configuration: full day bookings or partial day bookings. With full day bookings the whole day is blocked / reserved while in partial day bookings the start and end dates are partially blocked as used for example in **room/hotel bookings**.
 
 Features:
 
