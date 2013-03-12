@@ -57,3 +57,4 @@ z-index:1000;
 #fbuilder .uh_phone{float:left;margin:0px 5px;font-size:80%;text-align:center;position: relative;}
 #fbuilder .uh_phone input{text-align:center;font-size:100%;}
 #fbuilder .uh_phone div.cpefb_error{white-space:nowrap;}
+.cpp_form { text-align:left}

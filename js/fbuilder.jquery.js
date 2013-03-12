@@ -36,11 +36,11 @@ var cpfb_started=false;
 		for (var i=0;i<opt.typeList.length;i++)
 			$("#tabs-1").append('<div class="button itemForm width40" id="'+opt.typeList[i].id+'">'+opt.typeList[i].name+'</div>');
 		$("#tabs-1").append('<div class="clearer"></div>');
-		$( ".button").button();
+		if (!opt.pub) $( ".button").button();
 		var items = new Array();
 		var itemSelected = -2;
 		editItem = function(id) {
-			$('#tabs').tabs('select', 1);
+			if (!opt.pub) $('#tabs').tabs('select', 1);
 			try { $('#tabs-2').html(items[id].showAllSettings()); } catch (e) {}
 			itemSelected = id;
 			$("#sTitle").keyup(function(){
@@ -228,6 +228,11 @@ var cpfb_started=false;
 
 
 		}
+		function htmlEncode(value){
+		  value = $('<div/>').text(value).html()  
+          value = value.replace(/"/g, "&quot;");;
+          return value;
+        }
 		reloadItemsPublic = function() {
 			for (var i=0;i<showSettings.formlayoutList.length;i++)
 				$("#fieldlist").removeClass(showSettings.formlayoutList[i].id);
@@ -325,7 +330,7 @@ var cpfb_started=false;
 					var str = "";
 					for (var i=0;i<showSettings.formlayoutList.length;i++)
 						str += '<option value="'+showSettings.formlayoutList[i].id+'" '+((showSettings.formlayoutList[i].id==this.formlayout)?"selected":"")+'>'+showSettings.formlayoutList[i].name+'</option>';
-					return '<div><label>Form Name</label><input class="large" name="fTitle" id="fTitle" value="'+this.title+'" /></div><div><label>Description</label><textarea class="large" name="fDescription" id="fDescription">'+this.description+'</textarea></div><div><label>Label Placement</label><br /><select name="fLayout" id="fLayout">'+str+'</select></div>';
+					return '<div><label>Form Name</label><input class="large" name="fTitle" id="fTitle" value="'+htmlEncode(this.title)+'" /></div><div><label>Description</label><textarea class="large" name="fDescription" id="fDescription">'+this.description+'</textarea></div><div><label>Label Placement</label><br /><select name="fLayout" id="fLayout">'+str+'</select></div>';
 				}
 
 		});
@@ -431,10 +436,10 @@ var cpfb_started=false;
 				required:false,
 				size:"medium",
 				display:function(){
-					return '<div class="fields" id="field-'+this.index+'"><div class="arrow ui-icon ui-icon-play "></div><div class="remove ui-icon ui-icon-trash "></div><label>'+this.title+''+((this.required)?"*":"")+'</label><div class="dfield"><input class="field disabled '+this.size+'" type="text" value="'+this.predefined+'"/><span class="uh">'+this.userhelp+'</span></div><div class="clearer"></div></div>';
+					return '<div class="fields" id="field-'+this.index+'"><div class="arrow ui-icon ui-icon-play "></div><div class="remove ui-icon ui-icon-trash "></div><label>'+this.title+''+((this.required)?"*":"")+'</label><div class="dfield"><input class="field disabled '+this.size+'" type="text" value="'+htmlEncode(this.predefined)+'"/><span class="uh">'+this.userhelp+'</span></div><div class="clearer"></div></div>';
 				},
 				show:function(){
-					return '<div class="fields" id="field-'+this.index+'"><label>'+this.title+''+((this.required)?"*":"")+'</label><div class="dfield"><input id="'+this.name+'" name="'+this.name+'" class="field '+this.csslayout+' '+this.size+((this.required)?" required":"")+'" type="text" value="'+this.predefined+'"/><span class="uh">'+this.userhelp+'</span></div><div class="clearer"></div></div>';	
+					return '<div class="fields" id="field-'+this.index+'"><label>'+this.title+''+((this.required)?"*":"")+'</label><div class="dfield"><input id="'+this.name+'" name="'+this.name+'" class="field '+this.csslayout+' '+this.size+((this.required)?" required":"")+'" type="text" value="'+htmlEncode(this.predefined)+'"/><span class="uh">'+this.userhelp+'</span></div><div class="clearer"></div></div>';	
 				}
 		});
 		var femail=function(){};
@@ -445,10 +450,10 @@ var cpfb_started=false;
 				required:false,
 				size:"medium",
 				display:function(){
-					return '<div class="fields" id="field-'+this.index+'"><div class="arrow ui-icon ui-icon-play "></div><div class="remove ui-icon ui-icon-trash "></div><label>'+this.title+''+((this.required)?"*":"")+'</label><div class="dfield"><input class="field disabled '+this.size+'" type="text" value="'+this.predefined+'"/><span class="uh">'+this.userhelp+'</span></div><div class="clearer"></div></div>';
+					return '<div class="fields" id="field-'+this.index+'"><div class="arrow ui-icon ui-icon-play "></div><div class="remove ui-icon ui-icon-trash "></div><label>'+this.title+''+((this.required)?"*":"")+'</label><div class="dfield"><input class="field disabled '+this.size+'" type="text" value="'+htmlEncode(this.predefined)+'"/><span class="uh">'+this.userhelp+'</span></div><div class="clearer"></div></div>';
 				},
 				show:function(){
-					return '<div class="fields" id="field-'+this.index+'"><label>'+this.title+''+((this.required)?"*":"")+'</label><div class="dfield"><input id="'+this.name+'" name="'+this.name+'" class="field '+this.csslayout+' email '+this.size+((this.required)?" required":"")+'" type="text" value="'+this.predefined+'"/><span class="uh">'+this.userhelp+'</span></div><div class="clearer"></div></div>';	
+					return '<div class="fields" id="field-'+this.index+'"><label>'+this.title+''+((this.required)?"*":"")+'</label><div class="dfield"><input id="'+this.name+'" name="'+this.name+'" class="field '+this.csslayout+' email '+this.size+((this.required)?" required":"")+'" type="text" value="'+htmlEncode(this.predefined)+'"/><span class="uh">'+this.userhelp+'</span></div><div class="clearer"></div></div>';	
 				}
 		});
 		var fnumber=function(){};
@@ -463,10 +468,10 @@ var cpfb_started=false;
 				dformat:"digits",
 				formats:new Array("digits","number"),
 				display:function(){
-					return '<div class="fields" id="field-'+this.index+'"><div class="arrow ui-icon ui-icon-play "></div><div class="remove ui-icon ui-icon-trash "></div><label>'+this.title+''+((this.required)?"*":"")+'</label><div class="dfield"><input class="field disabled '+this.size+'" type="text" value="'+this.predefined+'"/><span class="uh">'+this.userhelp+'</span></div><div class="clearer"></div></div>';
+					return '<div class="fields" id="field-'+this.index+'"><div class="arrow ui-icon ui-icon-play "></div><div class="remove ui-icon ui-icon-trash "></div><label>'+this.title+''+((this.required)?"*":"")+'</label><div class="dfield"><input class="field disabled '+this.size+'" type="text" value="'+htmlEncode(this.predefined)+'"/><span class="uh">'+this.userhelp+'</span></div><div class="clearer"></div></div>';
 				},
 				show:function(){
-					return '<div class="fields" id="field-'+this.index+'"><label>'+this.title+''+((this.required)?"*":"")+'</label><div class="dfield"><input id="'+this.name+'" name="'+this.name+'" min="'+this.min+'" max="'+this.max+'" class="field '+this.csslayout+' '+this.dformat+' '+this.size+((this.required)?" required":"")+'" type="text" value="'+this.predefined+'"/><span class="uh">'+this.userhelp+'</span></div><div class="clearer"></div></div>';	
+					return '<div class="fields" id="field-'+this.index+'"><label>'+this.title+''+((this.required)?"*":"")+'</label><div class="dfield"><input id="'+this.name+'" name="'+this.name+'" min="'+this.min+'" max="'+this.max+'" class="field '+this.csslayout+' '+this.dformat+' '+this.size+((this.required)?" required":"")+'" type="text" value="'+htmlEncode(this.predefined)+'"/><span class="uh">'+this.userhelp+'</span></div><div class="clearer"></div></div>';	
 				},
 				showFormatIntance: function() {
 					var str = "";
@@ -490,10 +495,10 @@ var cpfb_started=false;
 				dropdownRange:"-10,+10",
 				formats:new Array("mm/dd/yyyy","dd/mm/yyyy"),
 				display:function(){
-					return '<div class="fields" id="field-'+this.index+'"><div class="arrow ui-icon ui-icon-play "></div><div class="remove ui-icon ui-icon-trash "></div><label>'+this.title+''+((this.required)?"*":"")+' ('+this.dformat+')</label><div class="dfield"><input class="field disabled '+this.size+'" type="text" value="'+this.predefined+'"/><span class="uh">'+this.userhelp+'</span></div><div class="clearer"></div></div>';
+					return '<div class="fields" id="field-'+this.index+'"><div class="arrow ui-icon ui-icon-play "></div><div class="remove ui-icon ui-icon-trash "></div><label>'+this.title+''+((this.required)?"*":"")+' ('+this.dformat+')</label><div class="dfield"><input class="field disabled '+this.size+'" type="text" value="'+htmlEncode(this.predefined)+'"/><span class="uh">'+this.userhelp+'</span></div><div class="clearer"></div></div>';
 				},
 				show:function(){
-					return '<div class="fields" id="field-'+this.index+'"><label>'+this.title+''+((this.required)?"*":"")+' ('+this.dformat+')</label><div class="dfield"><input id="'+this.name+'" name="'+this.name+'" class="field '+this.csslayout+' date'+this.dformat.replace(/\//g,"")+' '+this.size+((this.required)?" required":"")+'" type="text" value="'+this.predefined+'"/><span class="uh">'+this.userhelp+'</span></div><div class="clearer"></div></div>';	
+					return '<div class="fields" id="field-'+this.index+'"><label>'+this.title+''+((this.required)?"*":"")+' ('+this.dformat+')</label><div class="dfield"><input id="'+this.name+'" name="'+this.name+'" class="field '+this.csslayout+' date'+this.dformat.replace(/\//g,"")+' '+this.size+((this.required)?" required":"")+'" type="text" value="'+htmlEncode(this.predefined)+'"/><span class="uh">'+this.userhelp+'</span></div><div class="clearer"></div></div>';	
 				},
 				showFormatIntance: function() {
 					var str = "";
@@ -502,7 +507,7 @@ var cpfb_started=false;
 					return '<div><label>Date Format</label><br /><select name="sFormat" id="sFormat">'+str+'</select></div>';
 				},
 				showSpecialDataInstance: function() {
-					return '<div><input type="checkbox" name="sShowDropdown" id="sShowDropdown" '+((this.showDropdown)?"checked":"")+'/><label>Show Dropdown Year and Month</label><div id="divdropdownRange" style="display:'+((this.showDropdown)?"":"none")+'">Year Range: <input type="text" name="sDropdownRange" id="sDropdownRange" value="'+this.dropdownRange+'"/></div></div>';
+					return '<div><input type="checkbox" name="sShowDropdown" id="sShowDropdown" '+((this.showDropdown)?"checked":"")+'/><label>Show Dropdown Year and Month</label><div id="divdropdownRange" style="display:'+((this.showDropdown)?"":"none")+'">Year Range: <input type="text" name="sDropdownRange" id="sDropdownRange" value="'+htmlEncode(this.dropdownRange)+'"/></div></div>';
 				}
 		});
 		var ftextarea=function(){};
@@ -577,7 +582,7 @@ var cpfb_started=false;
 				},
 				showFormatIntance: function() {
 					return '<div><label>Number Format</label><br /><input type="text" name="sFormat" id="sFormat" value="'+this.dformat+'" /></div>';
-				},
+				}
 		});
 		var fDate3=function(){};
 		$.extend(fDate3.prototype,ffields.prototype,{
@@ -623,7 +628,7 @@ var cpfb_started=false;
 				show:function(){
 					var str = "";
 					for (var i=0;i<this.choices.length;i++)
-						str += '<div class="'+this.layout+'"><input name="'+this.name+'[]" id="list'+i+'" class="field '+this.csslayout+' group '+((this.required)?" required":"")+'" value="'+this.choices[i]+'" type="checkbox" '+((this.choiceSelected[i])?"checked":"")+'/> <span>'+this.choices[i]+'<span></div>';
+						str += '<div class="'+this.layout+'"><input name="'+this.name+'[]" id="list'+i+'" class="field '+this.csslayout+' group '+((this.required)?" required":"")+'" value="'+htmlEncode(this.choices[i])+'" type="checkbox" '+((this.choiceSelected[i])?"checked":"")+'/> <span>'+this.choices[i]+'<span></div>';
 					return '<div class="fields" id="field-'+this.index+'"><label>'+this.title+''+((this.required)?"*":"")+'</label><div class="dfield">'+str+'<span class="uh">'+this.userhelp+'</span></div><div class="clearer"></div></div>';
 				},
 				showChoiceIntance: function() {
@@ -632,7 +637,7 @@ var cpfb_started=false;
 					var str = "";
 					for (var i=0;i<l.length;i++)
 					{
-						str += '<div class="choicesEdit"><input class="choice_check" i="'+i+'" type="checkbox" '+((this.choiceSelected[i])?"checked":"")+'/><input class="choice_text" i="'+i+'" type="text" name="sChoice" id="sChoice" value="'+l[i]+'"/><a class="choice_add ui-icon ui-icon-circle-plus" i="'+i+'" title="Add another choice."></a><a class="choice_remove ui-icon ui-icon-circle-minus" i="'+i+'" title="Delete this choice."></a></div>';
+						str += '<div class="choicesEdit"><input class="choice_check" i="'+i+'" type="checkbox" '+((this.choiceSelected[i])?"checked":"")+'/><input class="choice_text" i="'+i+'" type="text" name="sChoice" id="sChoice" value="'+htmlEncode(l[i])+'"/><a class="choice_add ui-icon ui-icon-circle-plus" i="'+i+'" title="Add another choice."></a><a class="choice_remove ui-icon ui-icon-circle-minus" i="'+i+'" title="Delete this choice."></a></div>';
 					}
 					return '<div class="choicesSet"><label>Choices</label>'+str+'</div>';
 				}
@@ -656,7 +661,7 @@ var cpfb_started=false;
 				show:function(){
 					var str = "";
 					for (var i=0;i<this.choices.length;i++)
-						str += '<div class="'+this.layout+'"><input name="'+this.name+'" class="field '+this.csslayout+' group '+((this.required)?" required":"")+'" value="'+this.choices[i]+'" type="radio" i="'+i+'"  '+((this.choices[i]==this.choiceSelected)?"checked":"")+'/> <span>'+this.choices[i]+'</span></div>';
+						str += '<div class="'+this.layout+'"><input name="'+this.name+'" class="field '+this.csslayout+' group '+((this.required)?" required":"")+'" value="'+htmlEncode(this.choices[i])+'" type="radio" i="'+i+'"  '+((this.choices[i]==this.choiceSelected)?"checked":"")+'/> <span>'+this.choices[i]+'</span></div>';
 					return '<div class="fields" id="field-'+this.index+'"><label>'+this.title+''+((this.required)?"*":"")+'</label><div class="dfield">'+str+'<span class="uh">'+this.userhelp+'</span></div><div class="clearer"></div></div>';  
 				},
 				showChoiceIntance: function() {
@@ -665,7 +670,7 @@ var cpfb_started=false;
 					var str = "";
 					for (var i=0;i<l.length;i++)
 					{
-						str += '<div class="choicesEdit"><input class="choice_radio" i="'+i+'" type="radio" '+((this.choiceSelected==l[i])?"checked":"")+' name="choice_radio" /><input class="choice_text" i="'+i+'" type="text" name="sChoice" id="sChoice" value="'+l[i]+'"/><a class="choice_add ui-icon ui-icon-circle-plus" i="'+i+'" title="Add another choice."></a><a class="choice_remove ui-icon ui-icon-circle-minus" i="'+i+'" title="Delete this choice."></a></div>';
+						str += '<div class="choicesEdit"><input class="choice_radio" i="'+i+'" type="radio" '+((this.choiceSelected==l[i])?"checked":"")+' name="choice_radio" /><input class="choice_text" i="'+i+'" type="text" name="sChoice" id="sChoice" value="'+htmlEncode(l[i])+'"/><a class="choice_add ui-icon ui-icon-circle-plus" i="'+i+'" title="Add another choice."></a><a class="choice_remove ui-icon ui-icon-circle-minus" i="'+i+'" title="Delete this choice."></a></div>';
 					}
 					return '<div class="choicesSet"><label>Choices</label>'+str+'</div>';
 				}
@@ -689,7 +694,7 @@ var cpfb_started=false;
 					var str = "";
 					for (var i=0;i<l.length;i++)
 					{
-						str += '<option '+((this.choiceSelected==l[i])?"selected":"")+' value="'+l[i]+'">'+l[i]+'</option>';
+						str += '<option '+((this.choiceSelected==l[i])?"selected":"")+' value="'+htmlEncode(l[i])+'">'+l[i]+'</option>';
 					}
 					return '<div class="fields" id="field-'+this.index+'"><label>'+this.title+''+((this.required)?"*":"")+'</label><div class="dfield"><select id="'+this.name+'" name="'+this.name+'" class="field '+this.csslayout+' '+this.size+((this.required)?" required":"")+'" >'+str+'</select><span class="uh">'+this.userhelp+'</span></div><div class="clearer"></div><div class="clearer"></div></div>';
 				},
@@ -699,7 +704,7 @@ var cpfb_started=false;
 					var str = "";
 					for (var i=0;i<l.length;i++)
 					{
-						str += '<div class="choicesEdit"><input class="choice_select" i="'+i+'" type="radio" '+((this.choiceSelected==l[i])?"checked":"")+' name="choice_select" /><input class="choice_text" i="'+i+'" type="text" name="sChoice" id="sChoice" value="'+l[i]+'"/><a class="choice_add ui-icon ui-icon-circle-plus" i="'+i+'" title="Add another choice."></a><a class="choice_remove ui-icon ui-icon-circle-minus" i="'+i+'" title="Delete this choice."></a></div>';
+						str += '<div class="choicesEdit"><input class="choice_select" i="'+i+'" type="radio" '+((this.choiceSelected==l[i])?"checked":"")+' name="choice_select" /><input class="choice_text" i="'+i+'" type="text" name="sChoice" id="sChoice" value="'+htmlEncode(l[i])+'"/><a class="choice_add ui-icon ui-icon-circle-plus" i="'+i+'" title="Add another choice."></a><a class="choice_remove ui-icon ui-icon-circle-minus" i="'+i+'" title="Delete this choice."></a></div>';
 					}
 					return '<div class="choicesSet"><label>Choices</label>'+str+'</div>';
 				}
@@ -732,27 +737,30 @@ var cpfb_started=false;
 			   }
 			});
 		}
-		$('#tabs').tabs({select: function(event, ui) {
-			   if (ui.index!=1)
-			   {
-				   $(".fields").removeClass("ui-selected");
-				   itemSelected = -2;
-				   if (ui.index==2)
+		if (!opt.pub)
+		{
+			$('#tabs').tabs({select: function(event, ui) {
+				   if (ui.index!=1)
 				   {
-					   $(".fform").addClass("ui-selected");
-					   editForm();
+					   $(".fields").removeClass("ui-selected");
+					   itemSelected = -2;
+					   if (ui.index==2)
+					   {
+						   $(".fform").addClass("ui-selected");
+						   editForm();
+					   }
+					   else
+						   $(".fform").removeClass("ui-selected");
 				   }
 				   else
+				   {
 					   $(".fform").removeClass("ui-selected");
+					   if (itemSelected<0)
+						   $('#tabs-2').html('<b>No Field Selected</b><br />Please click on a field in the form preview on the right to change its properties.');
+				   }
 			   }
-			   else
-			   {
-				   $(".fform").removeClass("ui-selected");
-				   if (itemSelected<0)
-					   $('#tabs-2').html('<b>No Field Selected</b><br />Please click on a field in the form preview on the right to change its properties.');
-			   }
-		   }
-	   });
+		   });
+		}
 	   loadtmp = function(p)
 	   {
 
