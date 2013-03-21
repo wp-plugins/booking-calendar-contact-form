@@ -287,85 +287,89 @@ function dex_bccf_remove() {
 
 /* Filter for placing the maps into the contents */
 
-add_filter('the_content','dex_bccf_filter_content');
-
-function dex_bccf_filter_content($content) {
-
+function dex_bccf_filter_content($atts) {
     global $wpdb;
-
-    if (strpos($content, "[CP_BCCF_FORM") !== false)
+    extract( shortcode_atts( array(
+		'calendar' => '',
+		'user' => '',
+	), $atts ) );
+    if ($calendar != '')
+        define ('DEX_BCCF_CALENDAR_FIXED_ID',$calendar);
+    else if ($user != '') 
     {
-
-        $shorttag =  "[CP_BCCF_FORM]";
-        $shorttag_sel =  "[CP_BCCF_FORM]";
-        if (strpos($content, $shorttag) !== false)
-            define ('DEX_CALENDAR_USER',0);
+        $users = $wpdb->get_results( "SELECT user_login,ID FROM ".$wpdb->users." WHERE user_login='".$wpdb->escape($user)."'" );
+        if (isset($users[0]))
+            define ('DEX_CALENDAR_USER',$users[0]->ID);
         else
+            define ('DEX_CALENDAR_USER',0);    
+    }  
+    else
+        define ('DEX_CALENDAR_USER',0);  
+    ob_start();
+    dex_bccf_get_public_form();
+    $buffered_contents = ob_get_contents();
+    ob_end_clean();
+    return $buffered_contents;
+}
+
+
+
+function dex_bccf_get_public_form() {
+    global $wpdb;
+        
+    wp_deregister_script('query-stringify');
+    wp_register_script('query-stringify', plugins_url('/js/jQuery.stringify.js', __FILE__));
+
+    wp_deregister_script('cp_contactformpp_validate_script');
+    wp_register_script('cp_contactformpp_validate_script', plugins_url('/js/jquery.validate.js', __FILE__));
+
+    wp_enqueue_script( 'dex_bccf_builder_script',
+    plugins_url('/js/fbuilder.jquery.js', __FILE__),array("jquery","jquery-ui-core","jquery-ui-tabs","jquery-ui-button","jquery-ui-datepicker","query-stringify","cp_contactformpp_validate_script"), false, true );
+            
+    if (defined('DEX_CALENDAR_USER') && DEX_CALENDAR_USER != 0)
+        $myrows = $wpdb->get_results( "SELECT * FROM ".DEX_BCCF_CONFIG_TABLE_NAME." WHERE conwer=".DEX_CALENDAR_USER." AND caldeleted=0" );
+    else if (defined('DEX_BCCF_CALENDAR_FIXED_ID'))
+        $myrows = $wpdb->get_results( "SELECT * FROM ".DEX_BCCF_CONFIG_TABLE_NAME." WHERE id=".DEX_BCCF_CALENDAR_FIXED_ID." AND caldeleted=0" );
+    else
+        $myrows = $wpdb->get_results( "SELECT * FROM ".DEX_BCCF_CONFIG_TABLE_NAME." WHERE caldeleted=0" );
+    
+    define ('CP_BCCF_CALENDAR_ID',$myrows[0]->id);
+    
+    // for the additional services field if needed
+    $dex_buffer = "";
+    $services = explode("\n",dex_bccf_get_option('cp_cal_checkboxes', DEX_BCCF_DEFAULT_CP_CAL_CHECKBOXES));
+    foreach ($services as $item)
+        if (trim($item) != '')
         {
-            $users = $wpdb->get_results( "SELECT user_login,ID FROM ".$wpdb->prefix."users ORDER BY ID DESC" );
-            foreach ($users as $user)
-            {
-                $shorttag =  "[CP_BCCF_FORM user=\"".$user->user_login."\"]";
-                if (strpos($content, $shorttag) !== false)
-                {
-                    $shorttag_sel =  "[CP_BCCF_FORM user=\"".$user->user_login."\"]";
-                    define ('DEX_CALENDAR_USER',$user->ID);
-                }
-                else
-                {
-                    $shorttag =  "[CP_BCCF_FORM user=".$user->user_login."]";
-                    if (strpos($content, $shorttag) !== false)
-                    {
-                        $shorttag_sel =  "[CP_BCCF_FORM user=".$user->user_login."]";
-                        define ('DEX_CALENDAR_USER',$user->ID);
-                    }
-                }
-            }
-
-            // if no calendar tag found, try to find it by calendar id
-            if (!defined('DEX_CALENDAR_USER'))
-            {
-                $calendars = $wpdb->get_results( "SELECT * FROM ".DEX_BCCF_CONFIG_TABLE_NAME );
-                foreach ($calendars as $calendar)
-                {
-                    $shorttag =  "[CP_BCCF_FORM calendar=\"".$calendar->id."\"]";
-                    if (strpos($content, $shorttag) !== false)
-                    {
-                        $shorttag_sel =  "[CP_BCCF_FORM calendar=\"".$calendar->id."\"]";
-                        define ('DEX_BCCF_CALENDAR_FIXED_ID',$calendar->id);
-                    }
-                    else
-                    {
-                        $shorttag =  "[CP_BCCF_FORM calendar=".$calendar->id."]";
-                        if (strpos($content, $shorttag) !== false)
-                        {
-                            $shorttag_sel =  "[CP_BCCF_FORM calendar=".$calendar->id."]";
-                            define ('DEX_BCCF_CALENDAR_FIXED_ID',$calendar->id);
-                        }
-                    }
-                }
-            }
-
-
+            $dex_buffer .= '<option value="'.esc_attr($item).'">'.trim(substr($item,strpos($item,"|")+1)).'</option>';
         }
-
-        ob_start();
-        define('DEX_AUTH_INCLUDE', true);
-        @include dirname( __FILE__ ) . '/dex_scheduler.inc.php';
-        $buffered_contents = ob_get_contents();
-        ob_end_clean();
-
-        $content = str_replace($shorttag_sel, $buffered_contents, $content);
-    }
-    return $content;
+    
+    // localize script
+    wp_localize_script('dex_bccf_builder_script', 'dex_bccf_fbuilder_config', array('obj'  	=>
+    '{"pub":true,"messages": {
+    	                	"required": "'.str_replace(array('"', "'"),array('\\"', "\\'"),dex_bccf_get_option('vs_text_is_required', DEX_BCCF_DEFAULT_vs_text_is_required)).'",
+    	                	"email": "'.str_replace(array('"', "'"),array('\\"', "\\'"),dex_bccf_get_option('vs_text_is_email', DEX_BCCF_DEFAULT_vs_text_is_email)).'",
+    	                	"datemmddyyyy": "'.str_replace(array('"', "'"),array('\\"', "\\'"),dex_bccf_get_option('vs_text_datemmddyyyy', DEX_BCCF_DEFAULT_vs_text_datemmddyyyy)).'",
+    	                	"dateddmmyyyy": "'.str_replace(array('"', "'"),array('\\"', "\\'"),dex_bccf_get_option('vs_text_dateddmmyyyy', DEX_BCCF_DEFAULT_vs_text_dateddmmyyyy)).'",
+    	                	"number": "'.str_replace(array('"', "'"),array('\\"', "\\'"),dex_bccf_get_option('vs_text_number', DEX_BCCF_DEFAULT_vs_text_number)).'",
+    	                	"digits": "'.str_replace(array('"', "'"),array('\\"', "\\'"),dex_bccf_get_option('vs_text_digits', DEX_BCCF_DEFAULT_vs_text_digits)).'",
+    	                	"max": "'.str_replace(array('"', "'"),array('\\"', "\\'"),dex_bccf_get_option('vs_text_max', DEX_BCCF_DEFAULT_vs_text_max)).'",
+    	                	"min": "'.str_replace(array('"', "'"),array('\\"', "\\'"),dex_bccf_get_option('vs_text_min', DEX_BCCF_DEFAULT_vs_text_min)).'"
+    	                }}'
+    ));
+    
+    $option_calendar_enabled = dex_bccf_get_option('calendar_enabled', DEX_BCCF_DEFAULT_CALENDAR_ENABLED);            
+            
+    define('DEX_AUTH_INCLUDE', true);
+    @include dirname( __FILE__ ) . '/dex_scheduler.inc.php';
+    
 }
 
 function dex_bccf_show_booking_form($id = "")
 {
     if ($id != '')
         define ('DEX_BCCF_CALENDAR_FIXED_ID',$id);
-    define('DEX_AUTH_INCLUDE', true);
-    @include dirname( __FILE__ ) . '/dex_scheduler.inc.php';
+    dex_bccf_get_public_form();
 }
 
 
@@ -389,7 +393,7 @@ if ( is_admin() ) {
 }
 else
 {
-    add_action('wp_enqueue_scripts', 'set_dex_bccf_insert_publicScripts');
+    add_shortcode( 'CP_BCCF_FORM', 'dex_bccf_filter_content' );        
 }
 
 function dex_bccf_settingsLink($links) {
@@ -438,17 +442,6 @@ function set_dex_bccf_insert_adminScripts($hook) {
     if( 'post.php' != $hook  && 'post-new.php' != $hook )
         return;
     wp_enqueue_script( 'cp_dex_bccf_script', plugins_url('/dex_bccf_script.js', __FILE__) );
-}
-
-function set_dex_bccf_insert_publicScripts($hook) {
-    wp_deregister_script('query-stringify');
-    wp_register_script('query-stringify', plugins_url('/js/jQuery.stringify.js', __FILE__));
-
-    wp_deregister_script('cp_contactformpp_validate_script');
-    wp_register_script('cp_contactformpp_validate_script', plugins_url('/js/jquery.validate.js', __FILE__));
-
-    wp_enqueue_script( 'dex_bccf_builder_script',
-    plugins_url('/js/fbuilder.jquery.js', __FILE__),array("jquery","jquery-ui-core","jquery-ui-tabs","jquery-ui-button","jquery-ui-datepicker","query-stringify","cp_contactformpp_validate_script"), false, true );
 }
 
 
@@ -561,7 +554,7 @@ function dex_bccf_check_posted_data()
     if ($_GET['hdcaptcha_dex_bccf_post'] == '') $_GET['hdcaptcha_dex_bccf_post'] = $_POST['hdcaptcha_dex_bccf_post'];
     if (
            (dex_bccf_get_option('dexcv_enable_captcha', TDE_BCCFDEFAULT_dexcv_enable_captcha) != 'false') &&
-           ( ($_GET['hdcaptcha_dex_bccf_post'] != $_SESSION['rand_code']) ||
+           ( (strtolower($_GET['hdcaptcha_dex_bccf_post']) != strtolower($_SESSION['rand_code'])) ||
              ($_SESSION['rand_code'] == '')
            )
        )
