@@ -1,46 +1,4 @@
-<?php
-
-if ( !defined('DEX_AUTH_INCLUDE') )
-{
-    echo 'Direct access not allowed.';
-    exit;
-}
-
-global $wpdb;
-if (defined('DEX_CALENDAR_USER') && DEX_CALENDAR_USER != 0)
-    $myrows = $wpdb->get_results( "SELECT * FROM ".DEX_BCCF_CONFIG_TABLE_NAME." WHERE conwer=".DEX_CALENDAR_USER." AND caldeleted=0" );
-else if (defined('DEX_BCCF_CALENDAR_FIXED_ID'))
-    $myrows = $wpdb->get_results( "SELECT * FROM ".DEX_BCCF_CONFIG_TABLE_NAME." WHERE id=".DEX_BCCF_CALENDAR_FIXED_ID." AND caldeleted=0" );
-else
-    $myrows = $wpdb->get_results( "SELECT * FROM ".DEX_BCCF_CONFIG_TABLE_NAME." WHERE caldeleted=0" );
-
-define ('CP_BCCF_CALENDAR_ID',$myrows[0]->id);
-
-// for the additional services field if needed
-$dex_buffer = "";
-$services = explode("\n",dex_bccf_get_option('cp_cal_checkboxes', DEX_BCCF_DEFAULT_CP_CAL_CHECKBOXES));
-foreach ($services as $item)
-    if (trim($item) != '')
-    {
-        $dex_buffer .= '<option value="'.esc_attr($item).'">'.trim(substr($item,strpos($item,"|")+1)).'</option>';
-    }
-
-// localize script
-wp_localize_script('dex_bccf_builder_script', 'dex_bccf_fbuilder_config', array('obj'  	=>
-'{"pub":true,"messages": {
-	                	"required": "'.str_replace(array('"', "'"),array('\\"', "\\'"),dex_bccf_get_option('vs_text_is_required', DEX_BCCF_DEFAULT_vs_text_is_required)).'",
-	                	"email": "'.str_replace(array('"', "'"),array('\\"', "\\'"),dex_bccf_get_option('vs_text_is_email', DEX_BCCF_DEFAULT_vs_text_is_email)).'",
-	                	"datemmddyyyy": "'.str_replace(array('"', "'"),array('\\"', "\\'"),dex_bccf_get_option('vs_text_datemmddyyyy', DEX_BCCF_DEFAULT_vs_text_datemmddyyyy)).'",
-	                	"dateddmmyyyy": "'.str_replace(array('"', "'"),array('\\"', "\\'"),dex_bccf_get_option('vs_text_dateddmmyyyy', DEX_BCCF_DEFAULT_vs_text_dateddmmyyyy)).'",
-	                	"number": "'.str_replace(array('"', "'"),array('\\"', "\\'"),dex_bccf_get_option('vs_text_number', DEX_BCCF_DEFAULT_vs_text_number)).'",
-	                	"digits": "'.str_replace(array('"', "'"),array('\\"', "\\'"),dex_bccf_get_option('vs_text_digits', DEX_BCCF_DEFAULT_vs_text_digits)).'",
-	                	"max": "'.str_replace(array('"', "'"),array('\\"', "\\'"),dex_bccf_get_option('vs_text_max', DEX_BCCF_DEFAULT_vs_text_max)).'",
-	                	"min": "'.str_replace(array('"', "'"),array('\\"', "\\'"),dex_bccf_get_option('vs_text_min', DEX_BCCF_DEFAULT_vs_text_min)).'"
-	                }}'
-));
-
- $option_calendar_enabled = dex_bccf_get_option('calendar_enabled', DEX_BCCF_DEFAULT_CALENDAR_ENABLED);
-?>
+<?php if ( !defined('DEX_AUTH_INCLUDE') ) { echo 'Direct access not allowed.'; exit; } ?>
 <link href="<?php echo plugins_url('css/stylepublic.css', __FILE__); ?>" type="text/css" rel="stylesheet" />
 <link href="<?php echo plugins_url('css/cupertino/jquery-ui-1.8.20.custom.css', __FILE__); ?>" type="text/css" rel="stylesheet" />
 <form class="cpp_form" name="dex_bccf_pform" id="dex_bccf_pform" action="<?php get_site_url(); ?>" method="post" onsubmit="return doValidate(this);">
@@ -205,15 +163,12 @@ Price:
     echo ':</label><div class="dfield"><select name="services">'.$dex_buffer.'</select></div><div class="clearer"></div></div><br />';
  }
 ?>
-
-
-
 <?php if (dex_bccf_get_option('dexcv_enable_captcha', TDE_BCCFDEFAULT_dexcv_enable_captcha) != 'false') { ?>
-  Please enter the security code:<br />
+  <?php _e('Please enter the security code'); ?>:<br />
   <img src="<?php echo plugins_url('/captcha/captcha.php?width='.dex_bccf_get_option('dexcv_width', TDE_BCCFDEFAULT_dexcv_width).'&height='.dex_bccf_get_option('dexcv_height', TDE_BCCFDEFAULT_dexcv_height).'&letter_count='.dex_bccf_get_option('dexcv_chars', TDE_BCCFDEFAULT_dexcv_chars).'&min_size='.dex_bccf_get_option('dexcv_min_font_size', TDE_BCCFDEFAULT_dexcv_min_font_size).'&max_size='.dex_bccf_get_option('dexcv_max_font_size', TDE_BCCFDEFAULT_dexcv_max_font_size).'&noise='.dex_bccf_get_option('dexcv_noise', TDE_BCCFDEFAULT_dexcv_noise).'&noiselength='.dex_bccf_get_option('dexcv_noise_length', TDE_BCCFDEFAULT_dexcv_noise_length).'&bcolor='.dex_bccf_get_option('dexcv_background', TDE_BCCFDEFAULT_dexcv_background).'&border='.dex_bccf_get_option('dexcv_border', TDE_BCCFDEFAULT_dexcv_border).'&font='.dex_bccf_get_option('dexcv_font', TDE_BCCFDEFAULT_dexcv_font), __FILE__); ?>"  id="dex_bccf_captchaimg" alt="security code" border="0"  />
   <br />
   <div class="fields" id="field-c2"> 
-   <label>Security Code (lowercase letters):</label>
+   <label><?php _e('Security Code (lowercase letters)'); ?>:</label>
    <div class="dfield">  
      <input type="text" size="20" name="hdcaptcha_dex_bccf_post" id="hdcaptcha_dex_bccf_post" value="" />
      <div class="error message" id="hdcaptcha_error" generated="true" style="display:none;position: absolute; left: 0px; top: 25px;"></div>
