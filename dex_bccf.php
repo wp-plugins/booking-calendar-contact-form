@@ -416,7 +416,7 @@ function dex_bccf_customAdjustmentsLink($links) {
 }
 
 function dex_bccf_html_post_page() {
-    if ($_GET["cal"] != '')
+    if (isset($_GET["cal"]) && $_GET["cal"] != '')
     {
         if ($_GET["list"] == '1')
             @include_once dirname( __FILE__ ) . '/dex_bccf_admin_int_bookings_list.inc.php';
@@ -433,7 +433,7 @@ function set_dex_bccf_insert_button() {
 }
 
 function set_dex_bccf_insert_adminScripts($hook) {
-    if ($_GET["cal"] != '')
+    if (isset($_GET["page"]) && $_GET["page"] == "dex_bccf")
     {
         wp_deregister_script('query-stringify');
         wp_register_script('query-stringify', plugins_url('/js/jQuery.stringify.js', __FILE__));
