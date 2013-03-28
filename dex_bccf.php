@@ -59,17 +59,17 @@ define('DEX_BCCF_DEFAULT_EXPLAIN_CP_CAL_CHECKBOXES',"1.00 | Service 1 for us$1.0
 // tables
 
 define('DEX_BCCF_TABLE_NAME_NO_PREFIX', "bccf_dex_bccf_submissions");
-define('DEX_BCCF_TABLE_NAME', $wpdb->prefix . DEX_BCCF_TABLE_NAME_NO_PREFIX);
+define('DEX_BCCF_TABLE_NAME', @$wpdb->prefix . DEX_BCCF_TABLE_NAME_NO_PREFIX);
 
 define('DEX_BCCF_CALENDARS_TABLE_NAME_NO_PREFIX', "bccf_reservation_calendars_data");
-define('DEX_BCCF_CALENDARS_TABLE_NAME', $wpdb->prefix ."bccf_reservation_calendars_data");
+define('DEX_BCCF_CALENDARS_TABLE_NAME', @$wpdb->prefix ."bccf_reservation_calendars_data");
 
 define('DEX_BCCF_CONFIG_TABLE_NAME_NO_PREFIX', "bccf_reservation_calendars");
-define('DEX_BCCF_CONFIG_TABLE_NAME', $wpdb->prefix ."bccf_reservation_calendars");
+define('DEX_BCCF_CONFIG_TABLE_NAME', @$wpdb->prefix ."bccf_reservation_calendars");
 
 define('DEX_BCCF_DISCOUNT_CODES_TABLE_NAME_NO_PREFIX', "bccf_dex_discount_codes");
 define('DEX_BCCF_SEASON_PRICES_TABLE_NAME_NO_PREFIX', "bccf_dex_season_prices");
-define('DEX_BCCF_DISCOUNT_CODES_TABLE_NAME', $wpdb->prefix ."bccf_dex_discount_codes");
+define('DEX_BCCF_DISCOUNT_CODES_TABLE_NAME', @$wpdb->prefix ."bccf_dex_discount_codes");
 
 // calendar constants
 
@@ -114,7 +114,6 @@ define('DEX_BCCF_DEFAULT_dexcv_text_enter_valid_captcha', 'Please enter a valid 
 
 
 register_activation_hook(__FILE__,'dex_bccf_install');
-register_deactivation_hook( __FILE__, 'dex_bccf_remove' );
 
 function dex_bccf_install($networkwide)  {
 	global $wpdb;
@@ -138,18 +137,6 @@ function dex_bccf_install($networkwide)  {
 
 function _dex_bccf_install() {
     global $wpdb;
-
-    $sql = "DROP TABLE IF EXISTS".$wpdb->prefix.DEX_BCCF_DISCOUNT_CODES_TABLE_NAME_NO_PREFIX.";";
-    $wpdb->query($sql);
-    $sql = "DROP TABLE IF EXISTS".$wpdb->prefix.DEX_BCCF_SEASON_PRICES_TABLE_NAME_NO_PREFIX.";";
-    $wpdb->query($sql);
-    $sql = "DROP TABLE IF EXISTS".$wpdb->prefix.DEX_BCCF_TABLE_NAME_NO_PREFIX.";";
-    $wpdb->query($sql);
-    $sql = "DROP TABLE IF EXISTS".$wpdb->prefix.DEX_BCCF_CONFIG_TABLE_NAME.";";
-    $wpdb->query($sql);
-    $sql = "DROP TABLE IF EXISTS".$wpdb->prefix.DEX_BCCF_CALENDARS_TABLE_NAME.";";
-    $wpdb->query($sql);
-
 
     $sql = "CREATE TABLE ".$wpdb->prefix.DEX_BCCF_DISCOUNT_CODES_TABLE_NAME_NO_PREFIX." (
          id mediumint(9) NOT NULL AUTO_INCREMENT,
@@ -186,8 +173,8 @@ function _dex_bccf_install() {
          email VARCHAR(250) DEFAULT '' NOT NULL,
          phone VARCHAR(250) DEFAULT '' NOT NULL,
          notifyto VARCHAR(250) DEFAULT '' NOT NULL,
-         question text DEFAULT '' NOT NULL,
-         buffered_date text DEFAULT '' NOT NULL,
+         question text,
+         buffered_date text,
          UNIQUE KEY id (id)
          );";
     $wpdb->query($sql);
@@ -203,7 +190,7 @@ function _dex_bccf_install() {
                    "`".TDE_BCCFCONFIG_MSG."` varchar(255) NOT NULL default '',".
                    "`".TDE_BCCFCALDELETED_FIELD."` tinyint(3) unsigned default NULL,".
                    "`conwer` INT NOT NULL,".
-                   "`form_structure` text DEFAULT '' NOT NULL,".
+                   "`form_structure` text,".
                    "`calendar_language` varchar(10) DEFAULT '' NOT NULL,".
                    "`calendar_mode` varchar(10) DEFAULT '' NOT NULL,".
                    "`calendar_dateformat` varchar(10) DEFAULT '',".
@@ -219,17 +206,17 @@ function _dex_bccf_install() {
                    "`request_cost` varchar(255) DEFAULT '' NOT NULL ,".
                    "`paypal_product_name` varchar(255) DEFAULT '' NOT NULL,".
                    "`currency` varchar(10) DEFAULT '' NOT NULL,".
-                   "`url_ok` text DEFAULT '' NOT NULL,".
-                   "`url_cancel` text DEFAULT '' NOT NULL,".
+                   "`url_ok` text,".
+                   "`url_cancel` text,".
                    "`paypal_language` varchar(10) DEFAULT '' NOT NULL,".
                    // copy to user
                    "`cu_user_email_field` VARCHAR(250) DEFAULT '' NOT NULL,".
-                   "`notification_from_email` text DEFAULT '' NOT NULL,".
-                   "`notification_destination_email` text DEFAULT '' NOT NULL,".
-                   "`email_subject_confirmation_to_user` text DEFAULT '' NOT NULL ,".
-                   "`email_confirmation_to_user` text DEFAULT '' NOT NULL,".
-                   "`email_subject_notification_to_admin` text DEFAULT '' NOT NULL,".
-                   "`email_notification_to_admin` text DEFAULT '' NOT NULL,".
+                   "`notification_from_email` text,".
+                   "`notification_destination_email` text,".
+                   "`email_subject_confirmation_to_user` text,".
+                   "`email_confirmation_to_user` text,".
+                   "`email_subject_notification_to_admin` text,".
+                   "`email_notification_to_admin` text,".
                    // validation
                    "`vs_use_validation` VARCHAR(10) DEFAULT '' NOT NULL,".
                    "`vs_text_is_required` VARCHAR(250) DEFAULT '' NOT NULL,".
@@ -254,7 +241,7 @@ function _dex_bccf_install() {
                    "`dexcv_font` varchar(100) DEFAULT '' NOT NULL,".
                    "`cv_text_enter_valid_captcha` VARCHAR(250) DEFAULT '' NOT NULL,".
                    // services field
-                   "`cp_cal_checkboxes` text DEFAULT '' NOT NULL,".
+                   "`cp_cal_checkboxes` text,".
                    "`cp_cal_checkboxes_type` varchar(10) DEFAULT '' NOT NULL,".
                    "PRIMARY KEY (`".TDE_BCCFCONFIG_ID."`)); ";
     $wpdb->query($sql);
@@ -272,17 +259,9 @@ function _dex_bccf_install() {
                    "PRIMARY KEY (`".TDE_BCCFDATA_ID."`)) ;";
     $wpdb->query($sql);
 
-
-
-    require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
-    //dbDelta($sql);
-
-    add_option("dex_bccf_data", 'Default', '', 'yes'); // Creates new database field
+    require_once(ABSPATH . 'wp-admin/includes/upgrade.php');    
 }
 
-function dex_bccf_remove() {
-    delete_option('dex_bccf_data'); // Deletes the database field
-}
 
 
 /* Filter for placing the maps into the contents */
@@ -418,7 +397,7 @@ function dex_bccf_customAdjustmentsLink($links) {
 function dex_bccf_html_post_page() {
     if (isset($_GET["cal"]) && $_GET["cal"] != '')
     {
-        if ($_GET["list"] == '1')
+        if (isset($_GET["list"]) && $_GET["list"] == '1')
             @include_once dirname( __FILE__ ) . '/dex_bccf_admin_int_bookings_list.inc.php';
         else
             @include_once dirname( __FILE__ ) . '/dex_bccf_admin_int.inc.php';
@@ -438,6 +417,8 @@ function set_dex_bccf_insert_adminScripts($hook) {
         wp_deregister_script('query-stringify');
         wp_register_script('query-stringify', plugins_url('/js/jQuery.stringify.js', __FILE__));
         wp_enqueue_script( 'dex_bccf_builder_script', plugins_url('/js/fbuilder.jquery.js', __FILE__),array("jquery","jquery-ui-core","jquery-ui-sortable","jquery-ui-tabs","jquery-ui-droppable","jquery-ui-button","jquery-ui-datepicker","query-stringify") );
+        
+        wp_enqueue_style('jquery-style', 'http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.2/themes/smoothness/jquery-ui.css');
     }
     if( 'post.php' != $hook  && 'post-new.php' != $hook )
         return;
@@ -520,20 +501,20 @@ function dex_bccf_check_posted_data()
 
     // define which action is being requested
     //-------------------------------------------------
-    if ( $_GET["dex_bccf"] == 'getcost')
+    if (isset($_GET["dex_bccf"]) && $_GET["dex_bccf"] == 'getcost')
     {
         $default_price = dex_bccf_get_option('request_cost', DEX_BCCF_DEFAULT_COST);
         echo dex_bccf_caculate_price(strtotime($_GET["from"]), strtotime($_GET["to"]), $_POST["dex_item"], $default_price);
         exit;
     }
 
-    if ( $_GET["dex_bccf"] == 'calfeed')
+    if (isset($_GET["dex_bccf"]) && $_GET["dex_bccf"] == 'calfeed')
         dex_bccf_export_iCal();
 
-    if ( $_GET["dex_bccf"] == 'loadcoupons')
+    if (isset($_GET["dex_bccf"]) && $_GET["dex_bccf"] == 'loadcoupons')
         dex_bccf_load_discount_codes();
 
-    if ( $_GET["dex_bccf"] == 'loadseasonprices')
+    if (isset($_GET["dex_bccf"]) && $_GET["dex_bccf"] == 'loadseasonprices')
         dex_bccf_load_season_prices();
 
     if ( 'POST' == $_SERVER['REQUEST_METHOD'] && isset( $_POST['dex_bccf_post_options'] ) && is_admin() )
@@ -551,7 +532,7 @@ function dex_bccf_check_posted_data()
     // captcha verification
     //-------------------------------------------------
     session_start();
-    if ($_GET['hdcaptcha_dex_bccf_post'] == '') $_GET['hdcaptcha_dex_bccf_post'] = $_POST['hdcaptcha_dex_bccf_post'];
+    if (!isset($_GET['hdcaptcha_dex_bccf_post']) || $_GET['hdcaptcha_dex_bccf_post'] == '') $_GET['hdcaptcha_dex_bccf_post'] = $_POST['hdcaptcha_dex_bccf_post'];
     if (
            (dex_bccf_get_option('dexcv_enable_captcha', TDE_BCCFDEFAULT_dexcv_enable_captcha) != 'false') &&
            ( (strtolower($_GET['hdcaptcha_dex_bccf_post']) != strtolower($_SESSION['rand_code'])) ||
@@ -595,7 +576,10 @@ function dex_bccf_check_posted_data()
             $_POST["Date_e"] = date("m/d/Y",strtotime($_POST["dateAndTime_e"]));
         }
         
-        $services_formatted = explode("|",$_POST["services"]);
+        if (isset($_POST["services"]))
+            $services_formatted = explode("|",$_POST["services"]);
+        else
+            $services_formatted = array();    
         
         // calculate days
         $days = round(
@@ -642,7 +626,7 @@ function dex_bccf_check_posted_data()
         else if (isset($fields[str_replace("_"," ",$item)]))
             $buffer .= $fields[str_replace("_"," ",$item)] . ": ". (is_array($value)?(implode(", ",$value)):($value)) . "\n\n";
     $buffer_A = trim($buffer);
-    $buffer_A .= ($_POST["services"]?"\nService: ".trim($services_formatted[1])."\n\n":"").
+    $buffer_A .= (isset($_POST["services"])?"\nService: ".trim($services_formatted[1])."\n\n":"").
                  ($coupon?"\nCoupon code: ".$coupon->code.$discount_note."\n\n":"");
 
     $buffer = $_POST["selMonth_start".$selectedCalendar]."/".$_POST["selDay_start".$selectedCalendar]."/".$_POST["selYear_start".$selectedCalendar]."-".
@@ -682,7 +666,7 @@ function dex_bccf_check_posted_data()
 <form action="https://www.paypal.com/cgi-bin/webscr" name="ppform3" method="post">
 <input type="hidden" name="cmd" value="_xclick" />
 <input type="hidden" name="business" value="<?php echo dex_bccf_get_option('paypal_email', DEX_BCCF_DEFAULT_PAYPAL_EMAIL); ?>" />
-<input type="hidden" name="item_name" value="<?php echo dex_bccf_get_option('paypal_product_name', DEX_BCCF_DEFAULT_PRODUCT_NAME).($_POST["services"]?": ".trim($services_formatted[1]):"").$discount_note; ?>" />
+<input type="hidden" name="item_name" value="<?php echo dex_bccf_get_option('paypal_product_name', DEX_BCCF_DEFAULT_PRODUCT_NAME).(isset($_POST["services"])?": ".trim($services_formatted[1]):"").$discount_note; ?>" />
 <input type="hidden" name="item_number" value="<?php echo $item_number; ?>" />
 <input type="hidden" name="amount" value="<?php echo $price; ?>" />
 <input type="hidden" name="page_style" value="Primary" />
@@ -792,13 +776,13 @@ function dex_bccf_load_season_prices() {
     if (!defined('CP_BCCF_CALENDAR_ID'))
         define ('CP_BCCF_CALENDAR_ID',$_GET["dex_item"]);
 
-    if ($_GET["add"] == "1")
+    if (isset($_GET["add"]) && $_GET["add"] == "1")
         $wpdb->insert( $wpdb->prefix.DEX_BCCF_SEASON_PRICES_TABLE_NAME_NO_PREFIX, array('cal_id' => CP_BCCF_CALENDAR_ID,
                                                                          'price' => $_GET["price"],
                                                                          'date_from' => $_GET["dfrom"],
                                                                          'date_to' => $_GET["dto"],
                                                                          ));
-    if ($_GET["delete"] == "1")
+    if (isset($_GET["delete"]) && $_GET["delete"] == "1")
         $wpdb->query( $wpdb->prepare( "DELETE FROM ".$wpdb->prefix.DEX_BCCF_SEASON_PRICES_TABLE_NAME_NO_PREFIX." WHERE id = %d", $_GET["code"] ));
 
     $codes = $wpdb->get_results( 'SELECT * FROM '.$wpdb->prefix.DEX_BCCF_SEASON_PRICES_TABLE_NAME_NO_PREFIX.' WHERE `cal_id`='.CP_BCCF_CALENDAR_ID);
@@ -947,14 +931,14 @@ function dex_bccf_save_options()
          'calendar_overlapped' => $_POST["calendar_overlapped"],
          'calendar_enabled' => $_POST["calendar_enabled"],
          'calendar_mode' => $_POST["calendar_mode"],
-         'calendar_pages' => $_POST["calendar_pages"],
+         'calendar_pages' => (isset($_POST["calendar_pages"])?$_POST["calendar_pages"]:1),
          'calendar_weekday' => $_POST["calendar_weekday"],
          'calendar_mindate' => $_POST["calendar_mindate"],
          'calendar_maxdate' => $_POST["calendar_maxdate"],
 
          'cu_user_email_field' => $_POST['cu_user_email_field'],
 
-         'enable_paypal' => $_POST["enable_paypal"],
+         'enable_paypal' => 1,
          'paypal_email' => $_POST["paypal_email"],
          'request_cost' => $_POST["request_cost"],
          'paypal_product_name' => $_POST["paypal_product_name"],
@@ -1110,7 +1094,9 @@ $dex_option_buffered_id = -1;
 
 function dex_bccf_get_option ($field, $default_value)
 {
-    global $wpdb, $dex_option_buffered_item;
+    global $wpdb, $dex_option_buffered_item, $dex_option_buffered_id;
+    if (!defined("CP_BCCF_CALENDAR_ID"))
+        return  $default_value;
     if ($dex_option_buffered_id == CP_BCCF_CALENDAR_ID)
         $value = $dex_option_buffered_item->$field;
     else
