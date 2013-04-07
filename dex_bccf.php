@@ -459,7 +459,7 @@ function dex_bccf_export_iCal() {
     echo "END:STANDARD\n";
     echo "END:VTIMEZONE\n";
 
-    $events = $wpdb->get_results( "SELECT * FROM ".DEX_BCCF_CALENDARS_TABLE_NAME." WHERE reservation_calendar_id=".$_GET["id"]." ORDER BY datatime ASC" );
+    $events = $wpdb->get_results( "SELECT * FROM ".DEX_BCCF_CALENDARS_TABLE_NAME." WHERE reservation_calendar_id=".$_GET["id"]." ORDER BY datatime_s ASC" );
     foreach ($events as $event)
     {
 
