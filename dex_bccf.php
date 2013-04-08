@@ -464,8 +464,10 @@ function dex_bccf_export_iCal() {
     {
 
         echo "BEGIN:VEVENT\n";
-        echo "DTSTART:".date("Ymd",strtotime($event->datatime_s.DEX_CAL_TIME_ZONE_MODIFY))."T".date("His",strtotime($event->datatime_s.DEX_CAL_TIME_ZONE_MODIFY))."Z\n";
-        echo "DTEND:".date("Ymd",strtotime($event->datatime_e.DEX_CAL_TIME_ZONE_MODIFY))."T".date("His",strtotime($event->datatime_e.DEX_CAL_TIME_ZONE_MODIFY." +15 minutes"))."Z\n";
+        //echo "DTSTART:".date("Ymd",strtotime($event->datatime_s.DEX_CAL_TIME_ZONE_MODIFY))."T".date("His",strtotime($event->datatime_s.DEX_CAL_TIME_ZONE_MODIFY))."Z\n";
+        //echo "DTEND:".date("Ymd",strtotime($event->datatime_e.DEX_CAL_TIME_ZONE_MODIFY))."T".date("His",strtotime($event->datatime_e.DEX_CAL_TIME_ZONE_MODIFY." +15 minutes"))."Z\n";
+        echo "DTSTART;VALUE=DATE:".date("Ymd",strtotime($event->datatime_s.DEX_CAL_TIME_ZONE_MODIFY))."\n";
+        echo "DTEND;VALUE=DATE:".date("Ymd",strtotime($event->datatime_e.DEX_CAL_TIME_ZONE_MODIFY))."\n";
         echo "DTSTAMP:".date("Ymd",strtotime($event->datatime_s.DEX_CAL_TIME_ZONE_MODIFY))."T".date("His",strtotime($event->datatime_s.DEX_CAL_TIME_ZONE_MODIFY))."Z\n";
         echo "UID:uid".$event->id."@".$_SERVER["SERVER_NAME"]."\n";
         echo "CREATED:".date("Ymd",strtotime($event->datatime_s.DEX_CAL_TIME_ZONE_MODIFY))."T".date("His",strtotime($event->datatime_s.DEX_CAL_TIME_ZONE_MODIFY))."Z\n";
