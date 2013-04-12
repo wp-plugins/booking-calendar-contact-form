@@ -1,7 +1,7 @@
 === Booking Calendar Contact Form ===
 Contributors: codepeople
 Donate link: http://wordpress.dwbooster.com/calendars/booking-calendar-contact-form
-Tags: contact form,booking form,reservation form,calendar,form,payment form,paypal form,booking calendar,reservation calendar,calendar form
+Tags: contact form,booking form,reservation form,calendar,form,payment form,paypal form,booking calendar,reservation calendar,calendar form,booking
 Requires at least: 3.0.5
 Tested up to: 3.5
 Stable tag: trunk
@@ -36,6 +36,8 @@ Other features
 * List of bookings with print option
 * Several configurable fields, settings and behaviors (date format, min/max dates, block dates, etc...)
 
+There is also a pro version that includes a visual form builder, coupons/discount codes and other features.
+
 A more detailed description, screenshots and features can be found at the plugin's page:
 http://wordpress.dwbooster.com/calendars/booking-calendar-contact-form
 
@@ -57,6 +59,13 @@ To install **Booking Calendar Contact Form**, follow these steps:
 A: The product's page contains detailed information about each field and customization:
 
 http://wordpress.dwbooster.com/calendars/booking-calendar-contact-form
+
+= Q: Can I customize the colors? =
+
+
+A: This and other questions are already answered in the product's FAQ at this page:
+
+http://wordpress.dwbooster.com/faq/booking-calendar-contact-form
 
 == Screenshots ==
 
