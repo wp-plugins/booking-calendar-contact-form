@@ -1,3 +1,26 @@
+<?php
+
+  // Start:: Language constants, translate below:
+  // -----------------------------------------------
+  
+  $l_calendar     = __("Calendar");
+  $l_select_dates = __("Select start and end dates");
+  $l_p_select     = __("Please select start and end dates");
+  $l_select_start = __("Select Start Date");
+  $l_select_end   = __("Select End Date");
+  $l_cancel_c     = __("Cancel Selection");
+  $l_sucess       = __("Successfully");
+  $l_cost         = __("Cost");  
+  $l_coupon       = __("Coupon code (optional)");
+  $l_service      = __("Service");
+  $l_sec_code     = __("Please enter the security code");
+  $l_sec_code_low = __("Security Code (lowercase letters)");
+  $l_continue     = __("Continue");
+  
+  // End:: Language constants.
+  // -----------------------------------------------  
+  
+?>
 <?php if ( !defined('DEX_AUTH_INCLUDE') ) { echo 'Direct access not allowed.'; exit; } ?>
 <link href="<?php echo plugins_url('css/stylepublic.css', __FILE__); ?>" type="text/css" rel="stylesheet" />
 <link href="<?php echo plugins_url('css/cupertino/jquery-ui-1.8.20.custom.css', __FILE__); ?>" type="text/css" rel="stylesheet" />
@@ -20,7 +43,7 @@ var dex_global_start_weekday = '<?php echo dex_bccf_get_option('calendar_weekday
   <div>
 <?php } ?>
 <?php
-  echo __("Calendar").":";
+  echo $l_calendar.":";
 ?>
 <br />
 <select name="dex_item" id="dex_item" onchange="dex_updateItem()">
@@ -34,7 +57,7 @@ var dex_global_start_weekday = '<?php echo dex_bccf_get_option('calendar_weekday
 <br /><br />
 </div>
 <?php
-  echo __("Select start and end dates").":";
+  echo $l_select_dates.":";
 ?>
 <?php
   foreach ($myrows as $item)
@@ -70,12 +93,12 @@ Price:
  {
     dex_current_calendar_item = id;
     document.getElementById("calarea_"+dex_current_calendar_item).style.display = "";
-    initCalendar(id,'<?php echo dex_bccf_get_option('calendar_language', DEX_BCCF_DEFAULT_CALENDAR_LANGUAGE); ?>',false,<?php echo dex_bccf_get_option('calendar_mode',DEX_BCCF_DEFAULT_CALENDAR_MODE); ?>,'<?php _e('Select Start Date'); ?>','<?php _e('Select End Date'); ?>','<?php _e('Cancel Selection'); ?>','<?php _e('Successfully'); ?>');
+    initCalendar(id,'<?php echo dex_bccf_get_option('calendar_language', DEX_BCCF_DEFAULT_CALENDAR_LANGUAGE); ?>',false,<?php echo dex_bccf_get_option('calendar_mode',DEX_BCCF_DEFAULT_CALENDAR_MODE); ?>,'<?php echo $l_select_start; ?>','<?php echo $l_select_end; ?>','<?php echo $l_cancel_c; ?>','<?php echo $l_sucess; ?>');
     document.getElementById("selddiv").innerHTML = "";
  }
  dex_do_init(<?php echo $myrows[0]->id; ?>);
  var bccf_d1 = "";
- var bccf_d2 = ""
+ var bccf_d2 = "";
  function updatedate()
  {
     if (document.getElementById("selDay_start"+dex_current_calendar_item ).value != '' && document.getElementById("selDay_end"+dex_current_calendar_item ).value != '')
@@ -91,7 +114,7 @@ Price:
               type: "GET",
               url: "<?php echo cp_bccf_get_site_url(); ?>/?dex_bccf=getcost"+String.fromCharCode(38)+"dex_item="+dex_current_calendar_item+""+String.fromCharCode(38)+"from="+d1+""+String.fromCharCode(38)+"to="+d2,
             }).done(function( html ) {
-                $dexQuery("#bccf_display_price").append('<b><?php _e("Cost"); ?>:</b> <?php echo dex_bccf_get_option('currency', DEX_BCCF_DEFAULT_CURRENCY); ?> '+html);
+                $dexQuery("#bccf_display_price").append('<b><?php echo $l_cost; ?>:</b> <?php echo dex_bccf_get_option('currency', DEX_BCCF_DEFAULT_CURRENCY); ?> '+html);
             });
         }    
     }
@@ -108,7 +131,7 @@ Price:
     document.dex_bccf_pform.dex_bccf_ref_page.value = document.location;<?php if ($option_calendar_enabled != 'false') { ?>    
     if (document.getElementById("selDay_start"+dex_current_calendar_item).value == '' || document.getElementById("selDay_end"+dex_current_calendar_item).value == '')
     {
-        alert('<?php _e('Please select start and end dates'); ?>.');
+        alert('<?php echo $l_p_select; ?>.');
         return false;
     }<?php } ?>     
 <?php if (dex_bccf_get_option('dexcv_enable_captcha', TDE_BCCFDEFAULT_dexcv_enable_captcha) != 'false') { ?> if (form.hdcaptcha_dex_bccf_post.value == '')
@@ -149,7 +172,7 @@ Price:
      {
 ?>
       <div class="fields" id="field-c0"> 
-         <label><?php _e('Coupon code (optional)'); ?>:</label>
+         <label><?php echo $l_coupon; ?>:</label>
          <div class="dfield"><input type="text" name="couponcode" value=""></div>
          <div class="clearer"></div>
       </div>
@@ -159,16 +182,16 @@ Price:
  if ($dex_buffer != '')
  {
     echo '<div class="fields" id="field-c1"><label>';
-    _e('Service');
+    echo $l_service;
     echo ':</label><div class="dfield"><select name="services">'.$dex_buffer.'</select></div><div class="clearer"></div></div><br />';
  }
 ?>
 <?php if (dex_bccf_get_option('dexcv_enable_captcha', TDE_BCCFDEFAULT_dexcv_enable_captcha) != 'false') { ?>
-  <?php _e('Please enter the security code'); ?>:<br />
+  <?php echo $l_sec_code; ?>:<br />
   <img src="<?php echo plugins_url('/captcha/captcha.php?width='.dex_bccf_get_option('dexcv_width', TDE_BCCFDEFAULT_dexcv_width).'&height='.dex_bccf_get_option('dexcv_height', TDE_BCCFDEFAULT_dexcv_height).'&letter_count='.dex_bccf_get_option('dexcv_chars', TDE_BCCFDEFAULT_dexcv_chars).'&min_size='.dex_bccf_get_option('dexcv_min_font_size', TDE_BCCFDEFAULT_dexcv_min_font_size).'&max_size='.dex_bccf_get_option('dexcv_max_font_size', TDE_BCCFDEFAULT_dexcv_max_font_size).'&noise='.dex_bccf_get_option('dexcv_noise', TDE_BCCFDEFAULT_dexcv_noise).'&noiselength='.dex_bccf_get_option('dexcv_noise_length', TDE_BCCFDEFAULT_dexcv_noise_length).'&bcolor='.dex_bccf_get_option('dexcv_background', TDE_BCCFDEFAULT_dexcv_background).'&border='.dex_bccf_get_option('dexcv_border', TDE_BCCFDEFAULT_dexcv_border).'&font='.dex_bccf_get_option('dexcv_font', TDE_BCCFDEFAULT_dexcv_font), __FILE__); ?>"  id="dex_bccf_captchaimg" alt="security code" border="0"  />
   <br />
   <div class="fields" id="field-c2"> 
-   <label><?php _e('Security Code (lowercase letters)'); ?>:</label>
+   <label><?php echo $l_sec_code_low; ?>:</label>
    <div class="dfield">  
      <input type="text" size="20" name="hdcaptcha_dex_bccf_post" id="hdcaptcha_dex_bccf_post" value="" />
      <div class="error message" id="hdcaptcha_error" generated="true" style="display:none;position: absolute; left: 0px; top: 25px;"></div>
@@ -178,5 +201,5 @@ Price:
   <br />
 <?php } ?>
 
-<input type="submit" name="subbtn" value="<?php _e("Continue"); ?>">
+<input type="submit" name="subbtn" value="<?php echo $l_continue; ?>">
 </form>
