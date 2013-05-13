@@ -3,7 +3,7 @@ var cpfb_started=false;
 	$.fn.fbuilderbccfree = function(options){
 		var opt = $.extend({},
 				{
-	   				typeList:new Array({id:"ftext",name:"Single Line Text"},{id:"fnumber",name:"Number"},{id:"femail",name:"Email"},{id:"fdate",name:"Date"},{id:"ftextarea",name:"Paragraph Text"},{id:"fcheck",name:"Checkboxes"},{id:"fradio",name:"Multiple Choice"},{id:"fdropdown",name:"Dropdown"},{id:"ffile",name:"Upload file"},{id:"fSectionBreak",name:"Section break"},{id:"fPhone",name:"Phone field"},{id:"fCommentArea",name:"Comment Area"}),
+	   				typeList:new Array({id:"ftext",name:"Single Line Text"},{id:"fnumber",name:"Number"},{id:"femail",name:"Email"},{id:"fdate",name:"Date"},{id:"ftextarea",name:"Paragraph Text"},{id:"fcheck",name:"Checkboxes"},{id:"fradio",name:"Multiple Choice"},{id:"fdropdown",name:"Dropdown"},{id:"ffile",name:"Upload file"},{id:"fpassword",name:"Password"},{id:"fPhone",name:"Phone field"},{id:"fCommentArea",name:"Comment Area"},{id:"fSectionBreak",name:"Section break"}),
 					pub:false,
 					title:""
 				},options, true);
@@ -19,6 +19,7 @@ var cpfb_started=false;
 						digits: "Please enter only digits.",
 						maxlength: $.validator.format("Please enter no more than {0} characters"),
                         minlength: $.validator.format("Please enter at least {0} characters."),
+                        equalTo: "Please enter the same value again.",
 						max: $.validator.format("Please enter a value less than or equal to {0}."),
 						min: $.validator.format("Please enter a value greater than or equal to {0}.")
 					}
@@ -107,11 +108,29 @@ var cpfb_started=false;
 				items[id].max = $(this).val();
 				reloadItems();
 			});
+			$("#sMinlength").change(function(){
+				items[id].minlength = $(this).val();
+				reloadItems();
+			});
+			$("#sMaxlength").change(function(){
+				items[id].maxlength = $(this).val();
+				reloadItems();
+			});
+			$("#sEqualTo").change(function(){
+				items[id].equalTo = $(this).val();
+				reloadItems();
+			});
 			$(".choice_remove").click(function(){
 				if (items[id].choices.length==1)
+				{
 					items[id].choices[0]="";
+					items[id].choicesVal[0]="";
+				}	
 				else
+				{
 					items[id].choices.splice($(this).attr("i"),1);
+					items[id].choicesVal.splice($(this).attr("i"),1);
+				}	
 				if (items[id].ftype=="fcheck")
 				{
 					if (items[id].choiceSelected.length==1)
@@ -124,23 +143,33 @@ var cpfb_started=false;
 			});
 			$(".choice_add").click(function(){
 				items[id].choices.splice($(this).attr("i")+1,0,"");
+				items[id].choicesVal.splice($(this).attr("i")+1,0,"");
 				if (items[id].ftype=="fcheck")
 					items[id].choiceSelected.splice($(this).attr("i")+1,0,false);
 				editItem(id);
 				reloadItems();
 			});
 			$(".choice_text").keyup(function(){
+			    if (items[id].choices[$(this).attr("i")] == items[id].choicesVal[$(this).attr("i")])
+			    {
+				    $("#"+$(this).attr("id")+"V"+$(this).attr("i")).val($(this).val());
+				    items[id].choicesVal[$(this).attr("i")]= $(this).val();
+				}    
 				items[id].choices[$(this).attr("i")]= $(this).val();
+				reloadItems();
+			});
+			$(".choice_value").keyup(function(){
+			    items[id].choicesVal[$(this).attr("i")]= $(this).val();
 				reloadItems();
 			});
 			$(".choice_radio").click(function(){
 				if ($(this).is(':checked'))
-					items[id].choiceSelected = items[id].choices[$(this).attr("i")];
+					items[id].choiceSelected = items[id].choicesVal[$(this).attr("i")];
 				reloadItems();
 			});
 			$(".choice_select").click(function(){
 				if ($(this).is(':checked'))
-					items[id].choiceSelected = items[id].choices[$(this).attr("i")];
+					items[id].choiceSelected = items[id].choicesVal[$(this).attr("i")];
 				reloadItems();
 			});
 			$(".choice_check").click(function(){
@@ -157,6 +186,13 @@ var cpfb_started=false;
 			$("#sCsslayout").keyup(function(){
 				items[id].csslayout = $(this).val();
 				reloadItems();
+			});
+			$('.equalTo').each(function(){
+			    var str = '<option value="" '+(("" == $(this).attr("dvalue"))?"selected":"")+'></option>';
+			    for (var i=0;i<items.length;i++)
+			    	if ((items[i].ftype=="ftext" || items[i].ftype=="femail" || items[i].ftype=="fpassword") && (items[i].name != $(this).attr("dname")))
+			    		str += '<option value="'+items[i].name+'" '+((items[i].name == $(this).attr("dvalue"))?"selected":"")+'>'+(items[i].title)+'</option>';
+			    $(this).html(str);	
 			});
 		};
 		editForm = function() {
@@ -240,8 +276,7 @@ var cpfb_started=false;
 					str += '<option value="'+items[i].name+'" '+((items[i].name == $('#cu_user_email_field').attr("def"))?"selected":"")+'>'+(items[i].title)+'</option>';
 					//getNameByIdFromType
 			$('#cu_user_email_field').html(str);
-
-
+			
 		}
 		function htmlEncode(value){
 		  value = $('<div/>').text(value).html()  
@@ -311,6 +346,9 @@ var cpfb_started=false;
 			showPredefined: function(v) {
 				return '<label>Predefined Value</label><textarea class="large" name="sPredefined" id="sPredefined">'+v+'</textarea>';
 			},
+			showEqualTo: function(v,name) {
+			    return '<div><label>Equal to [<a class="helpfbuilder" text="Use this field to create password confirmation field or email confirmation fields.\n\nSpecify this setting ONLY into the confirmation field, not in the original field.">help?</a>]</label><br /><select class="equalTo" name="sEqualTo" id="sEqualTo" dvalue="'+v+'" dname="'+name+'"></select></div>';
+			},			
 			showRequired: function(v) {
 				return '<div><input type="checkbox" name="sRequired" id="sRequired" '+((v)?"checked":"")+'><label>Required</label></div>';
 			},
@@ -367,6 +405,12 @@ var cpfb_started=false;
 						return this.showSpecialDataInstance();
 					else
 						return "";
+				},				
+				showEqualTo:function(){
+					if(typeof this.equalTo != 'undefined')
+						return showSettings.showEqualTo(this.equalTo,this.name);
+					else
+						return "";
 				},
 				showPredefined:function(){
 					if(typeof this.predefined != 'undefined')
@@ -419,7 +463,7 @@ var cpfb_started=false;
 						return showSettings.showCsslayout(this.csslayout);
 				},
 				showAllSettings:function(){
-						return this.showTitle()+this.showName()+this.showSize()+this.showLayout()+this.showFormat()+this.showRange()+this.showRequired()+this.showSpecialData()+this.showPredefined()+this.showChoice()+this.showUserhelp()+this.showCsslayout();
+						return this.showTitle()+this.showName()+this.showSize()+this.showLayout()+this.showFormat()+this.showRange()+this.showRequired()+this.showSpecialData()+this.showEqualTo()+this.showPredefined()+this.showChoice()+this.showUserhelp()+this.showCsslayout();
 				},
 				showTitle:function(){
 						return showSettings.showTitle(this.ftype,this.title);
@@ -453,12 +497,38 @@ var cpfb_started=false;
 				predefined:"",
 				required:false,
 				size:"medium",
+				minlength:"",
+				maxlength:"",
+				equalTo:"",
 				display:function(){
 					return '<div class="fields" id="field-'+this.index+'"><div class="arrow ui-icon ui-icon-play "></div><div class="remove ui-icon ui-icon-trash "></div><label>'+this.title+''+((this.required)?"*":"")+'</label><div class="dfield"><input class="field disabled '+this.size+'" type="text" value="'+htmlEncode(this.predefined)+'"/><span class="uh">'+this.userhelp+'</span></div><div class="clearer"></div></div>';
 				},
 				show:function(){
-					return '<div class="fields '+this.csslayout+'" id="field-'+this.index+'"><label>'+this.title+''+((this.required)?"*":"")+'</label><div class="dfield"><input id="'+this.name+'" name="'+this.name+'" class="field '+this.size+((this.required)?" required":"")+'" type="text" value="'+htmlEncode(this.predefined)+'"/><span class="uh">'+this.userhelp+'</span></div><div class="clearer"></div></div>';	
-				}
+					return '<div class="fields '+this.csslayout+'" id="field-'+this.index+'"><label>'+this.title+''+((this.required)?"*":"")+'</label><div class="dfield"><input id="'+this.name+'" name="'+this.name+'" minlength="'+(this.minlength)+'" maxlength="'+htmlEncode(this.maxlength)+'" '+((this.equalTo!="")?"equalTo=\"#"+htmlEncode(this.equalTo)+"\"":"" )+' class="field '+this.size+((this.required)?" required":"")+'" type="text" value="'+htmlEncode(this.predefined)+'"/><span class="uh">'+this.userhelp+'</span></div><div class="clearer"></div></div>';	
+				},
+                showSpecialDataInstance: function() {
+                    return '<div class="column"><label>Min length/characters</label><br /><input name="sMinlength" id="sMinlength" value="'+this.minlength+'"></div><div class="column"><label>Max length/characters</label><br /><input name="sMaxlength" id="sMaxlength" value="'+this.maxlength+'"></div><div class="clearer"></div>';
+                }
+		});
+		var fpassword=function(){};
+		$.extend(fpassword.prototype,ffields.prototype,{
+				title:"Untitled",
+				ftype:"fpassword",
+				predefined:"",
+				required:false,
+				size:"medium",
+				minlength:"",
+				maxlength:"",
+				equalTo:"",
+				display:function(){
+					return '<div class="fields" id="field-'+this.index+'"><div class="arrow ui-icon ui-icon-play "></div><div class="remove ui-icon ui-icon-trash "></div><label>'+this.title+''+((this.required)?"*":"")+'</label><div class="dfield"><input class="field disabled '+this.size+'" type="password" value="'+htmlEncode(this.predefined)+'"/><span class="uh">'+this.userhelp+'</span></div><div class="clearer"></div></div>';
+				},
+				show:function(){
+					return '<div class="fields '+this.csslayout+'" id="field-'+this.index+'"><label>'+this.title+''+((this.required)?"*":"")+'</label><div class="dfield"><input id="'+this.name+'" name="'+this.name+'" minlength="'+(this.minlength)+'" maxlength="'+htmlEncode(this.maxlength)+'" '+((this.equalTo!="")?"equalTo=\"#"+htmlEncode(this.equalTo)+"\"":"" )+' class="field '+this.size+((this.required)?" required":"")+'" type="password" value="'+htmlEncode(this.predefined)+'"/><span class="uh">'+this.userhelp+'</span></div><div class="clearer"></div></div>';	
+				},
+                showSpecialDataInstance: function() {
+                    return '<div class="column"><label>Min length/characters</label><br /><input name="sMinlength" id="sMinlength" value="'+this.minlength+'"></div><div class="column"><label>Max length/characters</label><br /><input name="sMaxlength" id="sMaxlength" value="'+this.maxlength+'"></div><div class="clearer"></div>';
+                }
 		});
 		var femail=function(){};
 		$.extend(femail.prototype,ffields.prototype,{
@@ -467,12 +537,17 @@ var cpfb_started=false;
 				predefined:"",
 				required:false,
 				size:"medium",
+				equalTo:"",
 				display:function(){
 					return '<div class="fields" id="field-'+this.index+'"><div class="arrow ui-icon ui-icon-play "></div><div class="remove ui-icon ui-icon-trash "></div><label>'+this.title+''+((this.required)?"*":"")+'</label><div class="dfield"><input class="field disabled '+this.size+'" type="text" value="'+htmlEncode(this.predefined)+'"/><span class="uh">'+this.userhelp+'</span></div><div class="clearer"></div></div>';
 				},
 				show:function(){
-					return '<div class="fields '+this.csslayout+'" id="field-'+this.index+'"><label>'+this.title+''+((this.required)?"*":"")+'</label><div class="dfield"><input id="'+this.name+'" name="'+this.name+'" class="field email '+this.size+((this.required)?" required":"")+'" type="text" value="'+htmlEncode(this.predefined)+'"/><span class="uh">'+this.userhelp+'</span></div><div class="clearer"></div></div>';	
-				}
+					return '<div class="fields '+this.csslayout+'" id="field-'+this.index+'"><label>'+this.title+''+((this.required)?"*":"")+'</label><div class="dfield"><input id="'+this.name+'" name="'+this.name+'" '+((this.equalTo!="")?"equalTo=\"#"+htmlEncode(this.equalTo)+"\"":"" )+' class="field email '+this.size+((this.required)?" required":"")+'" type="text" value="'+htmlEncode(this.predefined)+'"/><span class="uh">'+this.userhelp+'</span></div><div class="clearer"></div></div>';	
+				},
+                showSpecialDataInstance: function() {
+                    var str = "";
+                    return str;
+                }
 		});
 		var fnumber=function(){};
 		$.extend(fnumber.prototype,ffields.prototype,{
@@ -591,7 +666,7 @@ var cpfb_started=false;
 				            tmpv.splice(i,1);    
 				    for (var i=0;i<tmp.length;i++)
 				        if ($.trim(tmp[i])!="")
-				            str += '<div class="uh_phone" ><input type="text" class="field disabled" style="width:'+(15*$.trim(tmp[i]).length)+'px" value="'+((tmpv[i])?tmpv[i]:"")+'" maxlength="'+$.trim(tmp[i]).length+'" /><br />'+$.trim(tmp[i])+'</div>';
+				            str += '<div class="uh_phone" ><input type="text" class="field disabled" style="width:'+(15*$.trim(tmp[i]).length)+'px" value="'+((tmpv[i])?tmpv[i]:"")+'" maxlength="'+$.trim(tmp[i]).length+'" /><div class="l">'+$.trim(tmp[i])+'</div></div>';
 					return '<div class="fields" id="field-'+this.index+'"><div class="arrow ui-icon ui-icon-play "></div><div class="remove ui-icon ui-icon-trash "></div><label>'+this.title+''+((this.required)?"*":"")+'</label><div class="dfield">'+str+'<span class="uh">'+this.userhelp+'</span></div><div class="clearer"></div></div>';
 				},
 				show:function(){
@@ -603,7 +678,7 @@ var cpfb_started=false;
 				            tmpv.splice(i,1);    
 				    for (var i=0;i<tmp.length;i++)
 				        if ($.trim(tmp[i])!="")
-				            str += '<div class="uh_phone" ><input type="text" id="'+this.name+'_'+i+'" name="'+this.name+'_'+i+'" class="field digits '+((this.required)?" required":"")+'" style="width:'+(15*$.trim(tmp[i]).length)+'px" value="'+((tmpv[i])?tmpv[i]:"")+'" maxlength="'+$.trim(tmp[i]).length+'" minlength="'+$.trim(tmp[i]).length+'"/><br />'+$.trim(tmp[i])+'</div>';
+				            str += '<div class="uh_phone" ><input type="text" id="'+this.name+'_'+i+'" name="'+this.name+'_'+i+'" class="field digits '+((this.required)?" required":"")+'" style="width:'+(15*$.trim(tmp[i]).length)+'px" value="'+((tmpv[i])?tmpv[i]:"")+'" maxlength="'+$.trim(tmp[i]).length+'" minlength="'+$.trim(tmp[i]).length+'"/><div class="l">'+$.trim(tmp[i])+'</div></div>';
 					return '<div class="fields '+this.csslayout+'" id="field-'+this.index+'"><label>'+this.title+''+((this.required)?"*":"")+'</label><div class="dfield"><input type="hidden" id="'+this.name+'" name="'+this.name+'" class="field " />'+str+'<span class="uh">'+this.userhelp+'</span></div><div class="clearer"></div></div>';
 				},
 				showFormatIntance: function() {
@@ -630,6 +705,7 @@ var cpfb_started=false;
 				required:false,
 				init:function(){
 					this.choices = new Array("First Choice","Second Choice","Third Choice");
+					this.choicesVal = new Array("First Choice","Second Choice","Third Choice");
 					this.choiceSelected = new Array(false,false,false);
 				},
 				display:function(){
@@ -641,18 +717,19 @@ var cpfb_started=false;
 				show:function(){
 					var str = "";
 					for (var i=0;i<this.choices.length;i++)
-						str += '<div class="'+this.layout+'"><input name="'+this.name+'[]" id="list'+i+'" class="field group '+((this.required)?" required":"")+'" value="'+htmlEncode(this.choices[i])+'" type="checkbox" '+((this.choiceSelected[i])?"checked":"")+'/> <span>'+this.choices[i]+'</span></div>';
+						str += '<div class="'+this.layout+'"><input name="'+this.name+'[]" id="list'+i+'" class="field group '+((this.required)?" required":"")+'" value="'+htmlEncode(this.choicesVal[i])+'" type="checkbox" '+((this.choiceSelected[i])?"checked":"")+'/> <span>'+this.choices[i]+'</span></div>';
 					return '<div class="fields '+this.csslayout+'" id="field-'+this.index+'"><label>'+this.title+''+((this.required)?"*":"")+'</label><div class="dfield">'+str+'<span class="uh">'+this.userhelp+'</span></div><div class="clearer"></div></div>';
 				},
 				showChoiceIntance: function() {
 					var l = this.choices;
+					var lv = this.choicesVal;
 					var v = this.choiceSelected;
 					var str = "";
 					for (var i=0;i<l.length;i++)
 					{
-						str += '<div class="choicesEdit"><input class="choice_check" i="'+i+'" type="checkbox" '+((this.choiceSelected[i])?"checked":"")+'/><input class="choice_text" i="'+i+'" type="text" name="sChoice" id="sChoice" value="'+htmlEncode(l[i])+'"/><a class="choice_add ui-icon ui-icon-circle-plus" i="'+i+'" title="Add another choice."></a><a class="choice_remove ui-icon ui-icon-circle-minus" i="'+i+'" title="Delete this choice."></a></div>';
+						str += '<div class="choicesEdit"><input class="choice_check" i="'+i+'" type="checkbox" '+((this.choiceSelected[i])?"checked":"")+'/><input class="choice_text" i="'+i+'" type="text" name="sChoice'+this.name+'" id="sChoice'+this.name+'" value="'+htmlEncode(l[i])+'"/><input class="choice_value" i="'+i+'" type="text" name="sChoice'+this.name+'V'+i+'" id="sChoice'+this.name+'V'+i+'" value="'+htmlEncode(lv[i])+'"/><a class="choice_add ui-icon ui-icon-circle-plus" i="'+i+'" title="Add another choice."></a><a class="choice_remove ui-icon ui-icon-circle-minus" i="'+i+'" title="Delete this choice."></a></div>';
 					}
-					return '<div class="choicesSet"><label>Choices</label>'+str+'</div>';
+					return '<div class="choicesSet"><label>Choices</label><div><div class="t">Text</div><div class="t">Value</div><div class="clearer"></div></div>'+str+'</div>';
 				}
 		});
 		var fradio=function(){};
@@ -664,28 +741,30 @@ var cpfb_started=false;
 				choiceSelected:null,
 				init:function(){
 					this.choices = new Array("First Choice","Second Choice","Third Choice");
+					this.choicesVal = new Array("First Choice","Second Choice","Third Choice");
 				},
 				display:function(){
 					var str = "";
 					for (var i=0;i<this.choices.length;i++)
-						str += '<div class="'+this.layout+'"><input class="field" disabled="true" type="radio" i="'+i+'"  '+((this.choices[i]==this.choiceSelected)?"checked":"")+'/> '+this.choices[i]+'</div>';
+						str += '<div class="'+this.layout+'"><input class="field" disabled="true" type="radio" i="'+i+'"  '+((this.choicesVal[i]==this.choiceSelected)?"checked":"")+'/> '+this.choices[i]+'</div>';
 					return '<div class="fields" id="field-'+this.index+'"><div class="arrow ui-icon ui-icon-play "></div><div class="remove ui-icon ui-icon-trash "></div><label>'+this.title+''+((this.required)?"*":"")+'</label><div class="dfield">'+str+'<span class="uh">'+this.userhelp+'</span></div><div class="clearer"></div></div>';
 				},
 				show:function(){
 					var str = "";
 					for (var i=0;i<this.choices.length;i++)
-						str += '<div class="'+this.layout+'"><input name="'+this.name+'" class="field group '+((this.required)?" required":"")+'" value="'+htmlEncode(this.choices[i])+'" type="radio" i="'+i+'"  '+((this.choices[i]==this.choiceSelected)?"checked":"")+'/> <span>'+this.choices[i]+'</span></div>';
+						str += '<div class="'+this.layout+'"><input name="'+this.name+'" class="field group '+((this.required)?" required":"")+'" value="'+htmlEncode(this.choicesVal[i])+'" type="radio" i="'+i+'"  '+((this.choicesVal[i]==this.choiceSelected)?"checked":"")+'/> <span>'+this.choices[i]+'</span></div>';
 					return '<div class="fields '+this.csslayout+'" id="field-'+this.index+'"><label>'+this.title+''+((this.required)?"*":"")+'</label><div class="dfield">'+str+'<span class="uh">'+this.userhelp+'</span></div><div class="clearer"></div></div>';  
 				},
 				showChoiceIntance: function() {
 					var l = this.choices;
+					var lv = this.choicesVal;
 					var v = this.choiceSelected;
 					var str = "";
 					for (var i=0;i<l.length;i++)
 					{
-						str += '<div class="choicesEdit"><input class="choice_radio" i="'+i+'" type="radio" '+((this.choiceSelected==l[i])?"checked":"")+' name="choice_radio" /><input class="choice_text" i="'+i+'" type="text" name="sChoice" id="sChoice" value="'+htmlEncode(l[i])+'"/><a class="choice_add ui-icon ui-icon-circle-plus" i="'+i+'" title="Add another choice."></a><a class="choice_remove ui-icon ui-icon-circle-minus" i="'+i+'" title="Delete this choice."></a></div>';
+						str += '<div class="choicesEdit"><input class="choice_radio" i="'+i+'" type="radio" '+((this.choiceSelected==lv[i])?"checked":"")+' name="choice_radio" /><input class="choice_text" i="'+i+'" type="text" name="sChoice'+this.name+'" id="sChoice'+this.name+'" value="'+htmlEncode(l[i])+'"/><input class="choice_value" i="'+i+'" type="text" name="sChoice'+this.name+'V'+i+'" id="sChoice'+this.name+'V'+i+'" value="'+htmlEncode(lv[i])+'"/><a class="choice_add ui-icon ui-icon-circle-plus" i="'+i+'" title="Add another choice."></a><a class="choice_remove ui-icon ui-icon-circle-minus" i="'+i+'" title="Delete this choice."></a></div>';
 					}
-					return '<div class="choicesSet"><label>Choices</label>'+str+'</div>';
+					return '<div class="choicesSet"><label>Choices</label><div><div class="t">Text</div><div class="t">Value</div><div class="clearer"></div></div>'+str+'</div>';
 				}
 		});
 		var fdropdown=function(){};
@@ -697,6 +776,7 @@ var cpfb_started=false;
 				choiceSelected:"",
 				init:function(){
 					this.choices = new Array("First Choice","Second Choice","Third Choice");
+					this.choicesVal = new Array("First Choice","Second Choice","Third Choice");
 				},
 				display:function(){
 					return '<div class="fields" id="field-'+this.index+'"><div class="arrow ui-icon ui-icon-play "></div><div class="remove ui-icon ui-icon-trash "></div><label>'+this.title+''+((this.required)?"*":"")+'</label><div class="dfield"><select class="field disabled '+this.size+'" ><option>'+this.choiceSelected+'</option></select><span class="uh">'+this.userhelp+'</span></div><div class="clearer"></div></div>';
@@ -707,19 +787,20 @@ var cpfb_started=false;
 					var str = "";
 					for (var i=0;i<l.length;i++)
 					{
-						str += '<option '+((this.choiceSelected==l[i])?"selected":"")+' value="'+htmlEncode(l[i])+'">'+l[i]+'</option>';
+						str += '<option '+((this.choiceSelected==this.choicesVal[i])?"selected":"")+' value="'+htmlEncode(this.choicesVal[i])+'">'+l[i]+'</option>';
 					}
 					return '<div class="fields '+this.csslayout+'" id="field-'+this.index+'"><label>'+this.title+''+((this.required)?"*":"")+'</label><div class="dfield"><select id="'+this.name+'" name="'+this.name+'" class="field '+this.size+((this.required)?" required":"")+'" >'+str+'</select><span class="uh">'+this.userhelp+'</span></div><div class="clearer"></div><div class="clearer"></div></div>';
 				},
 				showChoiceIntance: function() {
 					var l = this.choices;
+					var lv = this.choicesVal;
 					var v = this.choiceSelected;
 					var str = "";
 					for (var i=0;i<l.length;i++)
 					{
-						str += '<div class="choicesEdit"><input class="choice_select" i="'+i+'" type="radio" '+((this.choiceSelected==l[i])?"checked":"")+' name="choice_select" /><input class="choice_text" i="'+i+'" type="text" name="sChoice" id="sChoice" value="'+htmlEncode(l[i])+'"/><a class="choice_add ui-icon ui-icon-circle-plus" i="'+i+'" title="Add another choice."></a><a class="choice_remove ui-icon ui-icon-circle-minus" i="'+i+'" title="Delete this choice."></a></div>';
+						str += '<div class="choicesEdit"><input class="choice_select" i="'+i+'" type="radio" '+((this.choiceSelected==lv[i])?"checked":"")+' name="choice_select" /><input class="choice_text" i="'+i+'" type="text" name="sChoice'+this.name+'" id="sChoice'+this.name+'" value="'+htmlEncode(l[i])+'"/><input class="choice_value" i="'+i+'" type="text" name="sChoice'+this.name+'V'+i+'" id="sChoice'+this.name+'V'+i+'" value="'+htmlEncode(lv[i])+'"/><a class="choice_add ui-icon ui-icon-circle-plus" i="'+i+'" title="Add another choice."></a><a class="choice_remove ui-icon ui-icon-circle-minus" i="'+i+'" title="Delete this choice."></a></div>';
 					}
-					return '<div class="choicesSet"><label>Choices</label>'+str+'</div>';
+					return '<div class="choicesSet"><label>Choices</label><div><div class="t">Text</div><div class="t">Value</div><div class="clearer"></div></div>'+str+'</div>';
 				}
 		});
 		if (!opt.pub)
@@ -858,20 +939,14 @@ var cpfb_started=false;
 		$("#dex_bccf_pform").validate({
 			errorElement: "div",
 			errorPlacement: function(e, element) {
-				if (element.hasClass('group')){
-					if (element.parent().siblings().size() > 0)
-						element = element.parent().siblings(":last");
-					else
-						element = element.parent();	
-				}
-				offset = element.offset();
-				e.insertBefore(element)
-				e.addClass('message');  // add a class to the wrapper
-				e.css('position', 'absolute');
-				e.css('left',0 );
-				e.css('top',element.outerHeight(true));
+			    if (element.hasClass('group'))
+                    element = element.parent();
+                e.insertBefore(element);
+                e.addClass('message'); // add a class to the wrapper
+                e.css('position', 'absolute');
+                e.css('left',0 );
+                e.css('top',element.parent().outerHeight(true));
 			}
 		});
 	}
 })(jQuery);
-$contactFormPPQuery = jQuery.noConflict();

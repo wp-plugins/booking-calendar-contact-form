@@ -198,7 +198,7 @@ if (cp_bccf_is_administrator() || $mycalendarrows[0]->conwer == $current_user->I
     <link href="<?php echo plugins_url('css/cupertino/jquery-ui-1.8.20.custom.css', __FILE__); ?>" type="text/css" rel="stylesheet" />
 
      <script>
-
+         $contactFormPPQuery = jQuery.noConflict();
          $contactFormPPQuery(document).ready(function() {
             var f = $contactFormPPQuery("#fbuilder").fbuilderbccfree();
             f.fBuild.loadData("form_structure");
