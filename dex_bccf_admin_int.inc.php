@@ -66,6 +66,7 @@ if (cp_bccf_is_administrator() || $mycalendarrows[0]->conwer == $current_user->I
 ?>     
    <div style="background-color:#ffff55;width:450px;border: 1px solid black;padding:10px;margin:10px;">
     <strong>Note:</strong> Overlapped reservations are enabled below, so you cannot use the calendar to block dates and the booking should be checked in the <a href="admin.php?page=dex_bccf&cal=<?php echo CP_BCCF_CALENDAR_ID; ?>&list=1">bookings list area</a>.
+     The <a href="http://wordpress.dwbooster.com/calendars/booking-calendar-contact-form">pro version</a> allows using the calendar for blocking dates even with the overlapped mode enabled.
    </div> 
 <?php } else { ?>  
    <link rel="stylesheet" type="text/css" href="<?php echo plugins_url('TDE_RCalendar/all-css-admin.css', __FILE__); ?>" />
