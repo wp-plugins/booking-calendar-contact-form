@@ -76,9 +76,7 @@ var dex_global_start_weekday = '<?php echo dex_bccf_get_option('calendar_weekday
 <div id="bccf_display_price"> 
 Price:          
 </div>
-<?php } else { ?>
-  <input name="dex_item" id="dex_item" type="hidden" value="<?php echo $myrows[0]->id; ?>" />
-<?php } ?>            
+<?php } else { ?><input name="dex_item" id="dex_item" type="hidden" value="<?php echo $myrows[0]->id; ?>" /><?php } ?>            
 <div id="selddiv" style="font-weight: bold;margin-top:0px;padding-top:0px;padding-right:3px;padding-left:3px;"></div>
 <script type="text/javascript"><?php if ($option_calendar_enabled != 'false') { ?>
  var dex_current_calendar_item;
@@ -101,7 +99,11 @@ Price:
  var bccf_d2 = "";
  function updatedate()
  {
-    if (document.getElementById("selDay_start"+dex_current_calendar_item ).value != '' && document.getElementById("selDay_end"+dex_current_calendar_item ).value != '')
+    var a = (document.getElementById("selDay_start"+dex_current_calendar_item ).value != '');
+    var b = (document.getElementById("selDay_end"+dex_current_calendar_item ).value != '');
+    var c = false;
+    if (a) if (b) c = true;
+    if (c)
     {   
         var d1 = document.getElementById("selYear_start"+dex_current_calendar_item ).value+"-"+document.getElementById("selMonth_start"+dex_current_calendar_item ).value+"-"+document.getElementById("selDay_start"+dex_current_calendar_item ).value;
         var d2 = document.getElementById("selYear_end"+dex_current_calendar_item ).value+"-"+document.getElementById("selMonth_end"+dex_current_calendar_item ).value+"-"+document.getElementById("selDay_end"+dex_current_calendar_item ).value;        
@@ -155,17 +157,11 @@ Price:
     else <?php } ?>
         return true;
  }
-</script>
-<input type="hidden" name="dex_bccf_pform_process" value="1" />
-<input type="hidden" name="dex_bccf_id" value="<?php echo CP_BCCF_CALENDAR_ID; ?>" />
-<input type="hidden" name="dex_bccf_ref_page" value="<?php esc_attr(cp_bccf_get_FULL_site_url); ?>" />
-<input type="hidden" name="form_structure" id="form_structure" size="180" value="<?php echo str_replace("\r","",str_replace("\n","",esc_attr(dex_bccf_cleanJSON(dex_bccf_get_option('form_structure', DEX_BCCF_DEFAULT_form_structure))))); ?>" />
+</script><input type="hidden" name="dex_bccf_pform_process" value="1" /><input type="hidden" name="dex_bccf_id" value="<?php echo CP_BCCF_CALENDAR_ID; ?>" /><input type="hidden" name="dex_bccf_ref_page" value="<?php esc_attr(cp_bccf_get_FULL_site_url); ?>" /><input type="hidden" name="form_structure" id="form_structure" size="180" value="<?php echo str_replace("\r","",str_replace("\n","",esc_attr(dex_bccf_cleanJSON(dex_bccf_get_option('form_structure', DEX_BCCF_DEFAULT_form_structure))))); ?>" />
   <div id="fbuilder">
       <div id="formheader"></div>
       <div id="fieldlist"></div>
   </div>
-
-
 <?php
      $codes = $wpdb->get_results( 'SELECT * FROM '.DEX_BCCF_DISCOUNT_CODES_TABLE_NAME.' WHERE `cal_id`='.CP_BCCF_CALENDAR_ID);
      if (count($codes))
@@ -177,7 +173,6 @@ Price:
          <div class="clearer"></div>
       </div>
 <?php } ?>
-
 <?php
  if ($dex_buffer != '')
  {
@@ -188,11 +183,8 @@ Price:
 ?>
 <?php if (dex_bccf_get_option('dexcv_enable_captcha', TDE_BCCFDEFAULT_dexcv_enable_captcha) != 'false') { ?>
   <?php echo $l_sec_code; ?>:<br />
-  <img src="<?php echo plugins_url('/captcha/captcha.php?width='.dex_bccf_get_option('dexcv_width', TDE_BCCFDEFAULT_dexcv_width).'&height='.dex_bccf_get_option('dexcv_height', TDE_BCCFDEFAULT_dexcv_height).'&letter_count='.dex_bccf_get_option('dexcv_chars', TDE_BCCFDEFAULT_dexcv_chars).'&min_size='.dex_bccf_get_option('dexcv_min_font_size', TDE_BCCFDEFAULT_dexcv_min_font_size).'&max_size='.dex_bccf_get_option('dexcv_max_font_size', TDE_BCCFDEFAULT_dexcv_max_font_size).'&noise='.dex_bccf_get_option('dexcv_noise', TDE_BCCFDEFAULT_dexcv_noise).'&noiselength='.dex_bccf_get_option('dexcv_noise_length', TDE_BCCFDEFAULT_dexcv_noise_length).'&bcolor='.dex_bccf_get_option('dexcv_background', TDE_BCCFDEFAULT_dexcv_background).'&border='.dex_bccf_get_option('dexcv_border', TDE_BCCFDEFAULT_dexcv_border).'&font='.dex_bccf_get_option('dexcv_font', TDE_BCCFDEFAULT_dexcv_font), __FILE__); ?>"  id="dex_bccf_captchaimg" alt="security code" border="0"  />
-  <br />
-  <div class="fields" id="field-c2"> 
-   <label><?php echo $l_sec_code_low; ?>:</label>
-   <div class="dfield">  
+  <img src="<?php echo plugins_url('/captcha/captcha.php?width='.dex_bccf_get_option('dexcv_width', TDE_BCCFDEFAULT_dexcv_width).'&height='.dex_bccf_get_option('dexcv_height', TDE_BCCFDEFAULT_dexcv_height).'&letter_count='.dex_bccf_get_option('dexcv_chars', TDE_BCCFDEFAULT_dexcv_chars).'&min_size='.dex_bccf_get_option('dexcv_min_font_size', TDE_BCCFDEFAULT_dexcv_min_font_size).'&max_size='.dex_bccf_get_option('dexcv_max_font_size', TDE_BCCFDEFAULT_dexcv_max_font_size).'&noise='.dex_bccf_get_option('dexcv_noise', TDE_BCCFDEFAULT_dexcv_noise).'&noiselength='.dex_bccf_get_option('dexcv_noise_length', TDE_BCCFDEFAULT_dexcv_noise_length).'&bcolor='.dex_bccf_get_option('dexcv_background', TDE_BCCFDEFAULT_dexcv_background).'&border='.dex_bccf_get_option('dexcv_border', TDE_BCCFDEFAULT_dexcv_border).'&font='.dex_bccf_get_option('dexcv_font', TDE_BCCFDEFAULT_dexcv_font), __FILE__); ?>"  id="dex_bccf_captchaimg" alt="security code" border="0"  /><br />
+  <div class="fields" id="field-c2"> <label><?php echo $l_sec_code_low; ?>:</label><div class="dfield">  
      <input type="text" size="20" name="hdcaptcha_dex_bccf_post" id="hdcaptcha_dex_bccf_post" value="" />
      <div class="error message" id="hdcaptcha_error" generated="true" style="display:none;position: absolute; left: 0px; top: 25px;"></div>
      <div class="clearer"></div>
