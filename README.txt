@@ -97,6 +97,9 @@ A: Into the Booking Calendar Contact Form settings >> PayPal payment form config
 
 A: If you don't want to edit the MO/PO files then just edit the texts that are at the beginning of the file "dex_scheduler.inc.php" (the booking page). The booking form validation texts can be edited from the administration area.
 
+= Q: Can I restrict the number of days to book? =
+
+A: This feature is available in the pro version.
 
 
 == Screenshots ==

@@ -1,9 +1,10 @@
 var cpfb_started=false;
+jQuery(function(){
 (function($) {
 	$.fn.fbuilderbccfree = function(options){
 		var opt = $.extend({},
 				{
-	   				typeList:new Array({id:"ftext",name:"Single Line Text"},{id:"fnumber",name:"Number"},{id:"femail",name:"Email"},{id:"fdate",name:"Date"},{id:"ftextarea",name:"Paragraph Text"},{id:"fcheck",name:"Checkboxes"},{id:"fradio",name:"Multiple Choice"},{id:"fdropdown",name:"Dropdown"},{id:"ffile",name:"Upload file"},{id:"fpassword",name:"Password"},{id:"fPhone",name:"Phone field"},{id:"fCommentArea",name:"Comment Area"},{id:"fSectionBreak",name:"Section break"}),
+	   				typeList:new Array({id:"ftext",name:"Single Line Text"},{id:"fnumber",name:"Number"},{id:"femail",name:"Email"},{id:"fdate",name:"Date"},{id:"ftextarea",name:"Paragraph Text"},{id:"fcheck",name:"Checkboxes"},{id:"fradio",name:"Multiple Choice"},{id:"fdropdown",name:"Dropdown"},{id:"ffile",name:"Upload file"},{id:"fpassword",name:"Password"},{id:"fPhone",name:"Phone field"},{id:"fCommentArea",name:"Comment Area"},{id:"fSectionBreak",name:"Section break"},{id:"fPageBreak",name:"Page break"}),
 					pub:false,
 					title:""
 				},options, true);
@@ -119,17 +120,36 @@ var cpfb_started=false;
 			$("#sEqualTo").change(function(){
 				items[id].equalTo = $(this).val();
 				reloadItems();
+			});			
+			$(".showHideDependencies").click(function(){
+			    if (items[id].showDep) 
+			    {
+			        $(this).parent().removeClass("show");    
+			        $(this).parent().addClass("hide");
+			        $(this).html("Show Dependencies");
+			        items[id].showDep = false;
+			    }
+			    else
+			    {
+			        $(this).parent().addClass("show");    
+			        $(this).parent().removeClass("hide");
+			        $(this).html("Hide Dependencies");
+			        items[id].showDep = true;
+			    }
+			    return false;
 			});
 			$(".choice_remove").click(function(){
 				if (items[id].choices.length==1)
 				{
 					items[id].choices[0]="";
 					items[id].choicesVal[0]="";
+					items[id].choicesDep[0]=new Array();
 				}	
 				else
 				{
 					items[id].choices.splice($(this).attr("i"),1);
 					items[id].choicesVal.splice($(this).attr("i"),1);
+					items[id].choicesDep.splice($(this).attr("i"),1);
 				}	
 				if (items[id].ftype=="fcheck")
 				{
@@ -144,6 +164,7 @@ var cpfb_started=false;
 			$(".choice_add").click(function(){
 				items[id].choices.splice($(this).attr("i")+1,0,"");
 				items[id].choicesVal.splice($(this).attr("i")+1,0,"");
+				items[id].choicesDep.splice($(this).attr("i")+1,0,new Array());
 				if (items[id].ftype=="fcheck")
 					items[id].choiceSelected.splice($(this).attr("i")+1,0,false);
 				editItem(id);
@@ -160,7 +181,7 @@ var cpfb_started=false;
 			});
 			$(".choice_value").keyup(function(){
 			    items[id].choicesVal[$(this).attr("i")]= $(this).val();
-				reloadItems();
+			    reloadItems();
 			});
 			$(".choice_radio").click(function(){
 				if ($(this).is(':checked'))
@@ -193,6 +214,30 @@ var cpfb_started=false;
 			    	if ((items[i].ftype=="ftext" || items[i].ftype=="femail" || items[i].ftype=="fpassword") && (items[i].name != $(this).attr("dname")))
 			    		str += '<option value="'+items[i].name+'" '+((items[i].name == $(this).attr("dvalue"))?"selected":"")+'>'+(items[i].title)+'</option>';
 			    $(this).html(str);	
+			});
+			$('.dependencies').each(function(){
+			    var str = '<option value="" '+(("" == $(this).attr("dvalue"))?"selected":"")+'></option>';
+			    for (var i=0;i<items.length;i++)
+			    	if (items[i].name != $(this).attr("dname"))
+			    		str += '<option value="'+items[i].name+'" '+((items[i].name == $(this).attr("dvalue"))?"selected":"")+'>'+(items[i].title)+'</option>';
+			    $(this).html(str);	
+			});
+			$('.dependencies').change(function(){
+			    items[id].choicesDep[$(this).attr("i")][$(this).attr("j")] = $(this).val();
+				reloadItems();	
+			});
+			$(".choice_removeDep").click(function(){
+				if (items[id].choices.length==1)
+					items[id].choicesDep[$(this).attr("i")][0]="";
+				else
+					items[id].choicesDep[$(this).attr("i")].splice($(this).attr("j"),1);
+				editItem(id);
+				reloadItems();
+			});
+			$(".choice_addDep").click(function(){
+				items[id].choicesDep[$(this).attr("i")].splice($(this).attr("j")+1,0,"");
+				editItem(id);
+				reloadItems();
 			});
 		};
 		editForm = function() {
@@ -283,16 +328,47 @@ var cpfb_started=false;
           value = value.replace(/"/g, "&quot;");;
           return value;
         }
+        function showHideDep(){
+            $(".depItem").each(function() {
+                var item = $(this);
+                var d = item.attr("dep").split(",");
+                for (i=0;i<d.length;i++)
+		        {
+		            if (d[i]!="")
+		            {
+		                try {
+		                    if (item.is(':checked') || item.is(':selected'))
+		                    {
+		                        $("#"+d[i]).parents(".fields").css("display","");
+		                        $("#"+d[i]).attr("name",$("#"+d[i]).attr("name").replace("__dep",""));
+		                    }    
+		                    else
+		                    {
+		                        $("#"+d[i]).parents(".fields").css("display","none");
+		                        $("#"+d[i]).attr("name",$("#"+d[i]).attr("name")+"__dep");
+		                    }    
+		                }catch(e){}       
+		            }
+		        }
+		    });
+        }
 		reloadItemsPublic = function() {
 			for (var i=0;i<showSettings.formlayoutList.length;i++)
 				$("#fieldlist").removeClass(showSettings.formlayoutList[i].id);
 			$("#fieldlist").addClass(theForm.formlayout);
 			$("#formheader").html(theForm.show());
-			//$("#fieldlist").append('<form action="" method="post" name="form1" id="form1"></form>');
+			var page = 0;			
+			$("#fieldlist").append('<div class="pb'+page+' pbreak" page="'+page+'"></div>');
 			for (var i=0;i<items.length;i++)
 			{
 				items[i].index = i;
-				$("#fieldlist").append(items[i].show());
+				if (items[i].ftype=="fPageBreak")
+				{
+				    page++;
+				    $("#fieldlist").append('<div class="pb'+page+' pbreak" page="'+page+'"></div>');
+				}
+				else
+				    $("#fieldlist .pb"+page).append(items[i].show());
 				$(".fields").mouseover(function() {
 					$(this).addClass("ui-over");
 				}).mouseout(function(){
@@ -312,13 +388,65 @@ var cpfb_started=false;
                     $( "#"+items[i].name ).datepicker( "option", "maxDate", items[i].maxDate );
                     $( "#"+items[i].name ).datepicker( "option", "defaultDate", items[i].defaultDate );
 				}	
-					
+				$(".depItem").bind("click", function() {
+			        showHideDep();
+			    });
+			    $(".depItemSel").bind("change", function() {
+			        showHideDep();
+			    });
 			}
+			if (page>0)
+			{
+			    $("#fieldlist .pb"+page).addClass("pbEnd");
+			    $("#fieldlist .pbreak").find(".field").addClass("ignore");
+			    $("#fieldlist .pb0").find(".field").removeClass("ignore");
+			    $("#fieldlist .pbreak").each(function(index) {
+			        var code = $(this).html();
+			        var bSubmit = '';
+			        if (index == page)
+			        {
+			            if ($("#cpcaptchalayer").html())
+			            {
+			                code += '<div>'+$("#cpcaptchalayer").html()+'</div>';
+			                $("#cpcaptchalayer").html(""); 
+			            }
+			            if ($("#cp_subbtn").html())
+			                bSubmit = '<div class="pbSubmit">'+$("#cp_subbtn").html()+'</div>';
+			        }    
+			        $(this).html('<fieldset><legend>Page '+(index+1)+' of '+(page+1)+'</legend>'+code+'<div class="pbPrevious">Previous</div><div class="pbNext">Next</div>'+bSubmit+'<div class="clearer"></div></fieldset>');
+			    });
+			    $(".pbPrevious,.pbNext").bind("click", function() {
+			        if ($(this).parents("form").valid())
+			        {
+			            var page = parseInt($(this).parents(".pbreak").attr("page"));
+			            (($(this).hasClass("pbPrevious"))?page--:page++);			        
+			            $("#fieldlist .pbreak").css("display","none");
+			            $("#fieldlist .pbreak").find(".field").addClass("ignore");
+			            
+			            $("#fieldlist .pb"+page).css("display","block");
+			            $("#fieldlist .pb"+page).find(".field").removeClass("ignore");
+			        }
+			        return false;
+			    });
+			}
+			else
+			{
+			    if ($("#cpcaptchalayer").html())
+			    {
+			        $("#fieldlist .pb"+page).append('<div>'+$("#cpcaptchalayer").html()+'</div>');
+			        $("#cpcaptchalayer").html("");
+			    }
+			    if ($("#cp_subbtn").html())
+			        $("#fieldlist .pb"+page).append('<div class="pbSubmit">'+$("#cp_subbtn").html()+'</div>');
+			}
+			$(".pbSubmit").bind("click", function() {
+			    $(this).parents("form").submit();
+			});
 			if (i>0)
 			{
-
-				//$("#form1").append('<div class="fields"><label>&nbsp;</label><div class="dfield"><input type="submit" class="button submit" id="btnSave" value="Save"/></div><div class="clearer"></div></div>');
-				//$( ".button").button();
+                //$(".depItem").each(function() {
+			        showHideDep();
+			    //});
                 $.validator.addMethod("dateddmmyyyy", function(value, element) {				    
 				  return this.optional(element) || /^(?:[1-9]|0[1-9]|1[0-9]|2[0-9]|3[0-1])[\/\-](?:[1-9]|0[1-9]|1[0-2])[\/\-]\d{4}$/.test(value);
 				});
@@ -329,7 +457,6 @@ var cpfb_started=false;
 
 
 
-
 			}
 		}
 		var showSettings= {
@@ -337,7 +464,9 @@ var cpfb_started=false;
 			layoutList:new Array({id:"one_column",name:"One Column"},{id:"two_column",name:"Two Column"},{id:"three_column",name:"Three Column"},{id:"side_by_side",name:"Side by Side"}),
 			formlayoutList:new Array({id:"top_aligned",name:"Top Aligned"},{id:"left_aligned",name:"Left Aligned"},{id:"right_aligned",name:"Right Aligned"}),
 			showTitle: function(f,v) {
-				return '<label>Field Type: '+getNameByIdFromType(f)+'</label><br /><br /><label>Field Label</label><textarea class="large" name="sTitle" id="sTitle">'+v+'</textarea>';
+				var str = '<label>Field Label</label><textarea class="large" name="sTitle" id="sTitle">'+v+'</textarea>';
+			    if (v=="Page Break") str = "";
+				return '<label>Field Type: '+getNameByIdFromType(f)+'</label><br /><br />'+str;
 			},
 			showName: function(v) {
 				return '<div><label>Field tag for the message (optional):</label><input readonly="readonly" class="large" name="sNametag" id="sNametag" value="&lt;%'+v+'%&gt;" />'+
@@ -457,19 +586,19 @@ var cpfb_started=false;
 						return "";
 				},
 				showUserhelp:function(){
-						return showSettings.showUserhelp(this.userhelp);
+				    return ((this.ftype!="fPageBreak")?showSettings.showUserhelp(this.userhelp):"");
 				},
 				showCsslayout:function(){
-						return showSettings.showCsslayout(this.csslayout);
+				    return ((this.ftype!="fPageBreak")?showSettings.showCsslayout(this.csslayout):"");
 				},
 				showAllSettings:function(){
 						return this.showTitle()+this.showName()+this.showSize()+this.showLayout()+this.showFormat()+this.showRange()+this.showRequired()+this.showSpecialData()+this.showEqualTo()+this.showPredefined()+this.showChoice()+this.showUserhelp()+this.showCsslayout();
 				},
 				showTitle:function(){
-						return showSettings.showTitle(this.ftype,this.title);
+				    return showSettings.showTitle(this.ftype,this.title);
 				},
 				showName:function(){
-						return showSettings.showName(this.name);
+				    return ((this.ftype!="fPageBreak")?showSettings.showName(this.name):"");
 				},
 				display:function(){
 					return 'Not available yet';
@@ -647,7 +776,18 @@ var cpfb_started=false;
 					return '<div class="fields" id="field-'+this.index+'"><div class="arrow ui-icon ui-icon-play "></div><div class="remove ui-icon ui-icon-trash "></div><div class="section_break"></div><label>'+this.title+'</label><span class="uh">'+this.userhelp+'</span><div class="clearer"></div></div>';
 				},
 				show:function(){
-                        return '<div class="fields '+this.csslayout+'" id="field-'+this.index+'"><div class="section_break"></div><label>'+this.title+'</label><span class="uh">'+this.userhelp+'</span><div class="clearer"></div></div>';
+                        return '<div class="fields '+this.csslayout+' section_breaks" id="field-'+this.index+'"><div class="section_break" id="'+this.name+'" ></div><label>'+this.title+'</label><span class="uh">'+this.userhelp+'</span><div class="clearer"></div></div>';
+				}
+		});
+		var fPageBreak=function(){};
+		$.extend(fPageBreak.prototype,ffields.prototype,{				
+				title:"Page Break",
+				ftype:"fPageBreak",
+				display:function(){
+					return '<div class="fields" id="field-'+this.index+'"><div class="arrow ui-icon ui-icon-play "></div><div class="remove ui-icon ui-icon-trash "></div><div class="section_break"></div><label>'+this.title+'</label><span class="uh">'+this.userhelp+'</span><div class="clearer"></div></div>';
+				},
+				show:function(){
+                        return '<div class="fields '+this.csslayout+' section_breaks" id="field-'+this.index+'"><div class="section_break" id="'+this.name+'" ></div><label>'+this.title+'</label><span class="uh">'+this.userhelp+'</span><div class="clearer"></div></div>';
 				}
 		});
 		var fPhone=function(){};
@@ -694,7 +834,7 @@ var cpfb_started=false;
 					return '<div class="fields" id="field-'+this.index+'"><div class="arrow ui-icon ui-icon-play "></div><div class="remove ui-icon ui-icon-trash "></div><label>'+this.title+'</label><span class="uh">'+this.userhelp+'</span><div class="clearer"></div></div>';
 				},
 				show:function(){
-                        return '<div class="fields '+this.csslayout+'" id="field-'+this.index+'"><label>'+this.title+'</label><span class="uh">'+this.userhelp+'</span><div class="clearer"></div></div>';
+                        return '<div class="fields '+this.csslayout+' comment_area" id="field-'+this.index+'"><label id="'+this.name+'">'+this.title+'</label><span class="uh">'+this.userhelp+'</span><div class="clearer"></div></div>';
 				}
 		});
 		var fcheck=function(){};
@@ -703,33 +843,67 @@ var cpfb_started=false;
 				ftype:"fcheck",
 				layout:"one_column",
 				required:false,
+				showDep:false,
 				init:function(){
 					this.choices = new Array("First Choice","Second Choice","Third Choice");
 					this.choicesVal = new Array("First Choice","Second Choice","Third Choice");
 					this.choiceSelected = new Array(false,false,false);
+					this.choicesDep = new Array(new Array(),new Array(),new Array());
 				},
 				display:function(){
+				    this.choicesVal = ((typeof(this.choicesVal) != "undefined" && this.choicesVal !== null)?this.choicesVal:this.choices);
 					var str = "";
 					for (var i=0;i<this.choices.length;i++)
 						str += '<div class="'+this.layout+'"><input class="field" disabled="true" type="checkbox" '+((this.choiceSelected[i])?"checked":"")+'/> '+this.choices[i]+'</div>';
 					return '<div class="fields" id="field-'+this.index+'"><div class="arrow ui-icon ui-icon-play "></div><div class="remove ui-icon ui-icon-trash "></div><label>'+this.title+''+((this.required)?"*":"")+'</label><div class="dfield">'+str+'<span class="uh">'+this.userhelp+'</span></div><div class="clearer"></div></div>';
 				},
 				show:function(){
+				    this.choicesVal = ((typeof(this.choicesVal) != "undefined" && this.choicesVal !== null)?this.choicesVal:this.choices);
 					var str = "";
+					if (!(typeof(this.choicesDep) != "undefined" && this.choicesDep !== null))
+					{
+					    this.choicesDep = new Array();
+					    for (var i=0;i<this.choices.length;i++)
+					        this.choicesDep[i] = new Array();
+					}
 					for (var i=0;i<this.choices.length;i++)
-						str += '<div class="'+this.layout+'"><input name="'+this.name+'[]" id="list'+i+'" class="field group '+((this.required)?" required":"")+'" value="'+htmlEncode(this.choicesVal[i])+'" type="checkbox" '+((this.choiceSelected[i])?"checked":"")+'/> <span>'+this.choices[i]+'</span></div>';
+					{
+					    var classDep = "",attrDep = "";
+					    var d = this.choicesDep;
+					    if (d[i].length>0)
+					    {
+					        classDep = " depItem";
+					        for (var j=0;j<d[i].length;j++)
+					        {
+					            attrDep += ","+d[i][j];    
+					        }
+					    }
+						str += '<div class="'+this.layout+'"><input name="'+this.name+'[]" '+((classDep!="")?"dep=\""+attrDep+"\"":"")+' id="'+this.name+'" class="field'+classDep+' group '+((this.required)?" required":"")+'" value="'+htmlEncode(this.choicesVal[i])+'" type="checkbox" '+((this.choiceSelected[i])?"checked":"")+'/> <span>'+this.choices[i]+'</span></div>';
+					}	
 					return '<div class="fields '+this.csslayout+'" id="field-'+this.index+'"><label>'+this.title+''+((this.required)?"*":"")+'</label><div class="dfield">'+str+'<span class="uh">'+this.userhelp+'</span></div><div class="clearer"></div></div>';
 				},
 				showChoiceIntance: function() {
+				    this.choicesVal = ((typeof(this.choicesVal) != "undefined" && this.choicesVal !== null)?this.choicesVal:this.choices);				    
 					var l = this.choices;
 					var lv = this.choicesVal;
 					var v = this.choiceSelected;
+					if (!(typeof(this.choicesDep) != "undefined" && this.choicesDep !== null))
+					{
+					    this.choicesDep = new Array();
+					    for (var i=0;i<l.length;i++)
+					        this.choicesDep[i] = new Array();
+					}
+					var d = this.choicesDep;
 					var str = "";
 					for (var i=0;i<l.length;i++)
 					{
 						str += '<div class="choicesEdit"><input class="choice_check" i="'+i+'" type="checkbox" '+((this.choiceSelected[i])?"checked":"")+'/><input class="choice_text" i="'+i+'" type="text" name="sChoice'+this.name+'" id="sChoice'+this.name+'" value="'+htmlEncode(l[i])+'"/><input class="choice_value" i="'+i+'" type="text" name="sChoice'+this.name+'V'+i+'" id="sChoice'+this.name+'V'+i+'" value="'+htmlEncode(lv[i])+'"/><a class="choice_add ui-icon ui-icon-circle-plus" i="'+i+'" title="Add another choice."></a><a class="choice_remove ui-icon ui-icon-circle-minus" i="'+i+'" title="Delete this choice."></a></div>';
+						for (var j=0;j<d[i].length;j++)
+						    str += '<div class="choicesEditDep">If selected show: <select class="dependencies" i="'+i+'" j="'+j+'" dname="'+this.name+'" dvalue="'+d[i][j]+'" ></select><a class="choice_addDep ui-icon ui-icon-circle-plus" i="'+i+'" j="'+j+'" title="Add another dependency."></a><a class="choice_removeDep ui-icon ui-icon-circle-minus" i="'+i+'" j="'+j+'" title="Delete this dependency."></a></div>';
+						if (d[i].length==0)    
+						    str += '<div class="choicesEditDep">If selected show: <select class="dependencies" i="'+i+'" j="'+d[i].length+'" dname="'+this.name+'" dvalue="" ></select><a class="choice_addDep ui-icon ui-icon-circle-plus" i="'+i+'" j="'+d[i].length+'" title="Add another dependency."></a><a class="choice_removeDep ui-icon ui-icon-circle-minus" i="'+i+'" j="'+d[i].length+'" title="Delete this dependency."></a></div>';    
 					}
-					return '<div class="choicesSet"><label>Choices</label><div><div class="t">Text</div><div class="t">Value</div><div class="clearer"></div></div>'+str+'</div>';
+					return '<div class="choicesSet '+((this.showDep)?"show":"hide")+'"><label>Choices</label> <a class="helpfbuilder dep" text="Dependencies are used to show/hide other fields depending of the option selected in this field.">help?</a> <a href="" class="showHideDependencies">'+((this.showDep)?"Hide":"Show")+' Dependencies</a><div><div class="t">Text</div><div class="t">Value</div><div class="clearer"></div></div>'+str+'</div>';
 				}
 		});
 		var fradio=function(){};
@@ -739,32 +913,66 @@ var cpfb_started=false;
 				layout:"one_column",
 				required:false,
 				choiceSelected:null,
+				showDep:false,
 				init:function(){
 					this.choices = new Array("First Choice","Second Choice","Third Choice");
 					this.choicesVal = new Array("First Choice","Second Choice","Third Choice");
+					this.choicesDep = new Array(new Array(),new Array(),new Array());
 				},
 				display:function(){
+				    this.choicesVal = ((typeof(this.choicesVal) != "undefined" && this.choicesVal !== null)?this.choicesVal:this.choices);
 					var str = "";
 					for (var i=0;i<this.choices.length;i++)
 						str += '<div class="'+this.layout+'"><input class="field" disabled="true" type="radio" i="'+i+'"  '+((this.choicesVal[i]==this.choiceSelected)?"checked":"")+'/> '+this.choices[i]+'</div>';
 					return '<div class="fields" id="field-'+this.index+'"><div class="arrow ui-icon ui-icon-play "></div><div class="remove ui-icon ui-icon-trash "></div><label>'+this.title+''+((this.required)?"*":"")+'</label><div class="dfield">'+str+'<span class="uh">'+this.userhelp+'</span></div><div class="clearer"></div></div>';
 				},
 				show:function(){
+				    this.choicesVal = ((typeof(this.choicesVal) != "undefined" && this.choicesVal !== null)?this.choicesVal:this.choices);
 					var str = "";
+					if (!(typeof(this.choicesDep) != "undefined" && this.choicesDep !== null))
+					{
+					    this.choicesDep = new Array();
+					    for (var i=0;i<this.choices.length;i++)
+					        this.choicesDep[i] = new Array();
+					}
 					for (var i=0;i<this.choices.length;i++)
-						str += '<div class="'+this.layout+'"><input name="'+this.name+'" class="field group '+((this.required)?" required":"")+'" value="'+htmlEncode(this.choicesVal[i])+'" type="radio" i="'+i+'"  '+((this.choicesVal[i]==this.choiceSelected)?"checked":"")+'/> <span>'+this.choices[i]+'</span></div>';
+					{
+					    var classDep = "",attrDep = "";
+					    var d = this.choicesDep;
+					    if (d[i].length>0)
+					    {
+					        classDep = " depItem";
+					        for (var j=0;j<d[i].length;j++)
+					        {
+					            attrDep += ","+d[i][j];    
+					        }
+					    }
+					    str += '<div class="'+this.layout+'"><input name="'+this.name+'" id="'+this.name+'" '+((classDep!="")?"dep=\""+attrDep+"\"":"")+' class="field'+classDep+' group '+((this.required)?" required":"")+'" value="'+htmlEncode(this.choicesVal[i])+'" type="radio" i="'+i+'"  '+((this.choicesVal[i]==this.choiceSelected)?"checked":"")+'/> <span>'+this.choices[i]+'</span></div>';
+					}	
 					return '<div class="fields '+this.csslayout+'" id="field-'+this.index+'"><label>'+this.title+''+((this.required)?"*":"")+'</label><div class="dfield">'+str+'<span class="uh">'+this.userhelp+'</span></div><div class="clearer"></div></div>';  
 				},
 				showChoiceIntance: function() {
+				    this.choicesVal = ((typeof(this.choicesVal) != "undefined" && this.choicesVal !== null)?this.choicesVal:this.choices);
 					var l = this.choices;
 					var lv = this.choicesVal;
 					var v = this.choiceSelected;
+					if (!(typeof(this.choicesDep) != "undefined" && this.choicesDep !== null))
+					{
+					    this.choicesDep = new Array();
+					    for (var i=0;i<l.length;i++)
+					        this.choicesDep[i] = new Array();
+					}
+					var d = this.choicesDep;
 					var str = "";
 					for (var i=0;i<l.length;i++)
 					{
 						str += '<div class="choicesEdit"><input class="choice_radio" i="'+i+'" type="radio" '+((this.choiceSelected==lv[i])?"checked":"")+' name="choice_radio" /><input class="choice_text" i="'+i+'" type="text" name="sChoice'+this.name+'" id="sChoice'+this.name+'" value="'+htmlEncode(l[i])+'"/><input class="choice_value" i="'+i+'" type="text" name="sChoice'+this.name+'V'+i+'" id="sChoice'+this.name+'V'+i+'" value="'+htmlEncode(lv[i])+'"/><a class="choice_add ui-icon ui-icon-circle-plus" i="'+i+'" title="Add another choice."></a><a class="choice_remove ui-icon ui-icon-circle-minus" i="'+i+'" title="Delete this choice."></a></div>';
+					    for (var j=0;j<d[i].length;j++)
+						    str += '<div class="choicesEditDep">If selected show: <select class="dependencies" i="'+i+'" j="'+j+'" dname="'+this.name+'" dvalue="'+d[i][j]+'" ></select><a class="choice_addDep ui-icon ui-icon-circle-plus" i="'+i+'" j="'+j+'" title="Add another dependency."></a><a class="choice_removeDep ui-icon ui-icon-circle-minus" i="'+i+'" j="'+j+'" title="Delete this dependency."></a></div>';
+						if (d[i].length==0)    
+						    str += '<div class="choicesEditDep">If selected show: <select class="dependencies" i="'+i+'" j="'+d[i].length+'" dname="'+this.name+'" dvalue="" ></select><a class="choice_addDep ui-icon ui-icon-circle-plus" i="'+i+'" j="'+d[i].length+'" title="Add another dependency."></a><a class="choice_removeDep ui-icon ui-icon-circle-minus" i="'+i+'" j="'+d[i].length+'" title="Delete this dependency."></a></div>';    
 					}
-					return '<div class="choicesSet"><label>Choices</label><div><div class="t">Text</div><div class="t">Value</div><div class="clearer"></div></div>'+str+'</div>';
+					return '<div class="choicesSet '+((this.showDep)?"show":"hide")+'"><label>Choices</label> <a class="helpfbuilder dep" text="Dependencies are used to show/hide other fields depending of the option selected in this field.">help?</a> <a href="" class="showHideDependencies">'+((this.showDep)?"Hide":"Show")+' Dependencies</a><div><div class="t">Text</div><div class="t">Value</div><div class="clearer"></div></div>'+str+'</div>';
 				}
 		});
 		var fdropdown=function(){};
@@ -774,33 +982,65 @@ var cpfb_started=false;
 				size:"medium",
 				required:false,
 				choiceSelected:"",
+				showDep:false,
 				init:function(){
 					this.choices = new Array("First Choice","Second Choice","Third Choice");
 					this.choicesVal = new Array("First Choice","Second Choice","Third Choice");
+					this.choicesDep = new Array(new Array(),new Array(),new Array());
 				},
 				display:function(){
+				    this.choicesVal = ((typeof(this.choicesVal) != "undefined" && this.choicesVal !== null)?this.choicesVal:this.choices);
 					return '<div class="fields" id="field-'+this.index+'"><div class="arrow ui-icon ui-icon-play "></div><div class="remove ui-icon ui-icon-trash "></div><label>'+this.title+''+((this.required)?"*":"")+'</label><div class="dfield"><select class="field disabled '+this.size+'" ><option>'+this.choiceSelected+'</option></select><span class="uh">'+this.userhelp+'</span></div><div class="clearer"></div></div>';
 				},
 				show:function(){
+				    this.choicesVal = ((typeof(this.choicesVal) != "undefined" && this.choicesVal !== null)?this.choicesVal:this.choices);
 					var l = this.choices;
 					var v = this.choiceSelected;
 					var str = "";
-					for (var i=0;i<l.length;i++)
+					if (!(typeof(this.choicesDep) != "undefined" && this.choicesDep !== null))
 					{
-						str += '<option '+((this.choiceSelected==this.choicesVal[i])?"selected":"")+' value="'+htmlEncode(this.choicesVal[i])+'">'+l[i]+'</option>';
+					    this.choicesDep = new Array();
+					    for (var i=0;i<this.choices.length;i++)
+					        this.choicesDep[i] = new Array();
 					}
-					return '<div class="fields '+this.csslayout+'" id="field-'+this.index+'"><label>'+this.title+''+((this.required)?"*":"")+'</label><div class="dfield"><select id="'+this.name+'" name="'+this.name+'" class="field '+this.size+((this.required)?" required":"")+'" >'+str+'</select><span class="uh">'+this.userhelp+'</span></div><div class="clearer"></div><div class="clearer"></div></div>';
+					for (var i=0;i<this.choices.length;i++)
+					{
+					    var classDep = "",attrDep = "";
+					    var d = this.choicesDep;
+					    if (d[i].length>0)
+					    {
+					        classDep = " depItem";
+					        for (var j=0;j<d[i].length;j++)
+					        {
+					            attrDep += ","+d[i][j];    
+					        }
+					    }
+					    str += '<option '+((classDep!="")?"dep=\""+attrDep+"\"":"")+' '+((this.choiceSelected==this.choicesVal[i])?"selected":"")+' class="'+classDep+'" value="'+htmlEncode(this.choicesVal[i])+'">'+l[i]+'</option>';
+					}
+					return '<div class="fields '+this.csslayout+'" id="field-'+this.index+'"><label>'+this.title+''+((this.required)?"*":"")+'</label><div class="dfield"><select id="'+this.name+'" name="'+this.name+'" class="field '+classDep+'Sel '+this.size+((this.required)?" required":"")+'" >'+str+'</select><span class="uh">'+this.userhelp+'</span></div><div class="clearer"></div><div class="clearer"></div></div>';
 				},
 				showChoiceIntance: function() {
+				    this.choicesVal = ((typeof(this.choicesVal) != "undefined" && this.choicesVal !== null)?this.choicesVal:this.choices);
 					var l = this.choices;
 					var lv = this.choicesVal;
 					var v = this.choiceSelected;
+					if (!(typeof(this.choicesDep) != "undefined" && this.choicesDep !== null))
+					{
+					    this.choicesDep = new Array();
+					    for (var i=0;i<l.length;i++)
+					        this.choicesDep[i] = new Array();
+					}
+					var d = this.choicesDep;
 					var str = "";
 					for (var i=0;i<l.length;i++)
 					{
 						str += '<div class="choicesEdit"><input class="choice_select" i="'+i+'" type="radio" '+((this.choiceSelected==lv[i])?"checked":"")+' name="choice_select" /><input class="choice_text" i="'+i+'" type="text" name="sChoice'+this.name+'" id="sChoice'+this.name+'" value="'+htmlEncode(l[i])+'"/><input class="choice_value" i="'+i+'" type="text" name="sChoice'+this.name+'V'+i+'" id="sChoice'+this.name+'V'+i+'" value="'+htmlEncode(lv[i])+'"/><a class="choice_add ui-icon ui-icon-circle-plus" i="'+i+'" title="Add another choice."></a><a class="choice_remove ui-icon ui-icon-circle-minus" i="'+i+'" title="Delete this choice."></a></div>';
+					    for (var j=0;j<d[i].length;j++)
+						    str += '<div class="choicesEditDep">If selected show: <select class="dependencies" i="'+i+'" j="'+j+'" dname="'+this.name+'" dvalue="'+d[i][j]+'" ></select><a class="choice_addDep ui-icon ui-icon-circle-plus" i="'+i+'" j="'+j+'" title="Add another dependency."></a><a class="choice_removeDep ui-icon ui-icon-circle-minus" i="'+i+'" j="'+j+'" title="Delete this dependency."></a></div>';
+						if (d[i].length==0)    
+						    str += '<div class="choicesEditDep">If selected show: <select class="dependencies" i="'+i+'" j="'+d[i].length+'" dname="'+this.name+'" dvalue="" ></select><a class="choice_addDep ui-icon ui-icon-circle-plus" i="'+i+'" j="'+d[i].length+'" title="Add another dependency."></a><a class="choice_removeDep ui-icon ui-icon-circle-minus" i="'+i+'" j="'+d[i].length+'" title="Delete this dependency."></a></div>';    
 					}
-					return '<div class="choicesSet"><label>Choices</label><div><div class="t">Text</div><div class="t">Value</div><div class="clearer"></div></div>'+str+'</div>';
+					return '<div class="choicesSet '+((this.showDep)?"show":"hide")+'"><label>Choices</label> <a class="helpfbuilder dep" text="Dependencies are used to show/hide other fields depending of the option selected in this field.">help?</a> <a href="" class="showHideDependencies">'+((this.showDep)?"Hide":"Show")+' Dependencies</a><div><div class="t">Text</div><div class="t">Value</div><div class="clearer"></div></div>'+str+'</div>';
 				}
 		});
 		if (!opt.pub)
@@ -950,3 +1190,4 @@ var cpfb_started=false;
 		});
 	}
 })(jQuery);
+});
