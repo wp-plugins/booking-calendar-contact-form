@@ -8,17 +8,28 @@ body{font:11px "Lucida Grande","Lucida Sans Unicode",Tahoma,sans-serif;}
 .width30{width:30%}
 .padding10{padding:10px;}
 .button, .form-builder .button{float:left;margin:5px 15px;}
-#tabs{height:500px;overflow:auto}
-#fbuilder{height:484px;overflow:auto;position:relative;}
+.button.n span{color:#AED0EA}
+#tabs{height:650px;overflow:auto}
+#fbuilder{height:640px;overflow:auto;position:relative;}
 #fbuilder .fields{border:1px solid transparent;padding:3px 10px 14px 10px;margin:5px 0px;display:block;position:relative}
 #fbuilder .fields .arrow{position:absolute;left:-15px;top:20px;display:none}
 #fbuilder .fields .remove{position:absolute;bottom:0;right:0;display:none;background-color:#fff;cursor:pointer}
 .choicesSet{border:1px dashed #888;margin:10px 0px;padding:5px}
 .choicesEdit input[type=text]{width:130px;}
-.choicesEdit{position:relative;}
+.choicesEdit,.choicesEditDep{position:relative;}
 .choicesSet .t{margin-left:18px;width:115px;float:left}
 .choicesEdit .choice_add{position:absolute;top:5px;left:278px;cursor:pointer;}
 .choicesEdit .choice_remove{position:absolute;top:5px;left:293px;cursor:pointer;}
+.choicesEditDep .choice_addDep{position:absolute;top:5px;left:278px;cursor:pointer;}
+.choicesEditDep .choice_removeDep{position:absolute;top:5px;left:293px;cursor:pointer;}
+.choicesEditDep select{width:170px;}
+.ui-widget-content .choice_addDep.ui-icon {background-image: url(cupertino/images/ui-icons_2e83ff_256x240.png); }
+.ui-widget-content .choice_removeDep.ui-icon {background-image: url(cupertino/images/ui-icons_2e83ff_256x240.png); }
+.showHideDependencies,.dep{float:right}
+.choicesSet.hide {display:block}
+.choicesSet.hide .choicesEditDep{display:none}
+.choicesSet.show .choicesEditDep{display:block}
+a.helpfbuilder.dep{font-size:100%;padding-left:10px}
 input [disabled] {background-color: #f00;}
 input [readonly] {background-color: #f00;}
 #fbuilder .fields.ui-selected{background-color:#DFEFFF;border:1px solid #C2D7EF}
@@ -53,4 +64,12 @@ textarea {resize: none}
 #fbuilder .uh_phone{float:left;margin:0px 5px;font-size:80%;text-align:center;position: relative;}
 #fbuilder .uh_phone input{text-align:center;font-size:100%;}
 #fbuilder .uh_phone div.cpefb_error{display:block;white-space:nowrap;width:400px}
+
+.eq_btn{width:45px;}
+#fCalculated{
+    background: url("cupertino/images/ui-bg_glass_80_eebd4d_1x400.png") repeat-x scroll 50% 50% #EEBD4D;
+    border: 1px solid #D0771D;
+    color: #643F0D;
+    font-weight: bold;
+}
 a.helpfbuilder{font-size:80%;text-decoration:underline;color:#00f;cursor:pointer;}
