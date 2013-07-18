@@ -326,14 +326,14 @@ function dex_bccf_get_public_form() {
     // localize script
     wp_localize_script('dex_bccf_builder_script', 'dex_bccf_fbuilder_config', array('obj'  	=>
     '{"pub":true,"messages": {
-    	                	"required": "'.str_replace(array('"', "'"),array('\\"', "\\'"),dex_bccf_get_option('vs_text_is_required', DEX_BCCF_DEFAULT_vs_text_is_required)).'",
-    	                	"email": "'.str_replace(array('"', "'"),array('\\"', "\\'"),dex_bccf_get_option('vs_text_is_email', DEX_BCCF_DEFAULT_vs_text_is_email)).'",
-    	                	"datemmddyyyy": "'.str_replace(array('"', "'"),array('\\"', "\\'"),dex_bccf_get_option('vs_text_datemmddyyyy', DEX_BCCF_DEFAULT_vs_text_datemmddyyyy)).'",
-    	                	"dateddmmyyyy": "'.str_replace(array('"', "'"),array('\\"', "\\'"),dex_bccf_get_option('vs_text_dateddmmyyyy', DEX_BCCF_DEFAULT_vs_text_dateddmmyyyy)).'",
-    	                	"number": "'.str_replace(array('"', "'"),array('\\"', "\\'"),dex_bccf_get_option('vs_text_number', DEX_BCCF_DEFAULT_vs_text_number)).'",
-    	                	"digits": "'.str_replace(array('"', "'"),array('\\"', "\\'"),dex_bccf_get_option('vs_text_digits', DEX_BCCF_DEFAULT_vs_text_digits)).'",
-    	                	"max": "'.str_replace(array('"', "'"),array('\\"', "\\'"),dex_bccf_get_option('vs_text_max', DEX_BCCF_DEFAULT_vs_text_max)).'",
-    	                	"min": "'.str_replace(array('"', "'"),array('\\"', "\\'"),dex_bccf_get_option('vs_text_min', DEX_BCCF_DEFAULT_vs_text_min)).'"
+    	                	"required": "'.str_replace(array('"'),array('\\"'),dex_bccf_get_option('vs_text_is_required', DEX_BCCF_DEFAULT_vs_text_is_required)).'",
+    	                	"email": "'.str_replace(array('"'),array('\\"'),dex_bccf_get_option('vs_text_is_email', DEX_BCCF_DEFAULT_vs_text_is_email)).'",
+    	                	"datemmddyyyy": "'.str_replace(array('"'),array('\\"'),dex_bccf_get_option('vs_text_datemmddyyyy', DEX_BCCF_DEFAULT_vs_text_datemmddyyyy)).'",
+    	                	"dateddmmyyyy": "'.str_replace(array('"'),array('\\"'),dex_bccf_get_option('vs_text_dateddmmyyyy', DEX_BCCF_DEFAULT_vs_text_dateddmmyyyy)).'",
+    	                	"number": "'.str_replace(array('"'),array('\\"'),dex_bccf_get_option('vs_text_number', DEX_BCCF_DEFAULT_vs_text_number)).'",
+    	                	"digits": "'.str_replace(array('"'),array('\\"'),dex_bccf_get_option('vs_text_digits', DEX_BCCF_DEFAULT_vs_text_digits)).'",
+    	                	"max": "'.str_replace(array('"'),array('\\"'),dex_bccf_get_option('vs_text_max', DEX_BCCF_DEFAULT_vs_text_max)).'",
+    	                	"min": "'.str_replace(array('"'),array('\\"'),dex_bccf_get_option('vs_text_min', DEX_BCCF_DEFAULT_vs_text_min)).'"
     	                }}'
     ));
     
