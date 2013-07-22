@@ -329,27 +329,33 @@ jQuery(function(){
           return value;
         }
         function showHideDep(){
+            function inArray(needle, haystack) {
+                for(var i = 0; i < haystack.length; i++) {
+                    if(haystack[i] == needle) return true;
+                }
+                return false;
+            }
+            var used = new Array();
             $(".depItem").each(function() {
                 var item = $(this);
-                var d = item.attr("dep").split(",");
-                for (i=0;i<d.length;i++)
-		        {
-		            if (d[i]!="")
+                try {
+                    var d = item.attr("dep").split(",");
+                    for (i=0;i<d.length;i++)
 		            {
-		                try {
-		                    if (item.is(':checked') || item.is(':selected'))
-		                    {
-		                        $("#"+d[i]).parents(".fields").css("display","");
-		                        $("#"+d[i]).attr("name",$("#"+d[i]).attr("name").replace("__dep",""));
-		                    }    
-		                    else
-		                    {
-		                        $("#"+d[i]).parents(".fields").css("display","none");
-		                        $("#"+d[i]).attr("name",$("#"+d[i]).attr("name")+"__dep");
-		                    }    
-		                }catch(e){}       
+		                if (d[i]!="" && !inArray(d[i],used))
+		                {
+		                    try {
+		                        if ((item.is(':checked') || item.is(':selected') ))
+		                        {
+		                            $("#"+d[i]).parents(".fields").css("display","");
+		                            used[used.length] = d[i];
+		                        }    
+		                        else
+		                            $("#"+d[i]).parents(".fields").css("display","none");
+		                    }catch(e){}       
+		                }
 		            }
-		        }
+		        }catch(e){}    
 		    });
         }
 		reloadItemsPublic = function() {
@@ -387,13 +393,7 @@ jQuery(function(){
                     $( "#"+items[i].name ).datepicker( "option", "minDate", items[i].minDate );
                     $( "#"+items[i].name ).datepicker( "option", "maxDate", items[i].maxDate );
                     $( "#"+items[i].name ).datepicker( "option", "defaultDate", items[i].defaultDate );
-				}	
-				$(".depItem").bind("click", function() {
-			        showHideDep();
-			    });
-			    $(".depItemSel").bind("change", function() {
-			        showHideDep();
-			    });
+				}
 			}
 			if (page>0)
 			{
@@ -456,7 +456,13 @@ jQuery(function(){
 				});//{required: true, range: [11, 22]}
 
 
-
+                $("#fieldlist").append('<script>jQuery(function(){CalcField.defaultCalc("#cp_calculatedfieldsf_pform");});</script>');	
+				$(".depItem").bind("click", function() {
+			        showHideDep();
+			    });
+			    $(".depItemSel").bind("change", function() {
+			        showHideDep();
+			    });
 			}
 		}
 		var showSettings= {
@@ -878,7 +884,7 @@ jQuery(function(){
 					            attrDep += ","+d[i][j];    
 					        }
 					    }
-						str += '<div class="'+this.layout+'"><input name="'+this.name+'[]" '+((classDep!="")?"dep=\""+attrDep+"\"":"")+' id="'+this.name+'" class="field'+classDep+' group '+((this.required)?" required":"")+'" value="'+htmlEncode(this.choicesVal[i])+'" type="checkbox" '+((this.choiceSelected[i])?"checked":"")+'/> <span>'+this.choices[i]+'</span></div>';
+						str += '<div class="'+this.layout+'"><input name="'+this.name+'[]" '+((classDep!="")?"dep=\""+attrDep+"\"":"")+' id="'+this.name+'" class="field depItem group '+((this.required)?" required":"")+'" value="'+htmlEncode(this.choicesVal[i])+'" type="checkbox" '+((this.choiceSelected[i])?"checked":"")+'/> <span>'+this.choices[i]+'</span></div>';
 					}	
 					return '<div class="fields '+this.csslayout+'" id="field-'+this.index+'"><label>'+this.title+''+((this.required)?"*":"")+'</label><div class="dfield">'+str+'<span class="uh">'+this.userhelp+'</span></div><div class="clearer"></div></div>';
 				},
@@ -947,7 +953,7 @@ jQuery(function(){
 					            attrDep += ","+d[i][j];    
 					        }
 					    }
-					    str += '<div class="'+this.layout+'"><input name="'+this.name+'" id="'+this.name+'" '+((classDep!="")?"dep=\""+attrDep+"\"":"")+' class="field'+classDep+' group '+((this.required)?" required":"")+'" value="'+htmlEncode(this.choicesVal[i])+'" type="radio" i="'+i+'"  '+((this.choicesVal[i]==this.choiceSelected)?"checked":"")+'/> <span>'+this.choices[i]+'</span></div>';
+					    str += '<div class="'+this.layout+'"><input name="'+this.name+'" id="'+this.name+'" '+((classDep!="")?"dep=\""+attrDep+"\"":"")+' class="field depItem group '+((this.required)?" required":"")+'" value="'+htmlEncode(this.choicesVal[i])+'" type="radio" i="'+i+'"  '+((this.choicesVal[i]==this.choiceSelected)?"checked":"")+'/> <span>'+this.choices[i]+'</span></div>';
 					}	
 					return '<div class="fields '+this.csslayout+'" id="field-'+this.index+'"><label>'+this.title+''+((this.required)?"*":"")+'</label><div class="dfield">'+str+'<span class="uh">'+this.userhelp+'</span></div><div class="clearer"></div></div>';  
 				},
@@ -1015,7 +1021,7 @@ jQuery(function(){
 					            attrDep += ","+d[i][j];    
 					        }
 					    }
-					    str += '<option '+((classDep!="")?"dep=\""+attrDep+"\"":"")+' '+((this.choiceSelected==this.choicesVal[i])?"selected":"")+' class="'+classDep+'" value="'+htmlEncode(this.choicesVal[i])+'">'+l[i]+'</option>';
+					    str += '<option '+((classDep!="")?"dep=\""+attrDep+"\"":"")+' '+((this.choiceSelected==this.choicesVal[i])?"selected":"")+' class="depItem" value="'+htmlEncode(this.choicesVal[i])+'">'+l[i]+'</option>';
 					}
 					return '<div class="fields '+this.csslayout+'" id="field-'+this.index+'"><label>'+this.title+''+((this.required)?"*":"")+'</label><div class="dfield"><select id="'+this.name+'" name="'+this.name+'" class="field '+classDep+'Sel '+this.size+((this.required)?" required":"")+'" >'+str+'</select><span class="uh">'+this.userhelp+'</span></div><div class="clearer"></div><div class="clearer"></div></div>';
 				},
