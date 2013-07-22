@@ -120,3 +120,4 @@ A: This feature is available in the pro version.
 
 = 1.0.1 =
 * Interface modifications.
+* Compatible the latest WP and jQuery versions
