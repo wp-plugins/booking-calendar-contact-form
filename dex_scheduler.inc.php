@@ -141,7 +141,6 @@ Price:
         alert('<?php echo dex_bccf_get_option('cv_text_enter_valid_captcha', DEX_BCCF_DEFAULT_dexcv_text_enter_valid_captcha); ?>');
         return false;
     }
-    // check captcha    
     var result = $dexQuery.ajax({
         type: "GET",
         url: "<?php echo cp_bccf_get_site_url(); ?>?hdcaptcha_dex_bccf_post="+$dexQuery("#hdcaptcha_dex_bccf_post").val(),
