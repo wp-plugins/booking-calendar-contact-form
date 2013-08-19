@@ -246,7 +246,7 @@ function _dex_bccf_install() {
                    "PRIMARY KEY (`".TDE_BCCFCONFIG_ID."`)); ";
     $wpdb->query($sql);
 
-    $sql = 'INSERT INTO `'.$wpdb->prefix.DEX_BCCF_CONFIG_TABLE_NAME.'` (`'.TDE_BCCFCONFIG_ID.'`,`form_structure`,`'.TDE_BCCFCONFIG_TITLE.'`,`'.TDE_BCCFCONFIG_USER.'`,`'.TDE_BCCFCONFIG_PASS.'`,`'.TDE_BCCFCONFIG_LANG.'`,`'.TDE_BCCFCONFIG_CPAGES.'`,`'.TDE_BCCFCONFIG_MSG.'`,`'.TDE_BCCFCALDELETED_FIELD.'`,calendar_mode) VALUES("1","'.$wpdb->escape(DEX_BCCF_DEFAULT_form_structure).'","cal1","Calendar Item 1","","ENG","1","Please, select your reservation.","0","true");';
+    $sql = 'INSERT INTO `'.$wpdb->prefix.DEX_BCCF_CONFIG_TABLE_NAME.'` (`'.TDE_BCCFCONFIG_ID.'`,`form_structure`,`'.TDE_BCCFCONFIG_TITLE.'`,`'.TDE_BCCFCONFIG_USER.'`,`'.TDE_BCCFCONFIG_PASS.'`,`'.TDE_BCCFCONFIG_LANG.'`,`'.TDE_BCCFCONFIG_CPAGES.'`,`'.TDE_BCCFCONFIG_MSG.'`,`'.TDE_BCCFCALDELETED_FIELD.'`,calendar_mode) VALUES("1","'.esc_sql(DEX_BCCF_DEFAULT_form_structure).'","cal1","Calendar Item 1","","ENG","1","Please, select your reservation.","0","true");';
     $wpdb->query($sql);
 
     $sql = "CREATE TABLE `".$wpdb->prefix.DEX_BCCF_CALENDARS_TABLE_NAME."` (".
@@ -276,7 +276,7 @@ function dex_bccf_filter_content($atts) {
         define ('DEX_BCCF_CALENDAR_FIXED_ID',$calendar);
     else if ($user != '') 
     {
-        $users = $wpdb->get_results( "SELECT user_login,ID FROM ".$wpdb->users." WHERE user_login='".$wpdb->escape($user)."'" );
+        $users = $wpdb->get_results( "SELECT user_login,ID FROM ".$wpdb->users." WHERE user_login='".esc_sql($user)."'" );
         if (isset($users[0]))
             define ('DEX_CALENDAR_USER',$users[0]->ID);
         else
@@ -1054,7 +1054,7 @@ function dex_bccf_calendar_update2() {
                         if ($j!=count($data)-1)
                             $description .= "\n";
                     }
-                    $wpdb->query("insert into ".TDE_BCCFCALENDAR_DATA_TABLE."(".TDE_BCCFDATA_IDCALENDAR.",".TDE_BCCFDATA_DATETIME_S.",".TDE_BCCFDATA_DATETIME_E.",".TDE_BCCFDATA_TITLE.",".TDE_BCCFDATA_DESCRIPTION.") values(".$calid.",'".$datetime_s."','".$datetime_e."','".$wpdb->escape($title)."','".$wpdb->escape($description)."') ");
+                    $wpdb->query("insert into ".TDE_BCCFCALENDAR_DATA_TABLE."(".TDE_BCCFDATA_IDCALENDAR.",".TDE_BCCFDATA_DATETIME_S.",".TDE_BCCFDATA_DATETIME_E.",".TDE_BCCFDATA_TITLE.",".TDE_BCCFDATA_DESCRIPTION.") values(".$calid.",'".$datetime_s."','".$datetime_e."','".esc_sql($title)."','".esc_sql($description)."') ");
                 }
         }
     }
