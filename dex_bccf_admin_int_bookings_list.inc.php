@@ -100,6 +100,7 @@ echo paginate_links(  array(
 <table class="wp-list-table widefat fixed pages" cellspacing="0">
 	<thead>
 	<tr>
+	  <th style="padding-left:7px;font-weight:bold;width:70px;">ID</th>
 	  <th style="padding-left:7px;font-weight:bold;">Date</th>
 	  <th style="padding-left:7px;font-weight:bold;">Title</th>
 	  <th style="padding-left:7px;font-weight:bold;">Description</th>
@@ -109,9 +110,10 @@ echo paginate_links(  array(
 	<tbody id="the-list">
 	 <?php for ($i=($current_page-1)*$records_per_page; $i<$current_page*$records_per_page; $i++) if (isset($events[$i])) { ?>
 	  <tr class='<?php if (!($i%2)) { ?>alternate <?php } ?>author-self status-draft format-default iedit' valign="top">
-		<td><?php echo substr($events[$i]->datatime_s,0,16); ?><?php if ($option_calendar_enabled != 'false') { ?>- <?php echo substr($events[$i]->datatime_e,0,16); ?><?php } ?></td>
+	    <td width="1%"><?php echo $events[$i]->id; ?></td>
+		<td><?php echo substr($events[$i]->datatime_s,0,10); ?><?php if ($option_calendar_enabled != 'false') { ?> - <?php echo substr($events[$i]->datatime_e,0,10); ?><?php } ?></td>
 		<td><?php echo $events[$i]->title; ?></td>
-		<td><?php echo $events[$i]->description; ?></td>
+		<td><?php echo str_replace("<br /><br />","<br />",$events[$i]->description); ?></td>
 		<td>		  
 		  <input type="button" name="caldelete_<?php echo $events[$i]->id; ?>" value="Delete" onclick="cp_deleteMessageItem(<?php echo $events[$i]->id; ?>);" />                             
 		</td>		

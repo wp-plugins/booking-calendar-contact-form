@@ -10,10 +10,57 @@ $current_user = wp_get_current_user();
 
 global $wpdb;
 $message = "";
-if (isset($_GET['u']) && $_GET['u'] != '')
+if (isset($_GET['a']) && $_GET['a'] == '1')
+{
+    $sql .= 'INSERT INTO `'.DEX_BCCF_CONFIG_TABLE_NAME.'` (`'.TDE_BCCFCONFIG_TITLE.'`,`'.TDE_BCCFCONFIG_USER.'`,`'.TDE_BCCFCONFIG_PASS.'`,`'.TDE_BCCFCONFIG_LANG.'`,`'.TDE_BCCFCONFIG_CPAGES.'`,`'.TDE_BCCFCONFIG_MSG.'`,`'.TDE_BCCFCALDELETED_FIELD.'`,calendar_mode) '.
+            ' VALUES("","'.$_GET["name"].'","","ENG","1","Please, select your reservation.","0","true");';
+
+    $wpdb->query($sql);   
+
+    $results = $wpdb->get_results('SELECT `'.TDE_BCCFCONFIG_ID.'` FROM `'.DEX_BCCF_CONFIG_TABLE_NAME.'` ORDER BY `'.TDE_BCCFCONFIG_ID.'` DESC LIMIT 0,1');        
+    $wpdb->query('UPDATE `'.DEX_BCCF_CONFIG_TABLE_NAME.'` SET `'.TDE_BCCFCONFIG_TITLE.'`="cal'.$results[0]->id.'" WHERE `'.TDE_BCCFCONFIG_ID.'`='.$results[0]->id);           
+    $message = "Item added";
+} 
+else if (isset($_GET['u']) && $_GET['u'] != '')
 {
     $wpdb->query('UPDATE `'.DEX_BCCF_CONFIG_TABLE_NAME.'` SET conwer='.$_GET["owner"].',`'.TDE_BCCFCALDELETED_FIELD.'`='.$_GET["public"].',`'.TDE_BCCFCONFIG_USER.'`="'.$_GET["name"].'" WHERE `'.TDE_BCCFCONFIG_ID.'`='.$_GET['u']);           
     $message = "Item updated";        
+}
+else if (isset($_GET['d']) && $_GET['d'] != '')
+{
+    $wpdb->query('DELETE FROM `'.DEX_BCCF_CONFIG_TABLE_NAME.'` WHERE `'.TDE_BCCFCONFIG_ID.'`='.$_GET['d']);       
+    $message = "Item deleted";
+}  
+else if (isset($_GET['c']) && $_GET['c'] != '')
+{
+    $myrows = $wpdb->get_row( "SELECT * FROM ".DEX_BCCF_CONFIG_TABLE_NAME." WHERE `".TDE_BCCFCONFIG_ID."`=".$_GET['c'], ARRAY_A);    
+    unset($myrows[TDE_BCCFCONFIG_ID]);
+    $myrows[TDE_BCCFCONFIG_USER] = 'Cloned: '.$myrows[TDE_BCCFCONFIG_USER];
+    $wpdb->insert( DEX_BCCF_CONFIG_TABLE_NAME, $myrows);
+    $message = "Item duplicated/cloned";
+}
+else if (isset($_GET['ac']) && $_GET['ac'] == 'st')
+{   
+    update_option( 'CP_BCCF_LOAD_SCRIPTS', ($_GET["scr"]=="1"?"0":"1") );   
+    if ($_GET["chs"] != '')
+    {
+        $target_charset = $_GET["chs"];
+        $tables = array( $wpdb->prefix.DEX_BCCF_TABLE_NAME_NO_PREFIX, $wpdb->prefix.DEX_BCCF_CALENDARS_TABLE_NAME_NO_PREFIX, $wpdb->prefix.DEX_BCCF_CONFIG_TABLE_NAME_NO_PREFIX );                
+        foreach ($tables as $tab)
+        {  
+            $myrows = $wpdb->get_results( "DESCRIBE {$tab}" );                                                                                 
+            foreach ($myrows as $item)
+	        {
+	            $name = $item->Field;
+		        $type = $item->Type;
+		        if (preg_match("/^varchar\((\d+)\)$/i", $type, $mat) || !strcasecmp($type, "CHAR") || !strcasecmp($type, "TEXT") || !strcasecmp($type, "MEDIUMTEXT"))
+		        {
+	                $wpdb->query("ALTER TABLE {$tab} CHANGE {$name} {$name} {$type} COLLATE {$target_charset}");	            
+	            }
+	        }
+        }
+    }
+    $message = "Troubleshoot settings updated";
 }
 
 
@@ -39,7 +86,7 @@ if ($message) echo "<div id='setting-error-settings_updated' class='updated sett
     var is_public = (document.getElementById("calpublic_"+id).checked?"0":"1");
     document.location = 'admin.php?page=dex_bccf&u='+id+'&r='+Math.random()+'&public='+is_public+'&owner='+owner+'&name='+encodeURIComponent(calname);    
  }
- 
+
  function cp_manageSettings(id)
  {
     document.location = 'admin.php?page=dex_bccf&cal='+id+'&r='+Math.random();
@@ -48,6 +95,17 @@ if ($message) echo "<div id='setting-error-settings_updated' class='updated sett
  function cp_BookingsList(id)
  {
     document.location = 'admin.php?page=dex_bccf&cal='+id+'&list=1&r='+Math.random();
+ }
+
+ 
+ function cp_updateConfig()
+ {
+    if (confirm('Are you sure that you want to update these settings?'))
+    {        
+        var scr = document.getElementById("ccscriptload").value;    
+        var chs = document.getElementById("cccharsets").value;    
+        document.location = 'admin.php?page=dex_bccf&ac=st&scr='+scr+'&chs='+chs+'&r='+Math.random();
+    }    
  }
  
 </script>
@@ -63,11 +121,11 @@ if ($message) echo "<div id='setting-error-settings_updated' class='updated sett
   
   <table cellspacing="1"> 
    <tr>
-    <th align="left">ID</th><th align="left">Item Name</th><th align="left">Owner</th><th align="left">Public</th><th align="left">&nbsp; &nbsp; Options</th><th align="left">Shorttag for Pages and Posts</th>
+    <th align="left">ID</th><th align="left">Item Name</th><th align="left">Owner</th><th align="left">&nbsp; &nbsp; Options</th><th align="left">Shorttag for Pages and Posts</th>
    </tr> 
 <?php  
 
-  $users = $wpdb->get_results( "SELECT user_login,ID FROM ".$wpdb->users." WHERE id=1 ORDER BY ID DESC" );                                                                     
+  $users = $wpdb->get_results( "SELECT user_login,ID FROM ".$wpdb->users." ORDER BY ID DESC" );                                                                     
 
   $myrows = $wpdb->get_results( "SELECT * FROM ".DEX_BCCF_CONFIG_TABLE_NAME );                                                                     
   foreach ($myrows as $item)   
@@ -87,26 +145,21 @@ if ($message) echo "<div id='setting-error-settings_updated' class='updated sett
           <option value="<?php echo $user->ID; ?>"<?php if ($user->ID."" == $item->conwer) echo ' selected'; ?>><?php echo $user->user_login; ?></option>
        <?php  } ?>
       </select>
-    </td>
+    </td>    
     <?php } else { ?>
         <td nowrap>
         <?php echo $current_user->user_login; ?>
         </td>
     <?php } ?>
-    
-    <td nowrap align="center">
-       <?php if (cp_bccf_is_administrator()) { ?> 
-         &nbsp; &nbsp; <input type="checkbox" name="calpublic_<?php echo $item->id; ?>" id="calpublic_<?php echo $item->id; ?>" value="1" <?php if (!$item->caldeleted) echo " checked "; ?> />
-       <?php } else { ?>  
-         <?php if (!$item->caldeleted) echo "Yes"; else echo "No"; ?> 
-       <?php } ?>   
     </td>    
     <td nowrap>&nbsp; &nbsp; 
                              <?php if (cp_bccf_is_administrator()) { ?> 
                                <input type="button" name="calupdate_<?php echo $item->id; ?>" value="Update" onclick="cp_updateItem(<?php echo $item->id; ?>);" /> &nbsp; 
                              <?php } ?>    
                              <input type="button" name="calmanage_<?php echo $item->id; ?>" value="Settings " onclick="cp_manageSettings(<?php echo $item->id; ?>);" /> &nbsp; 
-                             <input type="button" name="calbookings_<?php echo $item->id; ?>" value="Bookings / Contacts" onclick="cp_BookingsList(<?php echo $item->id; ?>);" /> &nbsp;                              
+                             <input type="button" name="calbookings_<?php echo $item->id; ?>" value="Bookings / Contacts" onclick="cp_BookingsList(<?php echo $item->id; ?>);" /> &nbsp; 
+                             
+                             <input type="hidden" name="calpublic_<?php echo $item->id; ?>" id="calpublic_<?php echo $item->id; ?>" value="1" />
     </td>
     <td style="font-size:11px;" nowrap>[CP_BCCF_FORM calendar="<?php echo $item->id; ?>"]</td> 
    </tr>
@@ -120,6 +173,50 @@ if ($message) echo "<div id='setting-error-settings_updated' class='updated sett
    
   </div>    
  </div> 
+ 
+<?php if (cp_bccf_is_administrator()) { ?> 
+ 
+ <div id="metabox_basic_settings" class="postbox" >
+  <h3 class='hndle' style="padding:5px;"><span>New Calendar / Item</span></h3>
+  <div class="inside"> 
+   
+    This version supports one calendar / item. <a href="http://wordpress.dwbooster.com/calendars/booking-calendar-contact-form">Click for other versions</a>.
+
+  </div>    
+ </div>
+ 
+
+ <div id="metabox_basic_settings" class="postbox" >
+  <h3 class='hndle' style="padding:5px;"><span>Troubleshoot Area</span></h3>
+  <div class="inside"> 
+    <p><strong>Important!</strong>: Use this area <strong>only</strong> if you are experiencing conflicts with third party plugins, with the theme scripts or with the character encoding.</p>
+    <form name="updatesettings">
+      Script load method:<br />
+       <select id="ccscriptload" name="ccscriptload">
+        <option value="0" <?php if (get_option('CP_BCCF_LOAD_SCRIPTS',"1") == "1") echo 'selected'; ?>>Classic (Recommended)</option>
+        <option value="1" <?php if (get_option('CP_BCCF_LOAD_SCRIPTS',"1") != "1") echo 'selected'; ?>>Direct</option>
+       </select><br />
+       <em>* Change the script load method if the form doesn't appear in the public website.</em>
+      
+      <br /><br />
+      Character encoding:<br />
+       <select id="cccharsets" name="cccharsets">
+        <option value="">Keep current charset (Recommended)</option>
+        <option value="utf8_general_ci">UTF-8 (try this first)</option>
+        <option value="latin1_swedish_ci">latin1_swedish_ci</option>
+       </select><br />
+       <em>* Update the charset if you are getting problems displaying special/non-latin characters. After updated you need to edit the special characters again.</em>
+       <br />
+       <input type="button" onclick="cp_updateConfig();" name="gobtn" value="UPDATE" />
+      <br /><br />      
+    </form>
+
+  </div>    
+ </div> 
+
+<?php } ?> 
+
+
 
   
 </div> 

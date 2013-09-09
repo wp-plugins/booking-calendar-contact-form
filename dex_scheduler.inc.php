@@ -4,6 +4,8 @@
   // -----------------------------------------------
   
   $l_calendar     = __("Calendar");
+  $l_min_nights   = __("The minimum number of nights to book is");
+  $l_max_nights   = __("The maximum number of nights to book is");
   $l_select_dates = __("Select start and end dates");
   $l_p_select     = __("Please select start and end dates");
   $l_select_start = __("Select Start Date");
@@ -22,9 +24,8 @@
   
 ?>
 <?php if ( !defined('DEX_AUTH_INCLUDE') ) { echo 'Direct access not allowed.'; exit; } ?>
-<link href="<?php echo plugins_url('css/stylepublic.css', __FILE__); ?>" type="text/css" rel="stylesheet" />
-<link href="<?php echo plugins_url('css/cupertino/jquery-ui-1.8.20.custom.css', __FILE__); ?>" type="text/css" rel="stylesheet" />
-<form class="cpp_form" name="dex_bccf_pform" id="dex_bccf_pform" action="<?php get_site_url(); ?>" method="post" onsubmit="return doValidate(this);"><input name="dex_bccf_post" type="hidden" id="1" />
+<link href="<?php echo plugins_url('css/stylepublic.css', __FILE__); ?>" type="text/css" rel="stylesheet" /><link href="<?php echo plugins_url('css/cupertino/jquery-ui-1.8.20.custom.css', __FILE__); ?>" type="text/css" rel="stylesheet" />
+<form class="cpp_form" name="dex_bccf_pform" id="dex_bccf_pform" action="<?php get_site_url(); ?>" method="post" enctype="multipart/form-data" onsubmit="return doValidate(this);"><input name="dex_bccf_post" type="hidden" id="1" />
 <?php if ($option_calendar_enabled != 'false') { ?>
 <link rel="stylesheet" type="text/css" href="<?php echo plugins_url('TDE_RCalendar/all-css.css', __FILE__); ?>" />
 <script>
@@ -43,9 +44,7 @@ var dex_global_start_weekday = '<?php echo dex_bccf_get_option('calendar_weekday
 <?php } ?>
 <?php
   echo $l_calendar.":";
-?>
-<br />
-<select name="dex_item" id="dex_item" onchange="dex_updateItem()">
+?><br /><select name="dex_item" id="dex_item" onchange="dex_updateItem()">
 <?php
   foreach ($myrows as $item)
   {
@@ -62,8 +61,7 @@ var dex_global_start_weekday = '<?php echo dex_bccf_get_option('calendar_weekday
   foreach ($myrows as $item)
   {
 ?>
-<div id="calarea_<?php echo $item->id; ?>" style="display:none">
- <input name="selDay_start<?php echo $item->id; ?>" type="hidden" id="selDay_start<?php echo $item->id; ?>" /><input name="selMonth_start<?php echo $item->id; ?>" type="hidden" id="selMonth_start<?php echo $item->id; ?>" /><input name="selYear_start<?php echo $item->id; ?>" type="hidden" id="selYear_start<?php echo $item->id; ?>" /><input name="selDay_end<?php echo $item->id; ?>" type="hidden" id="selDay_end<?php echo $item->id; ?>" /><input name="selMonth_end<?php echo $item->id; ?>" type="hidden" id="selMonth_end<?php echo $item->id; ?>" /><input name="selYear_end<?php echo $item->id; ?>" type="hidden" id="selYear_end<?php echo $item->id; ?>" />
+<div id="calarea_<?php echo $item->id; ?>" style="display:none"><input name="selDay_start<?php echo $item->id; ?>" type="hidden" id="selDay_start<?php echo $item->id; ?>" /><input name="selMonth_start<?php echo $item->id; ?>" type="hidden" id="selMonth_start<?php echo $item->id; ?>" /><input name="selYear_start<?php echo $item->id; ?>" type="hidden" id="selYear_start<?php echo $item->id; ?>" /><input name="selDay_end<?php echo $item->id; ?>" type="hidden" id="selDay_end<?php echo $item->id; ?>" /><input name="selMonth_end<?php echo $item->id; ?>" type="hidden" id="selMonth_end<?php echo $item->id; ?>" /><input name="selYear_end<?php echo $item->id; ?>" type="hidden" id="selYear_end<?php echo $item->id; ?>" />
  <div style="z-index:1000;">
  <div id="containerRCalendar<?php echo $item->id; ?>"></div>
  </div>
@@ -75,7 +73,7 @@ var dex_global_start_weekday = '<?php echo dex_bccf_get_option('calendar_weekday
 <div id="bccf_display_price"> 
 Price:          
 </div>
-<?php } else { ?><input name="dex_item" id="dex_item" type="hidden" value="<?php echo $myrows[0]->id; ?>" /><?php } ?>            
+<?php } else { ?><input name="dex_item" id="dex_item" type="hidden" value="<?php echo $myrows[0]->id; ?>" /><?php } ?>
 <div id="selddiv" style="font-weight: bold;margin-top:0px;padding-top:0px;padding-right:3px;padding-left:3px;"></div>
 <script type="text/javascript"><?php if ($option_calendar_enabled != 'false') { ?>
  var dex_current_calendar_item;
@@ -96,40 +94,66 @@ Price:
  dex_do_init(<?php echo $myrows[0]->id; ?>);
  var bccf_d1 = "";
  var bccf_d2 = "";
+ var bccf_ser = "";
  function updatedate()
  {
-    var a = (document.getElementById("selDay_start"+dex_current_calendar_item ).value != '');
-    var b = (document.getElementById("selDay_end"+dex_current_calendar_item ).value != '');
-    var c = false;
-    if (a) if (b) c = true;
-    if (c)
-    {   
-        var d1 = document.getElementById("selYear_start"+dex_current_calendar_item ).value+"-"+document.getElementById("selMonth_start"+dex_current_calendar_item ).value+"-"+document.getElementById("selDay_start"+dex_current_calendar_item ).value;
-        var d2 = document.getElementById("selYear_end"+dex_current_calendar_item ).value+"-"+document.getElementById("selMonth_end"+dex_current_calendar_item ).value+"-"+document.getElementById("selDay_end"+dex_current_calendar_item ).value;        
-        if (bccf_d1 != d1 || bccf_d2 != d2)
-        {
-            bccf_d1 = d1;
-            bccf_d2 = d2;
-            $dexQuery = jQuery.noConflict();
-            $dexQuery.ajax({
-              type: "GET",
-              url: "<?php echo cp_bccf_get_site_url(); ?>/?dex_bccf=getcost"+String.fromCharCode(38)+"dex_item="+dex_current_calendar_item+""+String.fromCharCode(38)+"from="+d1+""+String.fromCharCode(38)+"to="+d2,
-            }).done(function( html ) {
-                $dexQuery("#bccf_display_price").append('<b><?php echo $l_cost; ?>:</b> <?php echo dex_bccf_get_option('currency', DEX_BCCF_DEFAULT_CURRENCY); ?> '+html);
-            });
-        }    
-    }
-    else         
+    try
     {
-        bccf_d1 = "";
-        bccf_d2 = "";
-        document.getElementById("bccf_display_price").innerHTML = '';
-    }    
+        var a = (document.getElementById("selDay_start"+dex_current_calendar_item ).value != '');
+        var b = (document.getElementById("selDay_end"+dex_current_calendar_item ).value != '');
+        var c = false;
+        if (a)
+          if (b)
+            c = true;
+        if (c)        
+        {   
+            var d1 = document.getElementById("selYear_start"+dex_current_calendar_item ).value+"-"+document.getElementById("selMonth_start"+dex_current_calendar_item ).value+"-"+document.getElementById("selDay_start"+dex_current_calendar_item ).value;
+            var d2 = document.getElementById("selYear_end"+dex_current_calendar_item ).value+"-"+document.getElementById("selMonth_end"+dex_current_calendar_item ).value+"-"+document.getElementById("selDay_end"+dex_current_calendar_item ).value;
+            $dexQuery = jQuery.noConflict();
+            <?php  if ($dex_buffer != '') { ?>var ser = $dexQuery("#dex_services").val();<?php } else { ?> var ser = '0|0|0';<?php } ?>            
+            if (bccf_d1 != d1 || bccf_d2 != d2 || bccf_ser != ser)
+            {
+                bccf_d1 = d1;
+                bccf_d2 = d2;
+                bccf_ser = ser;
+                $dexQuery.ajax({
+                  type: "GET",              
+                  url: "<?php echo cp_bccf_get_site_url(); ?>/?dex_bccf=getcost"+String.fromCharCode(38)+"dex_item="+dex_current_calendar_item+""+String.fromCharCode(38)+"from="+d1+""+String.fromCharCode(38)+"to="+d2+""+String.fromCharCode(38)+"ser="+ser,
+                }).done(function( html ) {
+                    document.getElementById("bccf_display_price").innerHTML = '';
+                    $dexQuery("#bccf_display_price").append('<b><?php echo $l_cost; ?>:</b> <?php echo dex_bccf_get_option('currency', DEX_BCCF_DEFAULT_CURRENCY); ?> '+html);
+                });
+            }    
+        }
+        else         
+        {
+            bccf_d1 = "";
+            bccf_d2 = "";
+            document.getElementById("bccf_display_price").innerHTML = '';
+        }
+    } catch (e) {}
  } 
  setInterval('updatedate()',200);<?php } ?> 
  function doValidate(form)
- {
+ {    
     $dexQuery = jQuery.noConflict();
+<?php if ($option_calendar_enabled != 'false') { ?>    
+    var d1 = new Date(document.getElementById("selYear_start"+dex_current_calendar_item ).value,document.getElementById("selMonth_start"+dex_current_calendar_item ).value,document.getElementById("selDay_start"+dex_current_calendar_item ).value);
+    var d2 = new Date(document.getElementById("selYear_end"+dex_current_calendar_item ).value,document.getElementById("selMonth_end"+dex_current_calendar_item ).value,document.getElementById("selDay_end"+dex_current_calendar_item ).value);
+    var ONE_DAY = 1000 * 60 * 60 * 24;
+    var nights = Math.round(Math.abs(d2.getTime() - d1.getTime()) / ONE_DAY)<?php if (dex_bccf_get_option('calendar_mode',DEX_BCCF_DEFAULT_CALENDAR_MODE) == 'false') echo '+1'; ?>;<?php 
+    $minn = dex_bccf_get_option('calendar_minnights', '0'); if ($minn == '') $minn = '0';
+    $maxn = dex_bccf_get_option('calendar_maxnights', '0'); if ($maxn == '0' || $maxn == '') $maxn = '365';
+    ?> 
+    if (nights < <?php echo $minn; ?>){
+        alert('<?php echo $l_min_nights.' '.$minn; ?>');
+        return false;
+    }
+    if (nights > <?php echo $maxn; ?>){
+        alert('<?php echo $l_max_nights.' '.$maxn; ?>');
+        return false;
+    }    
+<?php } ?>    
     document.dex_bccf_pform.dex_bccf_ref_page.value = document.location;<?php if ($option_calendar_enabled != 'false') { ?>    
     if (document.getElementById("selDay_start"+dex_current_calendar_item).value == '' || document.getElementById("selDay_end"+dex_current_calendar_item).value == '')
     {
@@ -161,29 +185,10 @@ Price:
       <div id="fieldlist"></div>
   </div>
 <div id="cpcaptchalayer">  
-<?php
-     $codes = $wpdb->get_results( 'SELECT * FROM '.DEX_BCCF_DISCOUNT_CODES_TABLE_NAME.' WHERE `cal_id`='.CP_BCCF_CALENDAR_ID);
-     if (count($codes))
-     {
-?>
-      <div class="fields" id="field-c0"> 
-         <label><?php echo $l_coupon; ?>:</label>
-         <div class="dfield"><input type="text" name="couponcode" value=""></div>
-         <div class="clearer"></div>
-      </div>
-<?php } ?>
-<?php
- if ($dex_buffer != '')
- {
-    echo '<div class="fields" id="field-c1"><label>';
-    echo $l_service;
-    echo ':</label><div class="dfield"><select name="services">'.$dex_buffer.'</select></div><div class="clearer"></div></div><br />';
- }
-?>
 <?php if (dex_bccf_get_option('dexcv_enable_captcha', TDE_BCCFDEFAULT_dexcv_enable_captcha) != 'false') { ?>
   <?php echo $l_sec_code; ?>:<br /><img src="<?php echo plugins_url('/captcha/captcha.php?width='.dex_bccf_get_option('dexcv_width', TDE_BCCFDEFAULT_dexcv_width).'&height='.dex_bccf_get_option('dexcv_height', TDE_BCCFDEFAULT_dexcv_height).'&letter_count='.dex_bccf_get_option('dexcv_chars', TDE_BCCFDEFAULT_dexcv_chars).'&min_size='.dex_bccf_get_option('dexcv_min_font_size', TDE_BCCFDEFAULT_dexcv_min_font_size).'&max_size='.dex_bccf_get_option('dexcv_max_font_size', TDE_BCCFDEFAULT_dexcv_max_font_size).'&noise='.dex_bccf_get_option('dexcv_noise', TDE_BCCFDEFAULT_dexcv_noise).'&noiselength='.dex_bccf_get_option('dexcv_noise_length', TDE_BCCFDEFAULT_dexcv_noise_length).'&bcolor='.dex_bccf_get_option('dexcv_background', TDE_BCCFDEFAULT_dexcv_background).'&border='.dex_bccf_get_option('dexcv_border', TDE_BCCFDEFAULT_dexcv_border).'&font='.dex_bccf_get_option('dexcv_font', TDE_BCCFDEFAULT_dexcv_font), __FILE__); ?>"  id="dex_bccf_captchaimg" alt="security code" border="0"  /><br />
-  <div class="fields" id="field-c2"><label><?php echo $l_sec_code_low; ?>:</label><div class="dfield"><input type="text" size="20" name="hdcaptcha_dex_bccf_post" id="hdcaptcha_dex_bccf_post" value="" /><div class="error message" id="hdcaptcha_error" generated="true" style="display:none;position: absolute; left: 0px; top: 25px;"></div><div class="clearer"></div></div></div> 
+  <div class="fields" id="field-c2"><label><?php echo $l_sec_code_low; ?>:</label><div class="dfield"><input type="text" size="20" name="hdcaptcha_dex_bccf_post" id="hdcaptcha_dex_bccf_post" value="" /><div class="error message" id="hdcaptcha_error" generated="true" style="display:none;position: absolute; left: 0px; top: 25px;"></div><div class="clearer"></div></div></div>
 <?php } ?>
 </div>
-<div id="cp_subbtn"><?php echo $l_continue; ?></div>
+<div id="cp_subbtn" class="cp_subbtn"><?php echo $l_continue; ?></div>
 </form>

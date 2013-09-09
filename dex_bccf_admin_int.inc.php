@@ -62,13 +62,14 @@ if (cp_bccf_is_administrator() || $mycalendarrows[0]->conwer == $current_user->I
      <strong>To re-enable</strong> the calendar select that option in the field above and <strong>save the settings</strong> to render the calendar again.
    </div> 
 <?php        
-    } else if ($option_overlapped == 'true') {         
+  //  } else if ($option_overlapped == 'true') {         
 ?>     
-   <div style="background-color:#ffff55;width:450px;border: 1px solid black;padding:10px;margin:10px;">
+   <!-- <div style="background-color:#ffff55;width:450px;border: 1px solid black;padding:10px;margin:10px;">
     <strong>Note:</strong> Overlapped reservations are enabled below, so you cannot use the calendar to block dates and the booking should be checked in the <a href="admin.php?page=dex_bccf&cal=<?php echo CP_BCCF_CALENDAR_ID; ?>&list=1">bookings list area</a>.
-     The <a href="http://wordpress.dwbooster.com/calendars/booking-calendar-contact-form">pro version</a> allows using the calendar for blocking dates even with the overlapped mode enabled.
    </div> 
+    --> 
 <?php } else { ?>  
+  
    <link rel="stylesheet" type="text/css" href="<?php echo plugins_url('TDE_RCalendar/all-css-admin.css', __FILE__); ?>" />
    <script>
    var pathCalendar = "<?php echo cp_bccf_get_site_url(); ?>";
@@ -95,7 +96,16 @@ if (cp_bccf_is_administrator() || $mycalendarrows[0]->conwer == $current_user->I
    <script type="text/javascript">initCalendar('<?php echo CP_BCCF_CALENDAR_ID; ?>','<?php echo TDE_BCCFDEFAULT_CALENDAR_LANGUAGE; ?>',true,<?php echo dex_bccf_get_option('calendar_mode',DEX_BCCF_DEFAULT_CALENDAR_MODE); ?>,'<?php _e('Select Start Date'); ?>','<?php _e('Select End Date'); ?>','<?php _e('Cancel Selection'); ?>','<?php _e('Successfully'); ?>');</script>
    
    <div style="clear:both;height:20px" ></div>
+   
+<?php if ($option_overlapped == 'true') { ?>
+<div style="background-color:#ffffdd;width:450px;border: 1px solid black;padding:10px;margin:10px;">
+    <strong>Note:</strong> Overlapped reservations are enabled below and you can use the calendar for blocking dates, however only the blocked dates are shown in the calendar. The bookings should be checked in the <a href="admin.php?page=dex_bccf&cal=<?php echo CP_BCCF_CALENDAR_ID; ?>&list=1">bookings list area</a>.
+   </div> 
+<?php } ?> 
+   
 <?php } ?>
+
+
 
 <?php if ($option_use_calendar != 'false') { ?>
    <div id="demo" class="yui-navset" style="padding-left:10px;width:690px;"></div>
@@ -174,6 +184,31 @@ if (cp_bccf_is_administrator() || $mycalendarrows[0]->conwer == $current_user->I
         </td>
         </tr>
 
+       <tr>
+        <td width="1%" nowrap valign="top" colspan="2">
+         <strong>Minimum number of nights to be booked:</strong><br />
+         <input type="text" name="calendar_minnights" size="40" value="<?php $v = dex_bccf_get_option('calendar_minnights', '0'); echo esc_attr(($v==''?'0':$v)); ?>" /><br />
+         <em style="font-size:11px;">The booking form won't accept less than the above nights</em>
+        </td>        
+        <td valign="top" colspan="2">
+         <strong>Maximum number of nights to be booked:</strong><br />
+         <input type="text" name="calendar_maxnights" size="40" value="<?php $v = dex_bccf_get_option('calendar_maxnights','365'); echo esc_attr(($v==''?'365':$v)); ?>" /><br />
+         <em style="font-size:11px;">The booking form won't accept more than the above nights</em>
+        </td>
+       </tr>
+
+       <tr>
+        <td width="1%" nowrap valign="top" colspan="2">
+         <strong>Supplement for bookings between</strong>
+         <input type="text" size="5" name="calendar_suplementminnight" size="40" value="<?php $v = dex_bccf_get_option('calendar_suplementminnight', '0'); echo esc_attr(($v==''?'0':$v)); ?>" />
+         <strong>and</strong>
+         <input type="text" size="5" name="calendar_suplementmaxnight" size="40" value="<?php $v = dex_bccf_get_option('calendar_suplementmaxnight', '0'); echo esc_attr(($v==''?'0':$v)); ?>" />
+         <strong>nights:</strong>
+         <input type="text" size="5" name="calendar_suplement" size="40" value="<?php $v = dex_bccf_get_option('calendar_suplement', '0'); echo esc_attr(($v==''?'0':$v)); ?>" /><br />
+         <em style="font-size:11px;">Suplement will be added once for bookings between those nights.</em>
+        </td>
+       </tr>
+
    </table>
 <?php } else { ?>
     <input type="hidden" name="calendar_language" value="<?php echo esc_attr(dex_bccf_get_option('calendar_language',DEX_BCCF_DEFAULT_CALENDAR_LANGUAGE)); ?>" />                 
@@ -201,7 +236,7 @@ if (cp_bccf_is_administrator() || $mycalendarrows[0]->conwer == $current_user->I
      <script>
          $contactFormPPQuery = jQuery.noConflict();
          $contactFormPPQuery(document).ready(function() {
-            var f = $contactFormPPQuery("#fbuilder").fbuilderbccfree();
+            var f = $contactFormPPQuery("#fbuilder").fbuilder();
             f.fBuild.loadData("form_structure");
 
             $contactFormPPQuery("#saveForm").click(function() {
@@ -296,8 +331,11 @@ if (cp_bccf_is_administrator() || $mycalendarrows[0]->conwer == $current_user->I
         </tr>
 
         <tr valign="top">
-        <th scope="row">Paypal email</th>
-        <td><input type="text" name="paypal_email" size="40" value="<?php echo esc_attr(dex_bccf_get_option('paypal_email',DEX_BCCF_DEFAULT_PAYPAL_EMAIL)); ?>" /></td>
+        <th scope="row"><strong>Paypal email</strong></th>
+        <td><input type="text" name="paypal_email" size="40" style="color:#770000;" value="<?php echo esc_attr(dex_bccf_get_option('paypal_email',DEX_BCCF_DEFAULT_PAYPAL_EMAIL)); ?>" />
+          <br />
+          <em>Important! Enter here the email address linked to your PayPal account.</em>
+        </td>
         </tr>
 
         <tr valign="top">
@@ -335,7 +373,10 @@ if (cp_bccf_is_administrator() || $mycalendarrows[0]->conwer == $current_user->I
 
         <tr valign="top">
         <th scope="row">URL to return after successful  payment</th>
-        <td><input type="text" name="url_ok" size="70" value="<?php echo esc_attr(dex_bccf_get_option('url_ok',DEX_BCCF_DEFAULT_OK_URL)); ?>" /></td>
+        <td><input type="text" name="url_ok" size="70" value="<?php echo esc_attr(dex_bccf_get_option('url_ok',DEX_BCCF_DEFAULT_OK_URL)); ?>" />
+          <br />
+          <em>Note: This field is used as the "acknowledgment / thank you message" even if the Paypal feature isn't used.</em>
+        </td>
         </tr>
 
         <tr valign="top">
@@ -384,11 +425,10 @@ if (cp_bccf_is_administrator() || $mycalendarrows[0]->conwer == $current_user->I
         <br />
         <em>Note: This is an optional field that appears only if some option is specified.</em>
         <br />
-        <br />
         <ul>Sample Format:</ul>
         <?php echo str_replace("\n", "<br />", DEX_BCCF_DEFAULT_EXPLAIN_CP_CAL_CHECKBOXES); ?>
         </th>
-        <td><textarea cols="50" wrap="on" rows="9" name="cp_cal_checkboxesnok" readonly disabled style="color:#999999;">This feature isn't available in this version. Please check the plugin's page for other versions.</textarea>
+        <td><textarea cols="50" wrap="on" rows="7" name="cp_cal_checkboxesnok" readonly disabled style="color:#999999;">This feature isn't available in this version. Please check the plugin's page for other versions.</textarea>
            <input type="hidden" name="cp_cal_checkboxes" value="<?php echo esc_attr(dex_bccf_get_option('cp_cal_checkboxes', DEX_BCCF_DEFAULT_CP_CAL_CHECKBOXES)); ?>">
         </td>
         </tr>
@@ -562,7 +602,7 @@ if (cp_bccf_is_administrator() || $mycalendarrows[0]->conwer == $current_user->I
                                var code = $j('#dex_dc_price').val();
                                var dfrom = $j('#dex_dc_season_dfrom').val();
                                var dto = $j('#dex_dc_season_dto').val();
-                               if (parseInt(code)+"" != code) { alert('Please enter a price (valid number).'); return; }
+                               if (parseFloat(code)+"" != code && parseFloat(code)+"0" != code && parseFloat(code)+"00" != code) { alert('Please enter a price (valid number).'); return; }
                                if (dfrom == '') { alert('Please enter an expiration date for the code'); return; }
                                if (dto == '') { alert('Please enter an expiration date for the code'); return; }
                                var params = '&add=1&dto='+encodeURI(dto)+'&dfrom='+encodeURI(dfrom)+'&price='+encodeURI(code);

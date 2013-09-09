@@ -102,6 +102,33 @@ A: If you don't want to edit the MO/PO files then just edit the texts that are a
 A: This feature is available in the pro version.
 
 
+== Other Notes ==
+
+= Troubleshoot Area =
+
+The "Troubleshoot Area" is located below the booking calendars list.
+
+Important!: Use the "Troubleshoot Area" area only if you are experiencing conflicts with third party plugins, with the theme scripts or with the character encoding.
+
+*Script load method:* Change the script load method if the booking form doesn't appear in the public website. In most cases changing the booking form load method to "direct" will solve the problem, however if possible leave the default setting "classic".
+
+*Character encoding:* Update the charset if you are getting problems displaying special/non-latin characters in the booking form, reservation emails or booking list. After updated you need to edit/enter the special characters again. 
+
+= Min and max number of nights to be booked =
+
+There are two new settings in the booking calendar administration area:
+
+*Minimum number of nights to be booked:* If set to a number greater than zero, the booking form won't accept bookings of less than the indicated nights.
+
+*Maximum number of nights to be booked:* The booking form won't accept booking of more than the indicated nights in this field.
+
+= Supplement for specific bookings = 
+
+You can apply supplements for bookings under some specific number of nights, or over a specified number of nights, or both.
+
+The field "*Supplement for bookings between X and Y nights*" makes the booking form add the specified supplement once for bookings between the indicated number of nights.
+
+
 == Screenshots ==
 
 1. Booking Calendar form / contact form.

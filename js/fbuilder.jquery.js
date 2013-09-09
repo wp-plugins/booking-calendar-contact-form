@@ -1,11 +1,12 @@
 var cpfb_started=false;
-jQuery(function(){
-(function($) {
-	$.fn.fbuilderbccfree = function(options){
+jQuery(function(){    
+(function($) { 
+	$.fn.fbuilder = function(options){
 		var opt = $.extend({},
 				{
 	   				typeList:new Array({id:"ftext",name:"Single Line Text"},{id:"fnumber",name:"Number"},{id:"femail",name:"Email"},{id:"fdate",name:"Date"},{id:"ftextarea",name:"Text Area"},{id:"fcheck",name:"Checkboxes"},{id:"fradio",name:"Radio Buttons"},{id:"fdropdown",name:"Dropdown"},{id:"ffile",name:"Upload file"},{id:"fpassword",name:"Password"},{id:"fPhone",name:"Phone field"},{id:"fCommentArea",name:"Instruct. Text"},{id:"fSectionBreak",name:"Section break"},{id:"fPageBreak",name:"Page break"}),
 					pub:false,
+					identifier:"",
 					title:""
 				},options, true);
 		if (opt.pub)
@@ -72,7 +73,31 @@ jQuery(function(){
 			$("#sPredefined").keyup(function(){
 				items[id].predefined = $(this).val();
 				reloadItems();
+			});			
+			$("#sPredefinedClick").click(function(){
+				items[id].predefinedClick = $(this).is(':checked');
+				reloadItems();
 			});
+            $("#sEq").keyup(function(){
+                items[id].eq = $(this).val();
+                reloadItems();
+            });
+                            $("#sSuffix").keyup(function(){
+                items[id].suffix = $(this).val();
+                reloadItems();
+            });
+            $("#sPrefix").keyup(function(){
+                items[id].prefix = $(this).val();
+                reloadItems();
+            });
+            $("#sDecimalSymbol").keyup(function(){
+                items[id].decimalsymbol = $(this).val();
+                reloadItems();
+            });
+            $("#sGroupingSymbol").keyup(function(){
+                items[id].groupingsymbol = $(this).val();
+                reloadItems();
+            });
 			$("#sDropdownRange").keyup(function(){
 				items[id].dropdownRange = $(this).val();
 				reloadItems();
@@ -81,6 +106,10 @@ jQuery(function(){
 				items[id].required = $(this).is(':checked');
 				reloadItems();
 			});
+            $("#sReadOnly").click(function(){
+                items[id].readonly = $(this).is(':checked');
+                reloadItems();
+            });			
 			$("#sShowDropdown").click(function(){
 				items[id].showDropdown = $(this).is(':checked');
 				if ($(this).is(':checked'))
@@ -120,7 +149,7 @@ jQuery(function(){
 			$("#sEqualTo").change(function(){
 				items[id].equalTo = $(this).val();
 				reloadItems();
-			});			
+			});
 			$(".showHideDependencies").click(function(){
 			    if (items[id].showDep) 
 			    {
@@ -267,10 +296,10 @@ jQuery(function(){
 		reloadItems = function() {
 		    if (cpfb_started){alert('* Note: The Form Builder is read-only in this version.');return;}else {cpfb_started=true;}
 			for (var i=0;i<showSettings.formlayoutList.length;i++)
-				$("#fieldlist").removeClass(showSettings.formlayoutList[i].id);
-			$("#fieldlist").addClass(theForm.formlayout);
-			$("#formheader").html(theForm.display());
-			$("#fieldlist").html("");
+				$("#fieldlist"+opt.identifier).removeClass(showSettings.formlayoutList[i].id);
+			$("#fieldlist"+opt.identifier).addClass(theForm.formlayout);
+			$("#formheader"+opt.identifier).html(theForm.display());
+			$("#fieldlist"+opt.identifier).html("");
 			if (parseInt(itemSelected)==-1)
 				$(".fform").addClass("ui-selected");
 			else
@@ -278,28 +307,28 @@ jQuery(function(){
 			for (var i=0;i<items.length;i++)
 			{
 				items[i].index = i;
-				$("#fieldlist").append(items[i].display());
+				$("#fieldlist"+opt.identifier).append(items[i].display());
 				if (i==itemSelected)
-					$("#field-"+i).addClass("ui-selected");
+					$("#field"+opt.identifier+"-"+i).addClass("ui-selected");
 				else
-					$("#field-"+i).removeClass("ui-selected");
+					$("#field"+opt.identifier+"-"+i).removeClass("ui-selected");
 				$(".fields").mouseover(function() {
 					$(this).addClass("ui-over");
 				}).mouseout(function(){
 					$(this).removeClass("ui-over")
 				}).click(function(){
-					editItem($(this).attr("id").replace("field-",""));
+					editItem($(this).attr("id").replace("field"+opt.identifier+"-",""));
 					$(this).siblings().removeClass("ui-selected");
 					$(this).addClass("ui-selected");
 				});
 				$(".field").focus(function(){
 					$(this).blur();
 				});
-				$("#field-"+i+" .remove").click(function(){
-					removeItem($(this).parent().attr("id").replace("field-",""));
+				$("#field"+opt.identifier+"-"+i+" .remove").click(function(){
+					removeItem($(this).parent().attr("id").replace("field"+opt.identifier+"-",""));
 				});
 			}
-			if ($("#fieldlist").html() == "")
+			if ($("#fieldlist"+opt.identifier).html() == "")
 				$("#saveForm").css("display","none");
 			else
 				$("#saveForm").css("display","none"); // changed "inline" to "none"
@@ -319,9 +348,23 @@ jQuery(function(){
 			for (var i=0;i<items.length;i++)
 				if (items[i].ftype=="femail")
 					str += '<option value="'+items[i].name+'" '+((items[i].name == $('#cu_user_email_field').attr("def"))?"selected":"")+'>'+(items[i].title)+'</option>';
-					//getNameByIdFromType
-			$('#cu_user_email_field').html(str);
-			
+			$('#cu_user_email_field').html(str);			
+            //field list for paypal request
+            if (($('#request_cost').length > 0) && ($('#request_cost').is('select')))
+            {    
+                var str = "";
+                for (var i=0;i<items.length;i++)
+                    str += '<option value="'+items[i].name+'" '+((items[i].name == $('#request_cost').attr("def"))?"selected":"")+'>'+items[i].name+'('+(items[i].title)+')</option>';
+                $('#request_cost').html(str);
+            }                
+            //request amount list
+            if ($('#paypal_price_field').length > 0)
+            {
+			    var str = '<option value="" '+(('' == $('#paypal_price_field').attr("def"))?"selected":"")+'> ---- No ---- </option>';
+			    for (var i=0;i<items.length;i++)
+			    		str += '<option value="'+items[i].name+'" '+((items[i].name == $('#paypal_price_field').attr("def"))?"selected":"")+'>'+(items[i].title)+'</option>';										
+			    $('#paypal_price_field').html(str);
+		    }
 		}
 		function htmlEncode(value){
 		  value = $('<div/>').text(value).html()  
@@ -335,23 +378,35 @@ jQuery(function(){
                 }
                 return false;
             }
+            function removeFromArray(needle, haystack) {
+                for(var i = 0; i < haystack.length; i++) {
+                    if(haystack[i] == needle) 
+                    {
+                        haystack.splice(i,1);
+                        i--;
+                    }
+                }
+                return haystack;
+            }
             var used = new Array();
             var hideArray = new Array();
             $(".depItem").each(function() {
                 var item = $(this);
                 try {
-                    if (item.attr("dep") && item.attr("dep")!="" && !inArray(item.parents(".field").attr("id"),hideArray))
+                    if ((item.parents("#fieldlist"+opt.identifier).length==1) && item.attr("dep") && item.attr("dep")!="" )
                     {
                         var d = item.attr("dep").split(",");
                         for (i=0;i<d.length;i++)
 		                {
-		                    if (d[i]!="" && !inArray(d[i],used))
+		                    if (d[i]!="") d[i] = d[i]+opt.identifier;
+		                    if (d[i]!="" && !inArray(d[i],used) )//&& !inArray(d[i],hideArray)
 		                    {
 		                        try {
-		                            if ((item.is(':checked') || item.is(':selected') ))
+		                            if ((item.is(':checked') || item.is(':selected') ) && (!inArray(  ((item.hasClass("field"))?item.attr("id"):item.parents(".field").attr("id"))   ,hideArray))   )
 		                            {
 		                                $("#"+d[i]).parents(".fields").css("display","");
 		                                used[used.length] = d[i];
+		                                removeFromArray(d[i],hideArray);
 		                            }    
 		                            else
 		                            {
@@ -367,11 +422,11 @@ jQuery(function(){
         }
 		reloadItemsPublic = function() {
 			for (var i=0;i<showSettings.formlayoutList.length;i++)
-				$("#fieldlist").removeClass(showSettings.formlayoutList[i].id);
-			$("#fieldlist").addClass(theForm.formlayout);
-			$("#formheader").html(theForm.show());
+				$("#fieldlist"+opt.identifier).removeClass(showSettings.formlayoutList[i].id);
+			$("#fieldlist"+opt.identifier).addClass(theForm.formlayout);
+			$("#formheader"+opt.identifier).html(theForm.show());
 			var page = 0;			
-			$("#fieldlist").append('<div class="pb'+page+' pbreak" page="'+page+'"></div>');
+			$("#fieldlist"+opt.identifier).append('<div class="pb'+page+' pbreak" page="'+page+'"></div>');
 			var itemsDates = new Array();
 			for (var i=0;i<items.length;i++)
 			{
@@ -379,16 +434,24 @@ jQuery(function(){
 				if (items[i].ftype=="fPageBreak")
 				{
 				    page++;
-				    $("#fieldlist").append('<div class="pb'+page+' pbreak" page="'+page+'"></div>');
+				    $("#fieldlist"+opt.identifier).append('<div class="pb'+page+' pbreak" page="'+page+'"></div>');
 				}
 				else
-				    $("#fieldlist .pb"+page).append(items[i].show());
+				{
+				    $("#fieldlist"+opt.identifier+" .pb"+page).append(items[i].show());
+				    if (items[i].predefinedClick)
+				    {
+				        var cl = $("#fieldlist"+opt.identifier+" .pb"+page).find("#"+items[i].name).attr("class")+" predefinedClick";
+				        $("#fieldlist"+opt.identifier+" .pb"+page).find("#"+items[i].name).attr("class",cl);
+				        $("#fieldlist"+opt.identifier+" .pb"+page).find("#"+items[i].name).attr("predefined",items[i].predefined);
+				    }
+				}    
 				$(".fields").mouseover(function() {
 					$(this).addClass("ui-over");
 				}).mouseout(function(){
 					$(this).removeClass("ui-over")
 				}).click(function(){
-					editItem($(this).attr("id").replace("field-",""));
+					editItem($(this).attr("id").replace("field"+opt.identifier+"-",""));
 					$(this).siblings().removeClass("ui-selected");
 					$(this).addClass("ui-selected");
 				});
@@ -398,21 +461,21 @@ jQuery(function(){
 			}
 			if (page>0)
 			{
-			    $("#fieldlist .pb"+page).addClass("pbEnd");
-			    $("#fieldlist .pbreak").find(".field").addClass("ignore");
-			    $("#fieldlist .pb0").find(".field").removeClass("ignore");
-			    $("#fieldlist .pbreak").each(function(index) {
+			    $("#fieldlist"+opt.identifier+" .pb"+page).addClass("pbEnd");
+			    $("#fieldlist"+opt.identifier+" .pbreak").find(".field").addClass("ignore");
+			    $("#fieldlist"+opt.identifier+" .pb0").find(".field").removeClass("ignore");
+			    $("#fieldlist"+opt.identifier+" .pbreak").each(function(index) {
 			        var code = $(this).html();
 			        var bSubmit = '';
 			        if (index == page)
 			        {
-			            if ($("#cpcaptchalayer").html())
+			            if ($("#cpcaptchalayer"+opt.identifier).html())
 			            {
-			                code += '<div>'+$("#cpcaptchalayer").html()+'</div>';
-			                $("#cpcaptchalayer").html(""); 
+			                code += '<div>'+$("#cpcaptchalayer"+opt.identifier).html()+'</div>';
+			                $("#cpcaptchalayer"+opt.identifier).html(""); 
 			            }
-			            if ($("#cp_subbtn").html())
-			                bSubmit = '<div class="pbSubmit">'+$("#cp_subbtn").html()+'</div>';
+			            if ($("#cp_subbtn"+opt.identifier).html())
+			                bSubmit = '<div class="pbSubmit">'+$("#cp_subbtn"+opt.identifier).html()+'</div>';
 			        }    
 			        $(this).html('<fieldset><legend>Page '+(index+1)+' of '+(page+1)+'</legend>'+code+'<div class="pbPrevious">Previous</div><div class="pbNext">Next</div>'+bSubmit+'<div class="clearer"></div></fieldset>');
 			    });
@@ -421,27 +484,35 @@ jQuery(function(){
 			        {
 			            var page = parseInt($(this).parents(".pbreak").attr("page"));
 			            (($(this).hasClass("pbPrevious"))?page--:page++);			        
-			            $("#fieldlist .pbreak").css("display","none");
-			            $("#fieldlist .pbreak").find(".field").addClass("ignore");
+			            $("#fieldlist"+opt.identifier+" .pbreak").css("display","none");
+			            $("#fieldlist"+opt.identifier+" .pbreak").find(".field").addClass("ignore");
 			            
-			            $("#fieldlist .pb"+page).css("display","block");
-			            $("#fieldlist .pb"+page).find(".field").removeClass("ignore");
+			            $("#fieldlist"+opt.identifier+" .pb"+page).css("display","block");
+			            $("#fieldlist"+opt.identifier+" .pb"+page).find(".field").removeClass("ignore");
 			        }
 			        return false;
 			    });
 			}
 			else
 			{
-			    if ($("#cpcaptchalayer").html())
+			    if ($("#cpcaptchalayer"+opt.identifier).html())
 			    {
-			        $("#fieldlist .pb"+page).append('<div>'+$("#cpcaptchalayer").html()+'</div>');
-			        $("#cpcaptchalayer").html("");
+			        $("#fieldlist"+opt.identifier+" .pb"+page).append('<div>'+$("#cpcaptchalayer"+opt.identifier).html()+'</div>');
+			        $("#cpcaptchalayer"+opt.identifier).html("");
 			    }
-			    if ($("#cp_subbtn").html())
-			        $("#fieldlist .pb"+page).append('<div class="pbSubmit">'+$("#cp_subbtn").html()+'</div>');
+			    if ($("#cp_subbtn"+opt.identifier).html())
+			        $("#fieldlist"+opt.identifier+" .pb"+page).append('<div class="pbSubmit">'+$("#cp_subbtn"+opt.identifier).html()+'</div>');
 			}
 			$(".pbSubmit").bind("click", function() {
-			    $(this).parents("form").submit();
+			    $(this).parents("#fieldlist"+opt.identifier).parents("form").submit();
+			});			
+			$("#fieldlist"+opt.identifier+" .predefinedClick").bind("click", function() {
+			    if ($(this).attr("predefined") == $(this).val())
+			        $(this).val("");
+			});
+			$("#fieldlist"+opt.identifier+" .predefinedClick").blur("click", function() {
+			    if ($(this).val()=="")
+			        $(this).val($(this).attr("predefined"));
 			});
 			if (i>0)
 			{
@@ -489,9 +560,9 @@ jQuery(function(){
 			showName: function(v) {
 				return '<div><label>Field tag for the message (optional):</label><input readonly="readonly" class="large" name="sNametag" id="sNametag" value="&lt;%'+v+'%&gt;" />'+
 				       '<input style="display:none" readonly="readonly" class="large" name="sName" id="sName" value="'+v+'" /></div>';
-			},
-			showPredefined: function(v) {
-				return '<label>Predefined Value</label><textarea class="large" name="sPredefined" id="sPredefined">'+v+'</textarea>';
+			},			
+			showPredefined: function(v,c) {
+				return '<div><label>Predefined Value</label><textarea class="large" name="sPredefined" id="sPredefined">'+v+'</textarea><br /><input type="checkbox" name="sPredefinedClick" id="sPredefinedClick" '+((c)?"checked":"")+' value="1" > Hide predefined value on click.</div>';
 			},
 			showEqualTo: function(v,name) {
 			    return '<div><label>Equal to [<a class="helpfbuilder" text="Use this field to create password confirmation field or email confirmation fields.\n\nSpecify this setting ONLY into the confirmation field, not in the original field.">help?</a>]</label><br /><select class="equalTo" name="sEqualTo" id="sEqualTo" dvalue="'+v+'" dname="'+name+'"></select></div>';
@@ -512,7 +583,7 @@ jQuery(function(){
 				return '<label>Field Layout</label><br /><select name="sLayout" id="sLayout">'+str+'</select>';
 			},
 			showUserhelp: function(v) {
-				return '<label>Instruccions for User</label><textarea class="large" name="sUserhelp" id="sUserhelp">'+v+'</textarea>';
+				return '<label>Instructions for User</label><textarea class="large" name="sUserhelp" id="sUserhelp">'+v+'</textarea>';
 			},
 			showCsslayout: function(v) {
 				return '<label>Add Css Layout Keywords</label><input class="large" name="sCsslayout" id="sCsslayout" value="'+v+'" />';
@@ -561,7 +632,7 @@ jQuery(function(){
 				},
 				showPredefined:function(){
 					if(typeof this.predefined != 'undefined')
-						return showSettings.showPredefined(this.predefined);
+						return showSettings.showPredefined(this.predefined,this.predefinedClick);
 					else
 						return "";
 				},
@@ -642,16 +713,17 @@ jQuery(function(){
 				title:"Untitled",
 				ftype:"ftext",
 				predefined:"",
+				predefinedClick:false,
 				required:false,
 				size:"medium",
 				minlength:"",
 				maxlength:"",
 				equalTo:"",
 				display:function(){
-					return '<div class="fields" id="field-'+this.index+'"><div class="arrow ui-icon ui-icon-play "></div><div class="remove ui-icon ui-icon-trash "></div><label>'+this.title+''+((this.required)?"*":"")+'</label><div class="dfield"><input class="field disabled '+this.size+'" type="text" value="'+htmlEncode(this.predefined)+'"/><span class="uh">'+this.userhelp+'</span></div><div class="clearer"></div></div>';
+					return '<div class="fields" id="field'+opt.identifier+'-'+this.index+'"><div class="arrow ui-icon ui-icon-play "></div><div class="remove ui-icon ui-icon-trash "></div><label>'+this.title+''+((this.required)?"*":"")+'</label><div class="dfield"><input class="field disabled '+this.size+'" type="text" value="'+htmlEncode(this.predefined)+'"/><span class="uh">'+this.userhelp+'</span></div><div class="clearer"></div></div>';
 				},
 				show:function(){
-					return '<div class="fields '+this.csslayout+'" id="field-'+this.index+'"><label>'+this.title+''+((this.required)?"*":"")+'</label><div class="dfield"><input id="'+this.name+'" name="'+this.name+'" minlength="'+(this.minlength)+'" maxlength="'+htmlEncode(this.maxlength)+'" '+((this.equalTo!="")?"equalTo=\"#"+htmlEncode(this.equalTo)+"\"":"" )+' class="field '+this.size+((this.required)?" required":"")+'" type="text" value="'+htmlEncode(this.predefined)+'"/><span class="uh">'+this.userhelp+'</span></div><div class="clearer"></div></div>';	
+					return '<div class="fields '+this.csslayout+'" id="field'+opt.identifier+'-'+this.index+'"><label>'+this.title+''+((this.required)?"*":"")+'</label><div class="dfield"><input id="'+this.name+'" name="'+this.name+'" minlength="'+(this.minlength)+'" maxlength="'+htmlEncode(this.maxlength)+'" '+((this.equalTo!="")?"equalTo=\"#"+htmlEncode(this.equalTo)+"\"":"" )+' class="field '+this.size+((this.required)?" required":"")+'" type="text" value="'+htmlEncode(this.predefined)+'"/><span class="uh">'+this.userhelp+'</span></div><div class="clearer"></div></div>';	
 				},
                 showSpecialDataInstance: function() {
                     return '<div class="column"><label>Min length/characters</label><br /><input name="sMinlength" id="sMinlength" value="'+this.minlength+'"></div><div class="column"><label>Max length/characters</label><br /><input name="sMaxlength" id="sMaxlength" value="'+this.maxlength+'"></div><div class="clearer"></div>';
@@ -662,16 +734,17 @@ jQuery(function(){
 				title:"Untitled",
 				ftype:"fpassword",
 				predefined:"",
+				predefinedClick:false,
 				required:false,
 				size:"medium",
 				minlength:"",
 				maxlength:"",
 				equalTo:"",
 				display:function(){
-					return '<div class="fields" id="field-'+this.index+'"><div class="arrow ui-icon ui-icon-play "></div><div class="remove ui-icon ui-icon-trash "></div><label>'+this.title+''+((this.required)?"*":"")+'</label><div class="dfield"><input class="field disabled '+this.size+'" type="password" value="'+htmlEncode(this.predefined)+'"/><span class="uh">'+this.userhelp+'</span></div><div class="clearer"></div></div>';
+					return '<div class="fields" id="field'+opt.identifier+'-'+this.index+'"><div class="arrow ui-icon ui-icon-play "></div><div class="remove ui-icon ui-icon-trash "></div><label>'+this.title+''+((this.required)?"*":"")+'</label><div class="dfield"><input class="field disabled '+this.size+'" type="password" value="'+htmlEncode(this.predefined)+'"/><span class="uh">'+this.userhelp+'</span></div><div class="clearer"></div></div>';
 				},
 				show:function(){
-					return '<div class="fields '+this.csslayout+'" id="field-'+this.index+'"><label>'+this.title+''+((this.required)?"*":"")+'</label><div class="dfield"><input id="'+this.name+'" name="'+this.name+'" minlength="'+(this.minlength)+'" maxlength="'+htmlEncode(this.maxlength)+'" '+((this.equalTo!="")?"equalTo=\"#"+htmlEncode(this.equalTo)+"\"":"" )+' class="field '+this.size+((this.required)?" required":"")+'" type="password" value="'+htmlEncode(this.predefined)+'"/><span class="uh">'+this.userhelp+'</span></div><div class="clearer"></div></div>';	
+					return '<div class="fields '+this.csslayout+'" id="field'+opt.identifier+'-'+this.index+'"><label>'+this.title+''+((this.required)?"*":"")+'</label><div class="dfield"><input id="'+this.name+'" name="'+this.name+'" minlength="'+(this.minlength)+'" maxlength="'+htmlEncode(this.maxlength)+'" '+((this.equalTo!="")?"equalTo=\"#"+htmlEncode(this.equalTo)+"\"":"" )+' class="field '+this.size+((this.required)?" required":"")+'" type="password" value="'+htmlEncode(this.predefined)+'"/><span class="uh">'+this.userhelp+'</span></div><div class="clearer"></div></div>';	
 				},
                 showSpecialDataInstance: function() {
                     return '<div class="column"><label>Min length/characters</label><br /><input name="sMinlength" id="sMinlength" value="'+this.minlength+'"></div><div class="column"><label>Max length/characters</label><br /><input name="sMaxlength" id="sMaxlength" value="'+this.maxlength+'"></div><div class="clearer"></div>';
@@ -682,14 +755,15 @@ jQuery(function(){
 				title:"Email",
 				ftype:"femail",
 				predefined:"",
+				predefinedClick:false,
 				required:false,
 				size:"medium",
 				equalTo:"",
 				display:function(){
-					return '<div class="fields" id="field-'+this.index+'"><div class="arrow ui-icon ui-icon-play "></div><div class="remove ui-icon ui-icon-trash "></div><label>'+this.title+''+((this.required)?"*":"")+'</label><div class="dfield"><input class="field disabled '+this.size+'" type="text" value="'+htmlEncode(this.predefined)+'"/><span class="uh">'+this.userhelp+'</span></div><div class="clearer"></div></div>';
+					return '<div class="fields" id="field'+opt.identifier+'-'+this.index+'"><div class="arrow ui-icon ui-icon-play "></div><div class="remove ui-icon ui-icon-trash "></div><label>'+this.title+''+((this.required)?"*":"")+'</label><div class="dfield"><input class="field disabled '+this.size+'" type="text" value="'+htmlEncode(this.predefined)+'"/><span class="uh">'+this.userhelp+'</span></div><div class="clearer"></div></div>';
 				},
 				show:function(){
-					return '<div class="fields '+this.csslayout+'" id="field-'+this.index+'"><label>'+this.title+''+((this.required)?"*":"")+'</label><div class="dfield"><input id="'+this.name+'" name="'+this.name+'" '+((this.equalTo!="")?"equalTo=\"#"+htmlEncode(this.equalTo)+"\"":"" )+' class="field email '+this.size+((this.required)?" required":"")+'" type="text" value="'+htmlEncode(this.predefined)+'"/><span class="uh">'+this.userhelp+'</span></div><div class="clearer"></div></div>';	
+					return '<div class="fields '+this.csslayout+'" id="field'+opt.identifier+'-'+this.index+'"><label>'+this.title+''+((this.required)?"*":"")+'</label><div class="dfield"><input id="'+this.name+'" name="'+this.name+'" '+((this.equalTo!="")?"equalTo=\"#"+htmlEncode(this.equalTo)+"\"":"" )+' class="field email '+this.size+((this.required)?" required":"")+'" type="text" value="'+htmlEncode(this.predefined)+'"/><span class="uh">'+this.userhelp+'</span></div><div class="clearer"></div></div>';	
 				},
                 showSpecialDataInstance: function() {
                     var str = "";
@@ -701,6 +775,7 @@ jQuery(function(){
 				title:"Number",
 				ftype:"fnumber",
 				predefined:"",
+				predefinedClick:false,
 				required:false,
 				size:"small",
 				min:"",
@@ -708,10 +783,10 @@ jQuery(function(){
 				dformat:"digits",
 				formats:new Array("digits","number"),
 				display:function(){
-					return '<div class="fields" id="field-'+this.index+'"><div class="arrow ui-icon ui-icon-play "></div><div class="remove ui-icon ui-icon-trash "></div><label>'+this.title+''+((this.required)?"*":"")+'</label><div class="dfield"><input class="field disabled '+this.size+'" type="text" value="'+htmlEncode(this.predefined)+'"/><span class="uh">'+this.userhelp+'</span></div><div class="clearer"></div></div>';
+					return '<div class="fields" id="field'+opt.identifier+'-'+this.index+'"><div class="arrow ui-icon ui-icon-play "></div><div class="remove ui-icon ui-icon-trash "></div><label>'+this.title+''+((this.required)?"*":"")+'</label><div class="dfield"><input class="field disabled '+this.size+'" type="text" value="'+htmlEncode(this.predefined)+'"/><span class="uh">'+this.userhelp+'</span></div><div class="clearer"></div></div>';
 				},
 				show:function(){
-					return '<div class="fields '+this.csslayout+'" id="field-'+this.index+'"><label>'+this.title+''+((this.required)?"*":"")+'</label><div class="dfield"><input id="'+this.name+'" name="'+this.name+'" min="'+this.min+'" max="'+this.max+'" class="field '+this.dformat+' '+this.size+((this.required)?" required":"")+'" type="text" value="'+htmlEncode(this.predefined)+'"/><span class="uh">'+this.userhelp+'</span></div><div class="clearer"></div></div>';	
+					return '<div class="fields '+this.csslayout+'" id="field'+opt.identifier+'-'+this.index+'"><label>'+this.title+''+((this.required)?"*":"")+'</label><div class="dfield"><input id="'+this.name+'" name="'+this.name+'" min="'+this.min+'" max="'+this.max+'" class="field '+this.dformat+' '+this.size+((this.required)?" required":"")+'" type="text" value="'+htmlEncode(this.predefined)+'"/><span class="uh">'+this.userhelp+'</span></div><div class="clearer"></div></div>';	
 				},
 				showFormatIntance: function() {
 					var str = "";
@@ -728,6 +803,7 @@ jQuery(function(){
 				title:"Date",
 				ftype:"fdate",
 				predefined:"",
+				predefinedClick:false,
 				size:"medium",
 				required:false,
 				dformat:"mm/dd/yyyy",
@@ -738,10 +814,10 @@ jQuery(function(){
                 defaultDate:"",
 				formats:new Array("mm/dd/yyyy","dd/mm/yyyy"),
 				display:function(){
-					return '<div class="fields" id="field-'+this.index+'"><div class="arrow ui-icon ui-icon-play "></div><div class="remove ui-icon ui-icon-trash "></div><label>'+this.title+''+((this.required)?"*":"")+' ('+this.dformat+')</label><div class="dfield"><input class="field disabled '+this.size+'" type="text" value="'+htmlEncode(this.predefined)+'"/><span class="uh">'+this.userhelp+'</span></div><div class="clearer"></div></div>';
+					return '<div class="fields" id="field'+opt.identifier+'-'+this.index+'"><div class="arrow ui-icon ui-icon-play "></div><div class="remove ui-icon ui-icon-trash "></div><label>'+this.title+''+((this.required)?"*":"")+' ('+this.dformat+')</label><div class="dfield"><input class="field disabled '+this.size+'" type="text" value="'+htmlEncode(this.predefined)+'"/><span class="uh">'+this.userhelp+'</span></div><div class="clearer"></div></div>';
 				},
 				show:function(){
-					return '<div class="fields '+this.csslayout+'" id="field-'+this.index+'"><label>'+this.title+''+((this.required)?"*":"")+' ('+this.dformat+')</label><div class="dfield"><input id="'+this.name+'" name="'+this.name+'" class="field date'+this.dformat.replace(/\//g,"")+' '+this.size+((this.required)?" required":"")+'" type="text" value="'+htmlEncode(this.predefined)+'"/><span class="uh">'+this.userhelp+'</span></div><div class="clearer"></div></div>';	
+					return '<div class="fields '+this.csslayout+'" id="field'+opt.identifier+'-'+this.index+'"><label>'+this.title+''+((this.required)?"*":"")+' ('+this.dformat+')</label><div class="dfield"><input id="'+this.name+'" name="'+this.name+'" class="field date'+this.dformat.replace(/\//g,"")+' '+this.size+((this.required)?" required":"")+'" type="text" value="'+htmlEncode(this.predefined)+'"/><span class="uh">'+this.userhelp+'</span></div><div class="clearer"></div></div>';	
 				},
 				showFormatIntance: function() {
 					var str = "";
@@ -763,15 +839,16 @@ jQuery(function(){
 				title:"Untitled",
 				ftype:"ftextarea",
 				predefined:"",
+				predefinedClick:false,
 				required:false,
 				size:"medium",				
 				minlength:"",
 				maxlength:"",
 				display:function(){
-					return '<div class="fields" id="field-'+this.index+'"><div class="arrow ui-icon ui-icon-play "></div><div class="remove ui-icon ui-icon-trash "></div><label>'+this.title+''+((this.required)?"*":"")+'</label><div class="dfield"><textarea class="field disabled '+this.size+'">'+this.predefined+'</textarea><span class="uh">'+this.userhelp+'</span></div><div class="clearer"></div></div>';
+					return '<div class="fields" id="field'+opt.identifier+'-'+this.index+'"><div class="arrow ui-icon ui-icon-play "></div><div class="remove ui-icon ui-icon-trash "></div><label>'+this.title+''+((this.required)?"*":"")+'</label><div class="dfield"><textarea class="field disabled '+this.size+'">'+this.predefined+'</textarea><span class="uh">'+this.userhelp+'</span></div><div class="clearer"></div></div>';
 				},
 				show:function(){
-					return '<div class="fields '+this.csslayout+'" id="field-'+this.index+'"><label>'+this.title+''+((this.required)?"*":"")+'</label><div class="dfield"><textarea id="'+this.name+'" name="'+this.name+'" minlength="'+(this.minlength)+'" maxlength="'+htmlEncode(this.maxlength)+'" class="field '+this.size+((this.required)?" required":"")+'">'+this.predefined+'</textarea><span class="uh">'+this.userhelp+'</span></div><div class="clearer"></div></div>';
+					return '<div class="fields '+this.csslayout+'" id="field'+opt.identifier+'-'+this.index+'"><label>'+this.title+''+((this.required)?"*":"")+'</label><div class="dfield"><textarea id="'+this.name+'" name="'+this.name+'" minlength="'+(this.minlength)+'" maxlength="'+htmlEncode(this.maxlength)+'" class="field '+this.size+((this.required)?" required":"")+'">'+this.predefined+'</textarea><span class="uh">'+this.userhelp+'</span></div><div class="clearer"></div></div>';
 				},
                 showSpecialDataInstance: function() {
                     return '<div class="column"><label>Min length/characters</label><br /><input name="sMinlength" id="sMinlength" value="'+this.minlength+'"></div><div class="column"><label>Max length/characters</label><br /><input name="sMaxlength" id="sMaxlength" value="'+this.maxlength+'"></div><div class="clearer"></div>';
@@ -784,10 +861,10 @@ jQuery(function(){
 				required:false,
 				size:"medium",
 				display:function(){
-					return '<div class="fields" id="field-'+this.index+'"><div class="arrow ui-icon ui-icon-play "></div><div class="remove ui-icon ui-icon-trash "></div><label>'+this.title+''+((this.required)?"*":"")+'</label><div class="dfield"><input type="file" class="field disabled '+this.size+'" /><span class="uh">'+this.userhelp+'</span></div><div class="clearer"></div></div>';
+					return '<div class="fields" id="field'+opt.identifier+'-'+this.index+'"><div class="arrow ui-icon ui-icon-play "></div><div class="remove ui-icon ui-icon-trash "></div><label>'+this.title+''+((this.required)?"*":"")+'</label><div class="dfield"><input type="file" class="field disabled '+this.size+'" /><span class="uh">'+this.userhelp+'</span></div><div class="clearer"></div></div>';
 				},
 				show:function(){
-					return '<div class="fields '+this.csslayout+'" id="field-'+this.index+'"><label>'+this.title+''+((this.required)?"*":"")+'</label><div class="dfield"><input type="file" id="'+this.name+'" name="'+this.name+'" class="field '+this.size+((this.required)?" required":"")+'" /><span class="uh">'+this.userhelp+'</span></div><div class="clearer"></div></div>';
+					return '<div class="fields '+this.csslayout+'" id="field'+opt.identifier+'-'+this.index+'"><label>'+this.title+''+((this.required)?"*":"")+'</label><div class="dfield"><input type="file" id="'+this.name+'" name="'+this.name+'" class="field '+this.size+((this.required)?" required":"")+'" /><span class="uh">'+this.userhelp+'</span></div><div class="clearer"></div></div>';
 				}
 		});
 		var fSectionBreak=function(){};
@@ -796,10 +873,10 @@ jQuery(function(){
 				ftype:"fSectionBreak",
 				userhelp:"A description of the section goes here.",
 				display:function(){
-					return '<div class="fields" id="field-'+this.index+'"><div class="arrow ui-icon ui-icon-play "></div><div class="remove ui-icon ui-icon-trash "></div><div class="section_break"></div><label>'+this.title+'</label><span class="uh">'+this.userhelp+'</span><div class="clearer"></div></div>';
+					return '<div class="fields" id="field'+opt.identifier+'-'+this.index+'"><div class="arrow ui-icon ui-icon-play "></div><div class="remove ui-icon ui-icon-trash "></div><div class="section_break"></div><label>'+this.title+'</label><span class="uh">'+this.userhelp+'</span><div class="clearer"></div></div>';
 				},
 				show:function(){
-                        return '<div class="fields '+this.csslayout+' section_breaks" id="field-'+this.index+'"><div class="section_break" id="'+this.name+'" ></div><label>'+this.title+'</label><span class="uh">'+this.userhelp+'</span><div class="clearer"></div></div>';
+                        return '<div class="fields '+this.csslayout+' section_breaks" id="field'+opt.identifier+'-'+this.index+'"><div class="section_break" id="'+this.name+'" ></div><label>'+this.title+'</label><span class="uh">'+this.userhelp+'</span><div class="clearer"></div></div>';
 				}
 		});
 		var fPageBreak=function(){};
@@ -807,10 +884,10 @@ jQuery(function(){
 				title:"Page Break",
 				ftype:"fPageBreak",
 				display:function(){
-					return '<div class="fields" id="field-'+this.index+'"><div class="arrow ui-icon ui-icon-play "></div><div class="remove ui-icon ui-icon-trash "></div><div class="section_break"></div><label>'+this.title+'</label><span class="uh">'+this.userhelp+'</span><div class="clearer"></div></div>';
+					return '<div class="fields" id="field'+opt.identifier+'-'+this.index+'"><div class="arrow ui-icon ui-icon-play "></div><div class="remove ui-icon ui-icon-trash "></div><div class="section_break"></div><label>'+this.title+'</label><span class="uh">'+this.userhelp+'</span><div class="clearer"></div></div>';
 				},
 				show:function(){
-                        return '<div class="fields '+this.csslayout+' section_breaks" id="field-'+this.index+'"><div class="section_break" id="'+this.name+'" ></div><label>'+this.title+'</label><span class="uh">'+this.userhelp+'</span><div class="clearer"></div></div>';
+                        return '<div class="fields '+this.csslayout+' section_breaks" id="field'+opt.identifier+'-'+this.index+'"><div class="section_break" id="'+this.name+'" ></div><label>'+this.title+'</label><span class="uh">'+this.userhelp+'</span><div class="clearer"></div></div>';
 				}
 		});
 		var fPhone=function(){};
@@ -830,7 +907,7 @@ jQuery(function(){
 				    for (var i=0;i<tmp.length;i++)
 				        if ($.trim(tmp[i])!="")
 				            str += '<div class="uh_phone" ><input type="text" class="field disabled" style="width:'+(15*$.trim(tmp[i]).length)+'px" value="'+((tmpv[i])?tmpv[i]:"")+'" maxlength="'+$.trim(tmp[i]).length+'" /><div class="l">'+$.trim(tmp[i])+'</div></div>';
-					return '<div class="fields" id="field-'+this.index+'"><div class="arrow ui-icon ui-icon-play "></div><div class="remove ui-icon ui-icon-trash "></div><label>'+this.title+''+((this.required)?"*":"")+'</label><div class="dfield">'+str+'<span class="uh">'+this.userhelp+'</span></div><div class="clearer"></div></div>';
+					return '<div class="fields" id="field'+opt.identifier+'-'+this.index+'"><div class="arrow ui-icon ui-icon-play "></div><div class="remove ui-icon ui-icon-trash "></div><label>'+this.title+''+((this.required)?"*":"")+'</label><div class="dfield">'+str+'<span class="uh">'+this.userhelp+'</span></div><div class="clearer"></div></div>';
 				},
 				show:function(){
 				    var str = "";
@@ -842,7 +919,7 @@ jQuery(function(){
 				    for (var i=0;i<tmp.length;i++)
 				        if ($.trim(tmp[i])!="")
 				            str += '<div class="uh_phone" ><input type="text" id="'+this.name+'_'+i+'" name="'+this.name+'_'+i+'" class="field digits '+((this.required)?" required":"")+'" style="width:'+(15*$.trim(tmp[i]).length)+'px" value="'+((tmpv[i])?tmpv[i]:"")+'" maxlength="'+$.trim(tmp[i]).length+'" minlength="'+$.trim(tmp[i]).length+'"/><div class="l">'+$.trim(tmp[i])+'</div></div>';
-					return '<div class="fields '+this.csslayout+'" id="field-'+this.index+'"><label>'+this.title+''+((this.required)?"*":"")+'</label><div class="dfield"><input type="hidden" id="'+this.name+'" name="'+this.name+'" class="field " />'+str+'<span class="uh">'+this.userhelp+'</span></div><div class="clearer"></div></div>';
+					return '<div class="fields '+this.csslayout+'" id="field'+opt.identifier+'-'+this.index+'"><label>'+this.title+''+((this.required)?"*":"")+'</label><div class="dfield"><input type="hidden" id="'+this.name+'" name="'+this.name+'" class="field " />'+str+'<span class="uh">'+this.userhelp+'</span></div><div class="clearer"></div></div>';
 				},
 				showFormatIntance: function() {
 					return '<div><label>Number Format</label><br /><input type="text" name="sFormat" id="sFormat" value="'+this.dformat+'" /></div>';
@@ -854,10 +931,10 @@ jQuery(function(){
 				ftype:"fCommentArea",
 				userhelp:"A description of the section goes here.",
 				display:function(){
-					return '<div class="fields" id="field-'+this.index+'"><div class="arrow ui-icon ui-icon-play "></div><div class="remove ui-icon ui-icon-trash "></div><label>'+this.title+'</label><span class="uh">'+this.userhelp+'</span><div class="clearer"></div></div>';
+					return '<div class="fields" id="field'+opt.identifier+'-'+this.index+'"><div class="arrow ui-icon ui-icon-play "></div><div class="remove ui-icon ui-icon-trash "></div><label>'+this.title+'</label><span class="uh">'+this.userhelp+'</span><div class="clearer"></div></div>';
 				},
 				show:function(){
-                        return '<div class="fields '+this.csslayout+' comment_area" id="field-'+this.index+'"><label id="'+this.name+'">'+this.title+'</label><span class="uh">'+this.userhelp+'</span><div class="clearer"></div></div>';
+                        return '<div class="fields '+this.csslayout+' comment_area" id="field'+opt.identifier+'-'+this.index+'"><label id="'+this.name+'">'+this.title+'</label><span class="uh">'+this.userhelp+'</span><div class="clearer"></div></div>';
 				}
 		});
 		var fcheck=function(){};
@@ -874,11 +951,11 @@ jQuery(function(){
 					this.choicesDep = new Array(new Array(),new Array(),new Array());
 				},
 				display:function(){
-				    this.choicesVal = ((typeof(this.choicesVal) != "undefined" && this.choicesVal !== null)?this.choicesVal:this.choices.slice(0));
+				    this.choicesVal = ((typeof(this.choicesVal) != "undefined" && this.choicesVal !== null)?this.choicesVal:this.choices.slice(0));				    
 					var str = "";
 					for (var i=0;i<this.choices.length;i++)
 						str += '<div class="'+this.layout+'"><input class="field" disabled="true" type="checkbox" '+((this.choiceSelected[i])?"checked":"")+'/> '+this.choices[i]+'</div>';
-					return '<div class="fields" id="field-'+this.index+'"><div class="arrow ui-icon ui-icon-play "></div><div class="remove ui-icon ui-icon-trash "></div><label>'+this.title+''+((this.required)?"*":"")+'</label><div class="dfield">'+str+'<span class="uh">'+this.userhelp+'</span></div><div class="clearer"></div></div>';
+					return '<div class="fields" id="field'+opt.identifier+'-'+this.index+'"><div class="arrow ui-icon ui-icon-play "></div><div class="remove ui-icon ui-icon-trash "></div><label>'+this.title+''+((this.required)?"*":"")+'</label><div class="dfield">'+str+'<span class="uh">'+this.userhelp+'</span></div><div class="clearer"></div></div>';
 				},
 				show:function(){
 				    this.choicesVal = ((typeof(this.choicesVal) != "undefined" && this.choicesVal !== null)?this.choicesVal:this.choices.slice(0));
@@ -902,8 +979,8 @@ jQuery(function(){
 					        }
 					    }
 						str += '<div class="'+this.layout+'"><input name="'+this.name+'[]" '+((classDep!="")?"dep=\""+attrDep+"\"":"")+' id="'+this.name+'" class="field depItem group '+((this.required)?" required":"")+'" value="'+htmlEncode(this.choicesVal[i])+'" type="checkbox" '+((this.choiceSelected[i])?"checked":"")+'/> <span>'+this.choices[i]+'</span></div>';
-					}	
-					return '<div class="fields '+this.csslayout+'" id="field-'+this.index+'"><label>'+this.title+''+((this.required)?"*":"")+'</label><div class="dfield">'+str+'<span class="uh">'+this.userhelp+'</span></div><div class="clearer"></div></div>';
+					}
+					return '<div class="fields '+this.csslayout+'" id="field'+opt.identifier+'-'+this.index+'"><label>'+this.title+''+((this.required)?"*":"")+'</label><div class="dfield">'+str+'<span class="uh">'+this.userhelp+'</span></div><div class="clearer"></div></div>';
 				},
 				showChoiceIntance: function() {
 				    this.choicesVal = ((typeof(this.choicesVal) != "undefined" && this.choicesVal !== null)?this.choicesVal:this.choices.slice(0));
@@ -947,7 +1024,7 @@ jQuery(function(){
 					var str = "";
 					for (var i=0;i<this.choices.length;i++)
 						str += '<div class="'+this.layout+'"><input class="field" disabled="true" type="radio" i="'+i+'"  '+((this.choicesVal[i]==this.choiceSelected)?"checked":"")+'/> '+this.choices[i]+'</div>';
-					return '<div class="fields" id="field-'+this.index+'"><div class="arrow ui-icon ui-icon-play "></div><div class="remove ui-icon ui-icon-trash "></div><label>'+this.title+''+((this.required)?"*":"")+'</label><div class="dfield">'+str+'<span class="uh">'+this.userhelp+'</span></div><div class="clearer"></div></div>';
+					return '<div class="fields" id="field'+opt.identifier+'-'+this.index+'"><div class="arrow ui-icon ui-icon-play "></div><div class="remove ui-icon ui-icon-trash "></div><label>'+this.title+''+((this.required)?"*":"")+'</label><div class="dfield">'+str+'<span class="uh">'+this.userhelp+'</span></div><div class="clearer"></div></div>';
 				},
 				show:function(){
 				    this.choicesVal = ((typeof(this.choicesVal) != "undefined" && this.choicesVal !== null)?this.choicesVal:this.choices.slice(0));
@@ -971,8 +1048,8 @@ jQuery(function(){
 					        }
 					    }
 					    str += '<div class="'+this.layout+'"><input name="'+this.name+'" id="'+this.name+'" '+((classDep!="")?"dep=\""+attrDep+"\"":"")+' class="field depItem group '+((this.required)?" required":"")+'" value="'+htmlEncode(this.choicesVal[i])+'" type="radio" i="'+i+'"  '+((this.choicesVal[i]==this.choiceSelected)?"checked":"")+'/> <span>'+this.choices[i]+'</span></div>';
-					}	
-					return '<div class="fields '+this.csslayout+'" id="field-'+this.index+'"><label>'+this.title+''+((this.required)?"*":"")+'</label><div class="dfield">'+str+'<span class="uh">'+this.userhelp+'</span></div><div class="clearer"></div></div>';  
+					}
+					return '<div class="fields '+this.csslayout+'" id="field'+opt.identifier+'-'+this.index+'"><label>'+this.title+''+((this.required)?"*":"")+'</label><div class="dfield">'+str+'<span class="uh">'+this.userhelp+'</span></div><div class="clearer"></div></div>';  
 				},
 				showChoiceIntance: function() {
 				    this.choicesVal = ((typeof(this.choicesVal) != "undefined" && this.choicesVal !== null)?this.choicesVal:this.choices.slice(0));
@@ -990,10 +1067,10 @@ jQuery(function(){
 					for (var i=0;i<l.length;i++)
 					{
 						str += '<div class="choicesEdit"><input class="choice_radio" i="'+i+'" type="radio" '+((this.choiceSelected==lv[i])?"checked":"")+' name="choice_radio" /><input class="choice_text" i="'+i+'" type="text" name="sChoice'+this.name+'" id="sChoice'+this.name+'" value="'+htmlEncode(l[i])+'"/><input class="choice_value" i="'+i+'" type="text" name="sChoice'+this.name+'V'+i+'" id="sChoice'+this.name+'V'+i+'" value="'+htmlEncode(lv[i])+'"/><a class="choice_add ui-icon ui-icon-circle-plus" i="'+i+'" title="Add another choice."></a><a class="choice_remove ui-icon ui-icon-circle-minus" i="'+i+'" title="Delete this choice."></a></div>';
-					    for (var j=0;j<d[i].length;j++)
+						for (var j=0;j<d[i].length;j++)
 						    str += '<div class="choicesEditDep">If selected show: <select class="dependencies" i="'+i+'" j="'+j+'" dname="'+this.name+'" dvalue="'+d[i][j]+'" ></select><a class="choice_addDep ui-icon ui-icon-circle-plus" i="'+i+'" j="'+j+'" title="Add another dependency."></a><a class="choice_removeDep ui-icon ui-icon-circle-minus" i="'+i+'" j="'+j+'" title="Delete this dependency."></a></div>';
 						if (d[i].length==0)    
-						    str += '<div class="choicesEditDep">If selected show: <select class="dependencies" i="'+i+'" j="'+d[i].length+'" dname="'+this.name+'" dvalue="" ></select><a class="choice_addDep ui-icon ui-icon-circle-plus" i="'+i+'" j="'+d[i].length+'" title="Add another dependency."></a><a class="choice_removeDep ui-icon ui-icon-circle-minus" i="'+i+'" j="'+d[i].length+'" title="Delete this dependency."></a></div>';    
+						    str += '<div class="choicesEditDep">If selected show: <select class="dependencies" i="'+i+'" j="'+d[i].length+'" dname="'+this.name+'" dvalue="" ></select><a class="choice_addDep ui-icon ui-icon-circle-plus" i="'+i+'" j="'+d[i].length+'" title="Add another dependency."></a><a class="choice_removeDep ui-icon ui-icon-circle-minus" i="'+i+'" j="'+d[i].length+'" title="Delete this dependency."></a></div>';
 					}
 					return '<div class="choicesSet '+((this.showDep)?"show":"hide")+'"><label>Choices</label> <a class="helpfbuilder dep" text="Dependencies are used to show/hide other fields depending of the option selected in this field.">help?</a> <a href="" class="showHideDependencies">'+((this.showDep)?"Hide":"Show")+' Dependencies</a><div><div class="t">Text</div><div class="t">Value</div><div class="clearer"></div></div>'+str+'</div>';
 				}
@@ -1013,7 +1090,7 @@ jQuery(function(){
 				},
 				display:function(){
 				    this.choicesVal = ((typeof(this.choicesVal) != "undefined" && this.choicesVal !== null)?this.choicesVal:this.choices.slice(0));
-					return '<div class="fields" id="field-'+this.index+'"><div class="arrow ui-icon ui-icon-play "></div><div class="remove ui-icon ui-icon-trash "></div><label>'+this.title+''+((this.required)?"*":"")+'</label><div class="dfield"><select class="field disabled '+this.size+'" ><option>'+this.choiceSelected+'</option></select><span class="uh">'+this.userhelp+'</span></div><div class="clearer"></div></div>';
+					return '<div class="fields" id="field'+opt.identifier+'-'+this.index+'"><div class="arrow ui-icon ui-icon-play "></div><div class="remove ui-icon ui-icon-trash "></div><label>'+this.title+''+((this.required)?"*":"")+'</label><div class="dfield"><select class="field disabled '+this.size+'" ><option>'+this.choiceSelected+'</option></select><span class="uh">'+this.userhelp+'</span></div><div class="clearer"></div></div>';
 				},
 				show:function(){
 				    this.choicesVal = ((typeof(this.choicesVal) != "undefined" && this.choicesVal !== null)?this.choicesVal:this.choices.slice(0));
@@ -1040,7 +1117,7 @@ jQuery(function(){
 					    }
 					    str += '<option '+((classDep!="")?"dep=\""+attrDep+"\"":"")+' '+((this.choiceSelected==this.choicesVal[i])?"selected":"")+' class="depItem" value="'+htmlEncode(this.choicesVal[i])+'">'+l[i]+'</option>';
 					}
-					return '<div class="fields '+this.csslayout+'" id="field-'+this.index+'"><label>'+this.title+''+((this.required)?"*":"")+'</label><div class="dfield"><select id="'+this.name+'" name="'+this.name+'" class="field depItemSel '+this.size+((this.required)?" required":"")+'" >'+str+'</select><span class="uh">'+this.userhelp+'</span></div><div class="clearer"></div><div class="clearer"></div></div>';
+					return '<div class="fields '+this.csslayout+'" id="field'+opt.identifier+'-'+this.index+'"><label>'+this.title+''+((this.required)?"*":"")+'</label><div class="dfield"><select id="'+this.name+'" name="'+this.name+'" class="field depItemSel '+this.size+((this.required)?" required":"")+'" >'+str+'</select><span class="uh">'+this.userhelp+'</span></div><div class="clearer"></div><div class="clearer"></div></div>';
 				},
 				showChoiceIntance: function() {
 				    this.choicesVal = ((typeof(this.choicesVal) != "undefined" && this.choicesVal !== null)?this.choicesVal:this.choices.slice(0));
@@ -1061,14 +1138,14 @@ jQuery(function(){
 					    for (var j=0;j<d[i].length;j++)
 						    str += '<div class="choicesEditDep">If selected show: <select class="dependencies" i="'+i+'" j="'+j+'" dname="'+this.name+'" dvalue="'+d[i][j]+'" ></select><a class="choice_addDep ui-icon ui-icon-circle-plus" i="'+i+'" j="'+j+'" title="Add another dependency."></a><a class="choice_removeDep ui-icon ui-icon-circle-minus" i="'+i+'" j="'+j+'" title="Delete this dependency."></a></div>';
 						if (d[i].length==0)    
-						    str += '<div class="choicesEditDep">If selected show: <select class="dependencies" i="'+i+'" j="'+d[i].length+'" dname="'+this.name+'" dvalue="" ></select><a class="choice_addDep ui-icon ui-icon-circle-plus" i="'+i+'" j="'+d[i].length+'" title="Add another dependency."></a><a class="choice_removeDep ui-icon ui-icon-circle-minus" i="'+i+'" j="'+d[i].length+'" title="Delete this dependency."></a></div>';    
+						    str += '<div class="choicesEditDep">If selected show: <select class="dependencies" i="'+i+'" j="'+d[i].length+'" dname="'+this.name+'" dvalue="" ></select><a class="choice_addDep ui-icon ui-icon-circle-plus" i="'+i+'" j="'+d[i].length+'" title="Add another dependency."></a><a class="choice_removeDep ui-icon ui-icon-circle-minus" i="'+i+'" j="'+d[i].length+'" title="Delete this dependency."></a></div>';
 					}
 					return '<div class="choicesSet '+((this.showDep)?"show":"hide")+'"><label>Choices</label> <a class="helpfbuilder dep" text="Dependencies are used to show/hide other fields depending of the option selected in this field.">help?</a> <a href="" class="showHideDependencies">'+((this.showDep)?"Hide":"Show")+' Dependencies</a><div><div class="t">Text</div><div class="t">Value</div><div class="clearer"></div></div>'+str+'</div>';
 				}
 		});
 		if (!opt.pub)
 		{
-			$("#fieldlist").sortable({
+			$("#fieldlist"+opt.identifier).sortable({
 			   start: function(event, ui) {
 				   var start_pos = ui.item.index();
 				   ui.item.data('start_pos', start_pos);
@@ -1130,6 +1207,7 @@ jQuery(function(){
 				   {
 					   var obj = eval("new "+d[0][i].ftype+"();");
 					   obj = $.extend(obj,d[0][i]);
+					   obj.name = obj.name+opt.identifier;
 					   items[items.length] = obj;
 				   }
 				   theForm = new fform();
@@ -1176,6 +1254,7 @@ jQuery(function(){
 			   }
 		   },
 		   loadData:function(f){
+		    
 			   if (f!="")
 				   loadtmp($("#"+f).val());
 			   else
@@ -1193,25 +1272,30 @@ jQuery(function(){
 	   }
 	   this.fBuild = ffunct;
 	   return this;
-	}
-
-	if (typeof dex_bccf_fbuilder_config != 'undefined')
-	{
-		var f = $("#fbuilder").fbuilderbccfree($.parseJSON(dex_bccf_fbuilder_config.obj));
-	  	f.fBuild.loadData("form_structure");
-		$("#dex_bccf_pform").validate({
-		    ignore:".ignore",
-			errorElement: "div",
-			errorPlacement: function(e, element) {
-			    if (element.hasClass('group'))
-                    element = element.parent();
-                e.insertBefore(element);
-                e.addClass('message'); // add a class to the wrapper
-                e.css('position', 'absolute');
-                e.css('left',0 );
-                e.css('top',element.parent().outerHeight(true));
-			}
-		});
-	}
+	}    
+         
+	var fcount = 1;
+        var fnum = '';        
+        while (eval("typeof dex_bccf_fbuilder_config"+fnum+" != 'undefined'"))
+        {                
+            var dex_bccf_fbuilder_config_s = eval("dex_bccf_fbuilder_config"+fnum);  
+            var f = $("#fbuilder"+fnum).fbuilder($.parseJSON(dex_bccf_fbuilder_config_s.obj));
+            f.fBuild.loadData("form_structure"+fnum);
+            $("#dex_bccf_pform"+fnum).validate({
+                ignore:".ignore",
+			    errorElement: "div",
+			    errorPlacement: function(e, element) {
+			        if (element.hasClass('group'))
+                        element = element.parent();
+                    e.insertBefore(element);
+                    e.addClass('message'); // add a class to the wrapper
+                    e.css('position', 'absolute');
+                    e.css('left',0 );
+                    e.css('top',element.parent().outerHeight(true));
+			    }
+     		});
+	    	fcount++;
+	    	fnum = "_"+fcount;
+	    }
 })(jQuery);
 });
