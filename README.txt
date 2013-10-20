@@ -17,11 +17,14 @@ Booking Calendar Form main features:
 	» Booking form connected to PayPal
 	» Optional availability verification
 	» Season management
-	» full-day bookings or partial-day bookings as used in hotels
+	» Weekly bookings supported
+	» Fixed days bookings supported
+	» Full-day bookings or partial-day bookings as used in hotels
 	» Built-in captcha anti-spam
 	» Configurable email texts
 	» Configurable validation messages
 	» Printable bookings list
+	» Multiple colors for marking dates on the booking calendar	
 	» ... and more features (see below)
 
 With the **Booking Calendar Contact Form** you can create a **classic contact form** or a **booking form with a reservation calendar**, connected to a PayPal payment button. The reservation calendar lets the customer select the start (ex: check-in) and end (ex: checkout) dates.
@@ -46,7 +49,9 @@ Other features also present in this version:
 * Configurable validation messages
 * Lets to assign a user to the calendar, this way a user with editor access will access his/her own booking calendar
 * List of bookings with print option
-* Several configurable fields, settings and behaviors (date format, min/max dates, block dates, etc...)
+* Supports bookings of a fixed length, example weekly bookings
+* Price structure can be defined for each number of days
+* Calendar configurable settings: date format, min/max dates, block dates, mark holidays, select working weekdays, calendar pages
 
 What isn't included in the free version described here?
 
@@ -87,7 +92,7 @@ A: In the booking calendar administration area, set the field "Accept overlapped
 
 = Q: When is blocked the reservation and sent the email with the rental information? =
 
-A: After clicking the submit / book button the customer is redirected to a PayPal payment page to submit the payment to confirm it. After completed the payment the reservation is saved into the database and calendar, the dates become un-available it the booking availability verification is enabled and the emails are sent with the booking information and the information entered by the customer on the booking form. At that point the booking information will appear also in the printable bookings list.
+A: After clicking the submit / booking button the customer is redirected to a PayPal payment page to submit the payment to confirm it. After completed the payment the reservation is saved into the database and calendar, the dates become un-available it the booking availability verification is enabled and the emails are sent with the booking information and the information entered by the customer on the booking form. At that point the booking information will appear also in the printable bookings list.
 
 = Q: Got this error message at PayPal after clicking the book button: "We cannot process this transaction...". Solution?
 
@@ -99,7 +104,7 @@ A: If you don't want to edit the MO/PO files then just edit the texts that are a
 
 = Q: Can I restrict the number of days to book? =
 
-A: This feature is available in the pro version.
+A: Yes, use the settings fields "Minimum number of nights to be booked" and "Maximum number of nights to be booked" for that purpose. You can also specify a fixed reservation length if you want to allow only bookings of a specific number of days.
 
 
 == Other Notes ==
@@ -127,6 +132,113 @@ There are two new settings in the booking calendar administration area:
 You can apply supplements for bookings under some specific number of nights, or over a specified number of nights, or both.
 
 The field "*Supplement for bookings between X and Y nights*" makes the booking form add the specified supplement once for bookings between the indicated number of nights.
+
+= Settings for both admin and public calendars =
+
+* Calendar Pages: Number of calendar months to display at the same time
+* Calendar Language: Language used for the calendar. The default is auto-detect that works in most cases. If the auto-detect doesn't get the expected language then select it manually.
+* Start Weekday: Start weekday, usually Sunday or Monday.
+* Date format: Select dd/mm/yyyy or mm/dd/yyyy
+* Accept overlapped reservations: Indicate if more than one reservation will be allowed in the same days. Default is "no overlapped" for an active availability verification.
+* Reservation mode: Select Complete day means that the first and the last days booked are charged as full days; Partial Day means that they are charged as half-days only.
+
+= Settings for public calendar only =
+
+* Minimum available date: The minimum selectable date in the calendar. Examples: 2012-10-25, today, today + 3 days
+* Maximum available date: The maximum selectable date in the calendar. 
+* Minimum number of nights to be booked: The booking form won't accept less than the indicated nights on this field.
+* Maximum number of nights to be booked: The booking form won't accept more than the indicated nights on this field.
+* Working dates: Working dates are the dates that accept bookings. Use this for example to disable the weekends or other specific weekdays.
+* Disabled and special dates: Click a date to mark it as disabled, for example for disabling holidays or other dates where reservations aren't allowed.
+* Enable Fixed Reservation Length?: Use this for allowing only bookings of a specific number of days. More details in the next section 
+
+= Fixed Reservation Length = 
+
+If you enable the option "Fixed Reservation Length" for the calendar that means that you want to accept only bookings of the specified length (number of days), for example for accepting only 7 days bookings.
+
+The settings fields for this option are:
+
+* Fixed reservation length (days): The number of days that must have the booking.
+* Start Reservation Date: Use this for allowing specific weekdays as start of the reservation, for example if you want to indicate that all the bookings must start on a Monday.
+* Disabled and special dates: When the "Fixed Reservation Length" is enabled you can use the calendar for indicating specific starting days for the bookings. This is useful if you are offering packages that start only on specific dates.
+
+When this mode is enabled, the customer only has to select the start day for the booking and the end date is calculated automatically.
+
+
+= Form Builder =
+
+The form builder is fully available only in the pro version. If allows to fully customize the form: add, edit and remove fields.
+
+
+= Submit Button =
+
+There is an area to indicate the label used for the submit button. The class="pbSubmit" can be used to modify the button styles. The styles can be applied into any of the CSS files of your theme or into the CSS file "booking-calendar-contact-form\css\stylepublic.css". For further modifications the submit button is located at the end of the file "dex_scheduler.inc.php". For general CSS styles modifications to the form and samples check this FAQ: http://wordpress.dwbooster.com/faq/booking-calendar-contact-form#q100
+
+
+= Validation Texts = 
+
+Use this area for translating of setting custom validation messages for the form fields.
+
+
+= Price Configuration =
+
+This administration section allows to setup most of the price structure for the bookings. The following settings fields are available:
+
+* Currency: The currency used at PayPal. Example currency codes: USD, EUR, GBP, CAD, AUD, NZD, CHF, MXN, CZK, DKK, NOK, SEK, HKD, SGD, HUF, ILS, JPY, PLN
+* Default request cost (per day): The default request cost for each day. This amount is the fee per day, for example if the value specified here is us$25 and the reservation is for 4 days then the payment amount will be us$100.
+* Total request cost for specific # of days, # of days to setup: The "total" request cost for bookings of a specific number of days. This has precedence over the default cost.
+* Supplement for bookings between X and Y nights: Supplement (or discount if negative) can be applied to bookings which length is into the specified range of days.
+* Seasons configuration: Allows to apply different prices on different seasons (configured with start and end dates). The season prices will overwrite the default request cost and the total request cost for specific days if that option is used.
+
+= PayPal Payment Configuration = 
+
+Settings related to the PayPal payment processing. The settings fields are:
+
+* Enable Paypal Payments?: The free version supports only PayPal enabled. The pro version supports other two options: Don't use PayPal or "Optional" to let the customer select PayPal or just submit the booking for a payment later. If "Optional" is selected (pro version), a radio-button field will be added to let the customer select "Pay with PayPal." or "Pay later".
+* Paypal email: The email of the Paypal that will receive the payments.
+* Paypal product name: The name that will appear to the customer at Paypal.
+* URL to return after successful payment: After the Paypal payment the user may go back to a page into your website (usually a "thank you" page). Paste here the complete address of that page. Important note: This field is used as the "acknowledgment / thank you message" even if the Paypal feature isn't used (pro version).
+* URL to return after an incomplete or cancelled payment: After a canceled/incomplete Paypal payment the user may go back to a page into your website, usually a page with more instructions or requesting feedback. Paste here the complete address of that page.
+* Paypal language: The language that will be used for the Paypal payment. It's any Paypal supported language.
+* Discount Codes: Available only in pro version. Adds a field for entering discount codes and apply them to the price.
+
+= Optional Services/Items Field =
+
+This feature is available only in the pro version. These area optional fields that appear only if some option is specified. Useful for selecting additional items with prices for the booking, example: optional services like "Internet" or "Parking" in a hotel booking.
+
+= Notification Settings to Administrator(s) =
+
+Setup area for the notifications sent to the administrator(s) after the booking is completed. Settings fields:
+
+* Notification "from" email: The email used as from in the notifications.
+* Send notification to email: The email address where the notification will be sent to (ex: your email address).
+* Email subject notification to admin: Subject of the notification email that you will receive.
+* Email notification to admin: Content of the notification email that you will receive. Keep the tag %INFORMATION% that will be replaced automatically by the booking information.
+
+= Email Copy to User (auto-reply): =
+
+Setup area for the auto-reply email sent to the customer after the completing the booking. Settings fields:
+
+* Email field on the form: Select which of the form field will contain the user's email address to send the auto-reply.
+* Email subject confirmation to user: Subject of the thank you/confirmation email sent to the user (customer) after completing the payment.
+* Email confirmation to user: Content of the thank you/confirmation email sent to the user (customer) after completing the payment. Keep the tag %INFORMATION% that will be replaced automatically by the booking information.
+
+= Catpcha Verification =
+
+Setup area for the built-in antispam captcha verification. Settings fields:
+
+* Use Captcha Verification?: Select if the captcha image will be used.
+* Width: Width of the captcha image.
+* Height: Height of the captcha image.
+* Chars: How many characters will appear in the captcha image.
+* Min font size: Minimum size used for the font (randomized).
+* Max font size: Maximum size used for the font (randomized).
+* Preview: Preview for checking how the captcha image will look.
+* Noise: Amount of noise to make it stronger.
+* Noise Length: Length of the noise to modify its look.
+* Background: Background color.
+* Border: Border color.
+* Font: Base font used to render the text. Four options already included.
 
 
 == Screenshots ==

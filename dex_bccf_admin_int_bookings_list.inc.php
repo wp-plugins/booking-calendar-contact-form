@@ -31,9 +31,18 @@ if (!$current_page) $current_page = 1;
 $records_per_page = 50;                                                                                  
 
 $cond = '';
-if ($_GET["search"] != '') $cond .= " AND (title like '%".esc_sql($_GET["search"])."%' OR description LIKE '%".esc_sql($_GET["search"])."%')";
+if (is_numeric($_GET["search"]))
+{
+    if ($_GET["search"] != '') $cond .= " AND (title like '%".esc_sql($_GET["search"])."%' OR description LIKE '%".esc_sql($_GET["search"])."%' OR id=".$_GET["search"].")";
+}
+else
+{
+    if ($_GET["search"] != '') $cond .= " AND (title like '%".esc_sql($_GET["search"])."%' OR description LIKE '%".esc_sql($_GET["search"])."%')";
+}    
 if ($_GET["dfrom"] != '') $cond .= " AND (datatime_s >= '".esc_sql($_GET["dfrom"])."')";
 if ($_GET["dto"] != '') $cond .= " AND (datatime_s <= '".esc_sql($_GET["dto"])." 23:59:59')";
+
+
 
 
 $events = $wpdb->get_results( "SELECT * FROM ".DEX_BCCF_CALENDARS_TABLE_NAME." WHERE reservation_calendar_id=".CP_BCCF_CALENDAR_ID.$cond." ORDER BY datatime_s DESC" );

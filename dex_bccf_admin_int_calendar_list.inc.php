@@ -10,34 +10,10 @@ $current_user = wp_get_current_user();
 
 global $wpdb;
 $message = "";
-if (isset($_GET['a']) && $_GET['a'] == '1')
-{
-    $sql .= 'INSERT INTO `'.DEX_BCCF_CONFIG_TABLE_NAME.'` (`'.TDE_BCCFCONFIG_TITLE.'`,`'.TDE_BCCFCONFIG_USER.'`,`'.TDE_BCCFCONFIG_PASS.'`,`'.TDE_BCCFCONFIG_LANG.'`,`'.TDE_BCCFCONFIG_CPAGES.'`,`'.TDE_BCCFCONFIG_MSG.'`,`'.TDE_BCCFCALDELETED_FIELD.'`,calendar_mode) '.
-            ' VALUES("","'.$_GET["name"].'","","ENG","1","Please, select your reservation.","0","true");';
-
-    $wpdb->query($sql);   
-
-    $results = $wpdb->get_results('SELECT `'.TDE_BCCFCONFIG_ID.'` FROM `'.DEX_BCCF_CONFIG_TABLE_NAME.'` ORDER BY `'.TDE_BCCFCONFIG_ID.'` DESC LIMIT 0,1');        
-    $wpdb->query('UPDATE `'.DEX_BCCF_CONFIG_TABLE_NAME.'` SET `'.TDE_BCCFCONFIG_TITLE.'`="cal'.$results[0]->id.'" WHERE `'.TDE_BCCFCONFIG_ID.'`='.$results[0]->id);           
-    $message = "Item added";
-} 
-else if (isset($_GET['u']) && $_GET['u'] != '')
+if (isset($_GET['u']) && $_GET['u'] != '')
 {
     $wpdb->query('UPDATE `'.DEX_BCCF_CONFIG_TABLE_NAME.'` SET conwer='.$_GET["owner"].',`'.TDE_BCCFCALDELETED_FIELD.'`='.$_GET["public"].',`'.TDE_BCCFCONFIG_USER.'`="'.$_GET["name"].'" WHERE `'.TDE_BCCFCONFIG_ID.'`='.$_GET['u']);           
     $message = "Item updated";        
-}
-else if (isset($_GET['d']) && $_GET['d'] != '')
-{
-    $wpdb->query('DELETE FROM `'.DEX_BCCF_CONFIG_TABLE_NAME.'` WHERE `'.TDE_BCCFCONFIG_ID.'`='.$_GET['d']);       
-    $message = "Item deleted";
-}  
-else if (isset($_GET['c']) && $_GET['c'] != '')
-{
-    $myrows = $wpdb->get_row( "SELECT * FROM ".DEX_BCCF_CONFIG_TABLE_NAME." WHERE `".TDE_BCCFCONFIG_ID."`=".$_GET['c'], ARRAY_A);    
-    unset($myrows[TDE_BCCFCONFIG_ID]);
-    $myrows[TDE_BCCFCONFIG_USER] = 'Cloned: '.$myrows[TDE_BCCFCONFIG_USER];
-    $wpdb->insert( DEX_BCCF_CONFIG_TABLE_NAME, $myrows);
-    $message = "Item duplicated/cloned";
 }
 else if (isset($_GET['ac']) && $_GET['ac'] == 'st')
 {   
@@ -71,22 +47,17 @@ if ($message) echo "<div id='setting-error-settings_updated' class='updated sett
 <h2>Booking Calendar Contact Form</h2>
 
 <script type="text/javascript">
- function cp_addItem()
- {
-    var calname = document.getElementById("cp_itemname").value;
-    document.location = 'admin.php?page=dex_bccf&a=1&r='+Math.random()+'&name='+encodeURIComponent(calname);       
- }
- 
+
  function cp_updateItem(id)
  {
     var calname = document.getElementById("calname_"+id).value;
     var owner = document.getElementById("calowner_"+id).options[document.getElementById("calowner_"+id).options.selectedIndex].value;    
     if (owner == '')
         owner = 0;
-    var is_public = (document.getElementById("calpublic_"+id).checked?"0":"1");
+    var is_public = "1";
     document.location = 'admin.php?page=dex_bccf&u='+id+'&r='+Math.random()+'&public='+is_public+'&owner='+owner+'&name='+encodeURIComponent(calname);    
  }
-
+ 
  function cp_manageSettings(id)
  {
     document.location = 'admin.php?page=dex_bccf&cal='+id+'&r='+Math.random();
@@ -96,7 +67,6 @@ if ($message) echo "<div id='setting-error-settings_updated' class='updated sett
  {
     document.location = 'admin.php?page=dex_bccf&cal='+id+'&list=1&r='+Math.random();
  }
-
  
  function cp_updateConfig()
  {
@@ -121,7 +91,7 @@ if ($message) echo "<div id='setting-error-settings_updated' class='updated sett
   
   <table cellspacing="1"> 
    <tr>
-    <th align="left">ID</th><th align="left">Item Name</th><th align="left">Owner</th><th align="left">&nbsp; &nbsp; Options</th><th align="left">Shorttag for Pages and Posts</th>
+    <th align="left">ID</th><th align="left">Item Name</th><th align="left">Owner</th><th align="left">Feed</th><th align="left">&nbsp; &nbsp; Options</th><th align="left">Shorttag for Pages and Posts</th>
    </tr> 
 <?php  
 
@@ -151,15 +121,16 @@ if ($message) echo "<div id='setting-error-settings_updated' class='updated sett
         <?php echo $current_user->user_login; ?>
         </td>
     <?php } ?>
-    </td>    
+    
+    <input type="hidden" name="calpublic_<?php echo $item->id; ?>" id="calpublic_<?php echo $item->id; ?>" value="1" />
+    
+    <td nowrap><a href="javascript:alert('iCal feed available only in pro version.');">iCal</a></td>
     <td nowrap>&nbsp; &nbsp; 
                              <?php if (cp_bccf_is_administrator()) { ?> 
                                <input type="button" name="calupdate_<?php echo $item->id; ?>" value="Update" onclick="cp_updateItem(<?php echo $item->id; ?>);" /> &nbsp; 
                              <?php } ?>    
                              <input type="button" name="calmanage_<?php echo $item->id; ?>" value="Settings " onclick="cp_manageSettings(<?php echo $item->id; ?>);" /> &nbsp; 
-                             <input type="button" name="calbookings_<?php echo $item->id; ?>" value="Bookings / Contacts" onclick="cp_BookingsList(<?php echo $item->id; ?>);" /> &nbsp; 
-                             
-                             <input type="hidden" name="calpublic_<?php echo $item->id; ?>" id="calpublic_<?php echo $item->id; ?>" value="1" />
+                             <input type="button" name="calbookings_<?php echo $item->id; ?>" value="Bookings / Contacts" onclick="cp_BookingsList(<?php echo $item->id; ?>);" /> &nbsp;                             
     </td>
     <td style="font-size:11px;" nowrap>[CP_BCCF_FORM calendar="<?php echo $item->id; ?>"]</td> 
    </tr>
@@ -180,7 +151,7 @@ if ($message) echo "<div id='setting-error-settings_updated' class='updated sett
   <h3 class='hndle' style="padding:5px;"><span>New Calendar / Item</span></h3>
   <div class="inside"> 
    
-    This version supports one calendar / item. <a href="http://wordpress.dwbooster.com/calendars/booking-calendar-contact-form">Click for other versions</a>.
+    This version supports one calendar. For a version that supports unlimited calendars upgrade to the <a href="http://wordpress.dwbooster.com/calendars/booking-calendar-contact-form#download">pro version</a>.
 
   </div>    
  </div>

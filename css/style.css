@@ -1,4 +1,4 @@
-body{font:11px "Lucida Grande","Lucida Sans Unicode",Tahoma,sans-serif;}
+
 .clearer{clear:both;}
 .column{float:left;}
 .columnr{float:right;}
@@ -73,3 +73,5 @@ textarea {resize: none}
     font-weight: bold;
 }
 a.helpfbuilder{font-size:80%;text-decoration:underline;color:#00f;cursor:pointer;}
+
+

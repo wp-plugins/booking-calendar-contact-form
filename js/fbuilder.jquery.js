@@ -352,7 +352,7 @@ jQuery(function(){
 				$(this).siblings().removeClass("ui-selected");
 				$(this).addClass("ui-selected");
 			});
-			
+
 			//email list
 			var str = "";
 			for (var i=0;i<items.length;i++)
