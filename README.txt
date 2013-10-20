@@ -260,3 +260,4 @@ Setup area for the built-in antispam captcha verification. Settings fields:
 = 1.0.1 =
 * Interface modifications.
 * Compatible the latest WP and jQuery versions
+* Replaced YUI calendar with a jQuery calendar
