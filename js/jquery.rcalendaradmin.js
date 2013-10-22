@@ -1,3 +1,4 @@
+jQuery(function(){
 (function($) {
 	$( document ).ready(function() {
 	    cAdmin = $("#calConfig").rcalendaradmin({"calendarId":1,
@@ -146,3 +147,4 @@
         return this;
 	}
 })(jQuery);
+});

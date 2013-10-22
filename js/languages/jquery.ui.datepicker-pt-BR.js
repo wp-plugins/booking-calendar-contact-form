@@ -1,6 +1,6 @@
 /* Brazilian initialisation for the jQuery UI date picker plugin. */
 /* Written by Leonildo Costa Silva (leocsilva@gmail.com). */
-jQuery(function($){
+jQuery(function(){ (function($) {
 	$.datepicker.regional['pt-BR'] = {
 		closeText: 'Fechar',
 		prevText: '&#x3C;Anterior',
@@ -19,4 +19,4 @@ jQuery(function($){
 		isRTL: false,
 		showMonthAfterYear: false,
 		yearSuffix: ''};
-});
+}(jQuery)); });

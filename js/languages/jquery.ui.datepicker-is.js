@@ -1,6 +1,6 @@
 /* Icelandic initialisation for the jQuery UI date picker plugin. */
 /* Written by Haukur H. Thorsson (haukur@eskill.is). */
-jQuery(function($){
+jQuery(function(){ (function($) {
 	$.datepicker.regional['is'] = {
 		closeText: 'Loka',
 		prevText: '&#x3C; Fyrri',
@@ -19,4 +19,4 @@ jQuery(function($){
 		isRTL: false,
 		showMonthAfterYear: false,
 		yearSuffix: ''};
-});
+}(jQuery)); });

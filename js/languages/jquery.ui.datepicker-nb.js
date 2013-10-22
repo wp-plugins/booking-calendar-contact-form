@@ -1,6 +1,6 @@
 /* Norwegian Bokmål initialisation for the jQuery UI date picker plugin. */
 /* Written by Bjørn Johansen (post@bjornjohansen.no). */
-jQuery(function($){
+jQuery(function(){ (function($) {
 	$.datepicker.regional['nb'] = {
 		closeText: 'Lukk',
 		prevText: '&#xAB;Forrige',
@@ -18,4 +18,4 @@ jQuery(function($){
 		showMonthAfterYear: false,
 		yearSuffix: ''
 	};
-});
+}(jQuery)); });

@@ -1,6 +1,6 @@
 /* Romansh initialisation for the jQuery UI date picker plugin. */
 /* Written by Yvonne Gienal (yvonne.gienal@educa.ch). */
-jQuery(function($){
+jQuery(function(){ (function($) {
 	$.datepicker.regional['rm'] = {
 		closeText: 'Serrar',
 		prevText: '&#x3C;Suandant',
@@ -17,4 +17,4 @@ jQuery(function($){
 		isRTL: false,
 		showMonthAfterYear: false,
 		yearSuffix: ''};
-});
+}(jQuery)); });

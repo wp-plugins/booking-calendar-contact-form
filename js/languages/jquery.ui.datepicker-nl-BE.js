@@ -1,6 +1,6 @@
 /* Dutch (Belgium) initialisation for the jQuery UI date picker plugin. */
 /* David De Sloovere @DavidDeSloovere */
-jQuery(function($){
+jQuery(function(){ (function($) {
 	$.datepicker.regional['nl-BE'] = {
 		closeText: 'Sluiten',
 		prevText: '←',
@@ -19,4 +19,4 @@ jQuery(function($){
 		isRTL: false,
 		showMonthAfterYear: false,
 		yearSuffix: ''};
-});
+}(jQuery)); });

@@ -1,6 +1,6 @@
 /* Polish initialisation for the jQuery UI date picker plugin. */
 /* Written by Jacek Wysocki (jacek.wysocki@gmail.com). */
-jQuery(function($){
+jQuery(function(){ (function($) {
 	$.datepicker.regional['pl'] = {
 		closeText: 'Zamknij',
 		prevText: '&#x3C;Poprzedni',
@@ -19,4 +19,4 @@ jQuery(function($){
 		isRTL: false,
 		showMonthAfterYear: false,
 		yearSuffix: ''};
-});
+}(jQuery)); });

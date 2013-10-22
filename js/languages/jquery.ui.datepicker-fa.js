@@ -55,4 +55,4 @@ jQuery(function($) {
 		isRTL: true,
 		showMonthAfterYear: false,
 		yearSuffix: ''};
-});
+}(jQuery)); });

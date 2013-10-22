@@ -1,7 +1,7 @@
 /* Algerian Arabic Translation for jQuery UI date picker plugin. (can be used for Tunisia)*/
 /* Mohamed Cherif BOUCHELAGHEM -- cherifbouchelaghem@yahoo.fr */
 
-jQuery(function($){
+jQuery(function(){ (function($) {
 	$.datepicker.regional['ar-DZ'] = {
 		closeText: 'إغلاق',
 		prevText: '&#x3C;السابق',
@@ -19,4 +19,4 @@ jQuery(function($){
   		isRTL: true,
 		showMonthAfterYear: false,
 		yearSuffix: ''};
-});
+}(jQuery)); });

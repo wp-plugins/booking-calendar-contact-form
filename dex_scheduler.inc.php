@@ -107,6 +107,8 @@ Price:
  }
  function dex_do_init(id)
  {
+  jQuery(function(){
+  (function($) {    
     dex_current_calendar_item = id;
     document.getElementById("calarea"+dex_current_calendar_item).style.display = "";
     /** initCalendar(id,'<?php echo dex_bccf_get_option('calendar_language', DEX_BCCF_DEFAULT_CALENDAR_LANGUAGE); ?>',false,,'<?php echo $l_select_start; ?>','<?php echo $l_select_end; ?>','<?php echo $l_cancel_c; ?>','<?php echo $l_sucess; ?>'); */
@@ -130,6 +132,8 @@ Price:
                                                 });
     });
     document.getElementById("selddiv").innerHTML = "";
+  })(jQuery);
+  })
  }
  dex_do_init(<?php echo $myrows[0]->id; ?>);
  var bccf_d1 = "";

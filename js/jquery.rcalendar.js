@@ -1,3 +1,4 @@
+jQuery(function(){
 (function($) {
 	$.fn.rcalendar = function(options){
 	    var opt = $.extend({},
@@ -12,10 +13,10 @@
                             "000","300","630","633","330","030","033","006","309","303"
                             ],
 				    defaultColor:"F66",
-				    partial_colors:["CCC","F66","F96","FF6","FF3","6F9","3FF","6FF","99F","F9F",
-                            "999","C00","F60","FC3","FC0","3C0","0CC","36F","63F","C3C",
-                            "333","600","930","963","660","060","366","009","339","636"
-                            ],
+                    partial_colors:["CCC","F66","FF6","6F9","6FF","F9F",
+                                    "999","C00","FC3","3C0","36F","C3C",
+                                    "333","600","963","060","009","636"
+                                    ],
 				    partial_defaultColor:"F66",
                     separator2: " - ",
 				    ajaxURL:pathCalendar,
@@ -535,3 +536,4 @@
     }
 
 })(jQuery);
+});

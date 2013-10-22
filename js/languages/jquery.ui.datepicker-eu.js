@@ -1,6 +1,6 @@
 /* Euskarako oinarria 'UI date picker' jquery-ko extentsioarentzat */
 /* Karrikas-ek itzulia (karrikas@karrikas.com) */
-jQuery(function($){
+jQuery(function(){ (function($) {
 	$.datepicker.regional['eu'] = {
 		closeText: 'Egina',
 		prevText: '&#x3C;Aur',
@@ -19,4 +19,4 @@ jQuery(function($){
 		isRTL: false,
 		showMonthAfterYear: false,
 		yearSuffix: ''};
-});
+}(jQuery)); });

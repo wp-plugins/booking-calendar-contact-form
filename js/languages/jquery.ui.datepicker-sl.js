@@ -1,7 +1,7 @@
 /* Slovenian initialisation for the jQuery UI date picker plugin. */
 /* Written by Jaka Jancar (jaka@kubje.org). */
 /* c = č, s = š z = ž C = Č S = Š Z = Ž */
-jQuery(function($){
+jQuery(function(){ (function($) {
 	$.datepicker.regional['sl'] = {
 		closeText: 'Zapri',
 		prevText: '&#x3C;Prejšnji',
@@ -20,4 +20,4 @@ jQuery(function($){
 		isRTL: false,
 		showMonthAfterYear: false,
 		yearSuffix: ''};
-});
+}(jQuery)); });

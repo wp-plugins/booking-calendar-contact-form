@@ -36,6 +36,15 @@ for ($k=1;$k<100;$k++)
 <link href="<?php echo plugins_url('css/style.css', __FILE__); ?>" type="text/css" rel="stylesheet" />
 <link href="<?php echo plugins_url('css/calendar.css', __FILE__); ?>" type="text/css" rel="stylesheet" />
 <link href="<?php echo plugins_url('css/admin.css', __FILE__); ?>" type="text/css" rel="stylesheet" />
+
+<script type="text/javascript"> 
+  if (false)
+  {
+    document.write ("<"+"script type='text/javascript' src='http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js'></"+"script>");
+    document.write ("<"+"script type='text/javascript' src='http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.20/jquery-ui.min.js'></"+"script>");
+  }
+</script>
+
 <div class="wrap">
 <h2>Booking Calendar Contact Form - Manage Calendar Availability</h2>
 
@@ -107,9 +116,11 @@ for ($k=1;$k<100;$k++)
    <div id="cal<?php echo CP_BCCF_CALENDAR_ID; ?>" class="rcalendar"><span style="color:#009900">Loading calendar data...</span></em></div>
 <script type="text/javascript" src="<?php echo plugins_url('js/languages/jquery.ui.datepicker-'.$calendar_language.'.js', __FILE__); ?>"></script>
 
-   <script type="text/javascript">
-   $calendarjQuery = jQuery.noConflict();
-   $calendarjQuery(function() {
+<script type="text/javascript">
+  jQuery(function(){
+  (function($) {     
+     $calendarjQuery = jQuery.noConflict();
+     $calendarjQuery(function() {
      $calendarjQuery("#cal<?php echo CP_BCCF_CALENDAR_ID; ?>").rcalendar({"calendarId":<?php echo CP_BCCF_CALENDAR_ID; ?>,
                                          "partialDate":<?php echo dex_bccf_get_option('calendar_mode',DEX_BCCF_DEFAULT_CALENDAR_MODE); ?>,
                                          "edition":true,
@@ -121,8 +132,10 @@ for ($k=1;$k<100;$k++)
                                          "numberOfMonths":<?php echo dex_bccf_get_option('calendar_pages',DEX_BCCF_DEFAULT_CALENDAR_PAGES); ?>
                                          });
 
-   });
-   </script>
+     });
+  })(jQuery);
+  });
+</script>
 
    <div style="clear:both;height:20px" ></div>
 
@@ -866,7 +879,7 @@ for ($k=1;$k<100;$k++)
  	$j("#dex_dc_expires").datepicker({
                     dateFormat: 'yy-mm-dd'
                  });
-    $j("#calendar_language").val("<?php echo $calendar_language;?>");
+    //$j("#calendar_language").val("<?php echo $calendar_language;?>");
 
  });
   $j(function() {
