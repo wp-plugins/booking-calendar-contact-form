@@ -379,6 +379,9 @@ function dex_bccf_get_public_form() {
                 $dex_buffer[$k] .= '<option value="'.esc_attr($item).'">'.trim(substr($item,strpos($item,"|")+1)).'</option>';
             }
     }
+    
+    $calendar_language = dex_bccf_get_option('calendar_language',DEX_BCCF_DEFAULT_CALENDAR_LANGUAGE);
+    if ($calendar_language == '') $calendar_language = dex_bccf_autodetect_language();
 
     if (DEX_BCCF_DEFAULT_DEFER_SCRIPTS_LOADING)
     {
@@ -387,9 +390,19 @@ function dex_bccf_get_public_form() {
 
         wp_deregister_script('cp_contactformpp_validate_script');
         wp_register_script('cp_contactformpp_validate_script', plugins_url('/js/jquery.validate.js', __FILE__));
-
+        
+        wp_deregister_script('cp_contactformpp_rcalendar');
+        wp_register_script('cp_contactformpp_rcalendar', plugins_url('/js/jquery.rcalendar.js', __FILE__));        
+       
+        $dependencies = array("jquery","jquery-ui-core","jquery-ui-button","jquery-ui-datepicker","jquery-ui-widget","jquery-ui-position","jquery-ui-tooltip","query-stringify","cp_contactformpp_validate_script", "cp_contactformpp_rcalendar"); 
+        if ($calendar_language != '') {
+            wp_deregister_script('cp_contactformpp_rclang');
+            wp_register_script('cp_contactformpp_rclang', plugins_url('/js/languages/jquery.ui.datepicker-'.$calendar_language.'.js', __FILE__));        
+            $dependencies[] = 'cp_contactformpp_rclang';
+        }    
+        
         wp_enqueue_script( 'dex_bccf_builder_script',
-        plugins_url('/js/fbuilder.jquery.js', __FILE__),array("jquery","jquery-ui-core","jquery-ui-button","jquery-ui-datepicker","jquery-ui-widget","jquery-ui-position","jquery-ui-tooltip","query-stringify","cp_contactformpp_validate_script"), false, true );
+        plugins_url('/js/fbuilder.jquery.js', __FILE__),$dependencies, false, true );
 
         // localize script
         wp_localize_script('dex_bccf_builder_script', 'dex_bccf_fbuilder_config', array('obj'  	=>
@@ -418,8 +431,7 @@ function dex_bccf_get_public_form() {
 
     $button_label = dex_bccf_get_option('vs_text_submitbtn', 'Continue');
     $button_label = ($button_label==''?'Continue':$button_label);
-    define('DEX_AUTH_INCLUDE', true);
-    @include dirname( __FILE__ ) . '/dex_scheduler.inc.php';
+    define('DEX_AUTH_INCLUDE', true);    
     if (!DEX_BCCF_DEFAULT_DEFER_SCRIPTS_LOADING) {
 ?>
 <?php $plugin_url = plugins_url('', __FILE__); ?>
@@ -431,13 +443,18 @@ function dex_bccf_get_public_form() {
 <script type='text/javascript' src='<?php echo $plugin_url.'/../../../wp-includes/js/jquery/ui/jquery.ui.tooltip.min.js'; ?>'></script>
 <script type='text/javascript' src='<?php echo plugins_url('js/jQuery.stringify.js', __FILE__); ?>'></script>
 <script type='text/javascript' src='<?php echo plugins_url('js/jquery.validate.js', __FILE__); ?>'></script>
+<?php if ($calendar_language != '') { ?><script type="text/javascript" src="<?php echo plugins_url('/js/languages/jquery.ui.datepicker-'.$calendar_language.'.js', __FILE__); ?>"></script><?php } ?>
+<script type='text/javascript' src='<?php echo plugins_url('js/jquery.rcalendar.js', __FILE__); ?>'></script>
 <script type='text/javascript'>
 /* <![CDATA[ */
 var dex_bccf_fbuilder_config = {"obj":"{\"pub\":true,\"messages\": {\n    \t                \t\"required\": \"This field is required.\",\n    \t                \t\"email\": \"Please enter a valid email address.\",\n    \t                \t\"datemmddyyyy\": \"Please enter a valid date with this format(mm\/dd\/yyyy)\",\n    \t                \t\"dateddmmyyyy\": \"Please enter a valid date with this format(dd\/mm\/yyyy)\",\n    \t                \t\"number\": \"Please enter a valid number.\",\n    \t                \t\"digits\": \"Please enter only digits.\",\n    \t                \t\"max\": \"Please enter a value less than or equal to {0}.\",\n    \t                \t\"min\": \"Please enter a value greater than or equal to {0}.\"\n    \t                }}"};
 /* ]]> */
 </script>
-<script type='text/javascript' src='<?php echo plugins_url('js/fbuilder.jquery.js', __FILE__); ?>'></script>
 <?php
+    }
+    @include dirname( __FILE__ ) . '/dex_scheduler.inc.php';
+    if (!DEX_BCCF_DEFAULT_DEFER_SCRIPTS_LOADING) {    
+        ?><script type='text/javascript' src='<?php echo plugins_url('js/fbuilder.jquery.js', __FILE__); ?>'></script><?php
     }
 }
 
