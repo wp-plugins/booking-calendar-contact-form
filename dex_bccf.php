@@ -979,6 +979,8 @@ function dex_process_ready_to_go_bccf($itemnumber, $payer_email = "", $params)
    $email_content1 = str_replace("%INFORMATION%", $information, $email_content1);
    $email_content2 = str_replace("%INFORMATION%", $information, $email_content2);
 
+   dex_bccf_add_field_verify(TDE_BCCFCALENDAR_DATA_TABLE, "color", "varchar(10)");
+
    $rows_affected = $wpdb->insert( TDE_BCCFCALENDAR_DATA_TABLE, array( 'reservation_calendar_id' => $myrows[0]->calendar,
                                                                        'datatime_s' => date("Y-m-d H:i:s", strtotime($myrows[0]->booked_time_unformatted_s)),
                                                                        'datatime_e' => date("Y-m-d H:i:s", strtotime($myrows[0]->booked_time_unformatted_e)),
