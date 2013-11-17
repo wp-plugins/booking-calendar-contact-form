@@ -35,9 +35,6 @@ var pathCalendar_full = pathCalendar + "/wp-content/plugins/<?php echo basename(
 </script>
 <?php
     $option_overlapped = dex_bccf_get_option('calendar_overlapped', DEX_BCCF_DEFAULT_CALENDAR_OVERLAPPED);
-    
-
-    
 
     $calendar_dateformat = dex_bccf_get_option('calendar_dateformat',DEX_BCCF_DEFAULT_CALENDAR_DATEFORMAT);
     $dformat = ((dex_bccf_get_option('calendar_dateformat', DEX_BCCF_DEFAULT_CALENDAR_DATEFORMAT)==0)?"mm/dd/yy":"dd/mm/yy");
@@ -105,40 +102,41 @@ Price:
  }
  function dex_do_init(id)
  {
-  try{$testjq = jQuery.noConflict();} catch (e) {}
+myjQuery = (typeof myjQuery != 'undefined' ) ? myjQuery : jQuery;
+  try{$testjq = myjQuery} catch (e) {}
   if (typeof $testjq == 'undefined')
   {
     setTimeout("dex_do_init("+id+");");
     return;
-  }
-  jQuery(function(){
-  (function($) {    
-    dex_current_calendar_item = id;
-    document.getElementById("calarea"+dex_current_calendar_item).style.display = "";
-    /** initCalendar(id,'<?php echo dex_bccf_get_option('calendar_language', DEX_BCCF_DEFAULT_CALENDAR_LANGUAGE); ?>',false,,'<?php echo $l_select_start; ?>','<?php echo $l_select_end; ?>','<?php echo $l_cancel_c; ?>','<?php echo $l_sucess; ?>'); */
-    $calendarjQuery = jQuery.noConflict();
-    $calendarjQuery(function() {
-    $calendarjQuery("#calarea"+id).rcalendar({"calendarId":id,
-                                                "partialDate":<?php echo dex_bccf_get_option('calendar_mode',DEX_BCCF_DEFAULT_CALENDAR_MODE); ?>,
-                                                "edition":false,
-                                                "minDate":"<?php echo $calendar_mindate;?>",
-                                                "maxDate":"<?php echo $calendar_maxdate;?>",
-                                                "dformat":"<?php echo $dformat;?>",
-                                                "workingDates":<?php echo $workingdates;?>,
-				                                "holidayDates":<?php echo $holidayDates;?>,
-				                                "startReservationWeekly":<?php echo $startReservationWeekly;?>,
-				                                "startReservationDates":<?php echo $startReservationDates;?>,
-				                                "fixedReservationDates":<?php echo ((dex_bccf_get_option('calendar_fixedmode', '')=='1'?'true':'false'));?>,
-				                                "fixedReservationDates_length":<?php echo dex_bccf_get_option('calendar_fixedreslength','1');?>,
-                                                "language":"<?php echo $calendar_language?>",
-                                                "firstDay":<?php echo dex_bccf_get_option('calendar_weekday', DEX_BCCF_DEFAULT_CALENDAR_WEEKDAY); ?>,
-                                                "numberOfMonths":<?php echo dex_bccf_get_option('calendar_pages',DEX_BCCF_DEFAULT_CALENDAR_PAGES); ?>
-                                                });
+  }    
+  myjQuery(function(){
+    (function($) {
+        dex_current_calendar_item = id;
+        document.getElementById("calarea"+dex_current_calendar_item).style.display = "";
+        /** initCalendar(id,'<?php echo dex_bccf_get_option('calendar_language', DEX_BCCF_DEFAULT_CALENDAR_LANGUAGE); ?>',false,,'<?php echo $l_select_start; ?>','<?php echo $l_select_end; ?>','<?php echo $l_cancel_c; ?>','<?php echo $l_sucess; ?>'); */
+        $calendarjQuery = myjQuery;
+        $calendarjQuery(function() {
+        $calendarjQuery("#calarea"+id).rcalendar({"calendarId":id,
+                                                    "partialDate":<?php echo dex_bccf_get_option('calendar_mode',DEX_BCCF_DEFAULT_CALENDAR_MODE); ?>,
+                                                    "edition":false,
+                                                    "minDate":"<?php echo $calendar_mindate;?>",
+                                                    "maxDate":"<?php echo $calendar_maxdate;?>",
+                                                    "dformat":"<?php echo $dformat;?>",
+                                                    "workingDates":<?php echo $workingdates;?>,
+	    			                                "holidayDates":<?php echo $holidayDates;?>,
+	    			                                "startReservationWeekly":<?php echo $startReservationWeekly;?>,
+	    			                                "startReservationDates":<?php echo $startReservationDates;?>,
+	    			                                "fixedReservationDates":<?php echo ((dex_bccf_get_option('calendar_fixedmode', '')=='1'?'true':'false'));?>,
+	    			                                "fixedReservationDates_length":<?php echo dex_bccf_get_option('calendar_fixedreslength','1');?>,
+                                                    "language":"<?php echo $calendar_language?>",
+                                                    "firstDay":<?php echo dex_bccf_get_option('calendar_weekday', DEX_BCCF_DEFAULT_CALENDAR_WEEKDAY); ?>,
+                                                    "numberOfMonths":<?php echo dex_bccf_get_option('calendar_pages',DEX_BCCF_DEFAULT_CALENDAR_PAGES); ?>
+                                                    });
+        });
+        document.getElementById("selddiv").innerHTML = "";
+    })(myjQuery);
     });
-    document.getElementById("selddiv").innerHTML = "";
-  })(jQuery);
-  })
- } 
+ }
  dex_do_init(<?php echo $myrows[0]->id; ?>);
  var bccf_d1 = "";
  var bccf_d2 = "";
@@ -157,7 +155,7 @@ Price:
         {
             var d1 = document.getElementById("selYear_startcalarea"+dex_current_calendar_item ).value+"-"+document.getElementById("selMonth_startcalarea"+dex_current_calendar_item ).value+"-"+document.getElementById("selDay_startcalarea"+dex_current_calendar_item ).value;
             var d2 = document.getElementById("selYear_endcalarea"+dex_current_calendar_item ).value+"-"+document.getElementById("selMonth_endcalarea"+dex_current_calendar_item ).value+"-"+document.getElementById("selDay_endcalarea"+dex_current_calendar_item ).value;
-            $dexQuery = jQuery.noConflict();
+            $dexQuery = (typeof myjQuery != 'undefined' ) ? myjQuery : jQuery;
             var ser = "";<?php for ($k=1;$k<=DEX_BCCF_DEFAULT_SERVICES_FIELDS; $k++) if ($dex_buffer[$k] != '') { ?>ser += String.fromCharCode(38)+"ser<?php echo $k; ?>="+$dexQuery("#dex_services<?php echo $k; ?>").val();<?php } ?>
             if (bccf_d1 != d1 || bccf_d2 != d2 || bccf_ser != ser)
             {
@@ -184,7 +182,7 @@ Price:
  setInterval('updatedate()',200);<?php } ?>
  function doValidate(form)
  {
-    $dexQuery = jQuery.noConflict();<?php if ($option_calendar_enabled != 'false') { ?>
+    $dexQuery = (typeof myjQuery != 'undefined' ) ? myjQuery : jQuery;<?php if ($option_calendar_enabled != 'false') { ?>
     var d1 = new Date(document.getElementById("selYear_startcalarea"+dex_current_calendar_item ).value,document.getElementById("selMonth_startcalarea"+dex_current_calendar_item ).value,document.getElementById("selDay_startcalarea"+dex_current_calendar_item ).value);
     var d2 = new Date(document.getElementById("selYear_endcalarea"+dex_current_calendar_item ).value,document.getElementById("selMonth_endcalarea"+dex_current_calendar_item ).value,document.getElementById("selDay_endcalarea"+dex_current_calendar_item ).value);
     var ONE_DAY = 1000 * 60 * 60 * 24;
@@ -258,8 +256,8 @@ Price:
 ?>   <div class="fields" id="field-c0">
          <label><?php echo $l_payment_options; ?></label>
          <div class="dfield">
-           <input type="radio" name="bccf_payment_option_paypal" value="1" checked> <?php echo dex_bccf_get_option('enable_paypal_option_yes',DEX_BCCF_DEFAULT_PAYPAL_OPTION_YES); ?><br />
-           <input type="radio" name="bccf_payment_option_paypal" value="0"> <?php echo dex_bccf_get_option('enable_paypal_option_no',DEX_BCCF_DEFAULT_PAYPAL_OPTION_NO); ?>
+           <input type="radio" name="bccf_payment_option_paypal" value="1" checked> <?php echo __(dex_bccf_get_option('enable_paypal_option_yes',DEX_BCCF_DEFAULT_PAYPAL_OPTION_YES)); ?><br />
+           <input type="radio" name="bccf_payment_option_paypal" value="0"> <?php echo  __(dex_bccf_get_option('enable_paypal_option_no',DEX_BCCF_DEFAULT_PAYPAL_OPTION_NO)); ?>
          </div>
          <div class="clearer"></div>
       </div>

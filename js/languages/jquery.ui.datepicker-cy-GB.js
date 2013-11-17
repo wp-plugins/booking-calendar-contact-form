@@ -1,6 +1,6 @@
 /* Welsh/UK initialisation for the jQuery UI date picker plugin. */
 /* Written by William Griffiths. */
-jQuery(function(){ (function($) {
+myjQuery = (typeof myjQuery != 'undefined' ) ? myjQuery : jQuery;myjQuery(function(){ (function($) {
 	$.datepicker.regional['cy-GB'] = {
 		closeText: 'Done',
 		prevText: 'Prev',
@@ -19,4 +19,4 @@ jQuery(function(){ (function($) {
 		isRTL: false,
 		showMonthAfterYear: false,
 		yearSuffix: ''};
-}(jQuery)); });
+}(myjQuery)); });

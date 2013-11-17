@@ -1,5 +1,5 @@
 /* Portuguese initialisation for the jQuery UI date picker plugin. */
-jQuery(function(){ (function($) {
+myjQuery = (typeof myjQuery != 'undefined' ) ? myjQuery : jQuery;myjQuery(function(){ (function($) {
 	$.datepicker.regional['pt'] = {
 		closeText: 'Fechar',
 		prevText: 'Anterior',
@@ -18,4 +18,4 @@ jQuery(function(){ (function($) {
 		isRTL: false,
 		showMonthAfterYear: false,
 		yearSuffix: ''};
-}(jQuery)); });
+}(myjQuery)); });

@@ -1,4 +1,5 @@
-jQuery(function(){
+myjQuery = (typeof myjQuery != 'undefined' ) ? myjQuery : jQuery;
+myjQuery(function(){
 (function($) {
 	$.fn.rcalendar = function(options){
 	    var opt = $.extend({},
@@ -393,18 +394,16 @@ jQuery(function(){
                         var r =  (
                         ((n>1 && opt.partialDate) 
                         || (n>0 && !opt.partialDate))
-                        || (opt.workingDates[d.getDay()]==0)
+                        || (opt.workingDates[d.getDay()]==0 && (opt.startReservationDates.indexOf($.datepicker.formatDate('yy-mm-dd', d))=="-1"))
                         || (opt.holidayDates.indexOf($.datepicker.formatDate('yy-mm-dd', d))!="-1")
-                        || (
-                        (opt.fixedReservationDates)
-                        &&
-                            ( (opt.startReservationWeekly[d.getDay()]==0)
-                            || (opt.startReservationDates.indexOf($.datepicker.formatDate('yy-mm-dd', d))!="-1")
-                            )
-                        )
+                        || (opt.startReservationWeekly[d.getDay()]==0 && (opt.startReservationDates.indexOf($.datepicker.formatDate('yy-mm-dd', d))=="-1"))
+                        //|| (
+                        //(opt.fixedReservationDates)
+                        //&& (opt.startReservationDates.indexOf($.datepicker.formatDate('yy-mm-dd', d))!="-1")
+                        //)
                         ?false:true); //startReservationDates
                         //return [(((n>1 && opt.partialDate) || (n>0 && !opt.partialDate))?false:true),c+" "+dString];
-                        return [r,c+" "+dString];    
+                        return [r,c+" "+dString]; 
 		    		}
 
 
@@ -535,5 +534,5 @@ jQuery(function(){
        }
     }
 
-})(jQuery);
+})(myjQuery);
 });

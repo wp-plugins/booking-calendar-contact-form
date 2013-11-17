@@ -1,5 +1,6 @@
 var cpfb_started=false;
-jQuery(function(){
+myjQuery = (typeof myjQuery != 'undefined' ) ? myjQuery : jQuery;
+myjQuery(function(){
 (function($) {
 	$.fn.fbuilder = function(options){
 		var opt = $.extend({},
@@ -1322,5 +1323,5 @@ jQuery(function(){
 	    	fcount++;
 	    	fnum = "_"+fcount;
 	    }
-})(jQuery);
+})(myjQuery);
 });

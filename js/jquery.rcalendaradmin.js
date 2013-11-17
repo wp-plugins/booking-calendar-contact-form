@@ -1,4 +1,5 @@
-jQuery(function(){
+myjQuery = (typeof myjQuery != 'undefined' ) ? myjQuery : jQuery;
+myjQuery(function(){
 (function($) {
 	$( document ).ready(function() {
 	    cAdmin = $("#calConfig").rcalendaradmin({"calendarId":1,
@@ -13,7 +14,7 @@ jQuery(function(){
         });
         $("#fixedreservation").click(function(){
             $("#container_fixedreservation").css("display",($(this).is(":checked")?"block":"none"));
-            $("#startreslegend").css("display",($(this).is(":checked")?"block":"none"));
+            //$("#startreslegend").css("display",($(this).is(":checked")?"block":"none"));
             reloadCheck();
         });
         reloadCheck = function(){
@@ -32,7 +33,7 @@ jQuery(function(){
             });            
             cAdmin.opt.startReservationWeekly = w;
             $("#container_fixedreservation").css("display",($("#fixedreservation").is(":checked")?"block":"none"));
-            $("#startreslegend").css("display",($("#fixedreservation").is(":checked")?"block":"none"));
+            //$("#startreslegend").css("display",($("#fixedreservation").is(":checked")?"block":"none"));
             cAdmin.opt.fixedreservation = $("#fixedreservation").is(":checked");
             cAdmin.reload();
         }
@@ -64,8 +65,8 @@ jQuery(function(){
                 dateFormat:opt.dformat,
                 numberOfMonths:opt.numberOfMonths,
                 onSelect: function(d,inst) {
-                    if (opt.fixedreservation)
-                    {
+                    //if (opt.fixedreservation)
+                    //{
                         if (opt.holidays.indexOf(d)!="-1")  // holiday
                         {
 		                    opt.holidays.splice(opt.holidays.indexOf(d),1);
@@ -77,14 +78,14 @@ jQuery(function(){
 		                }
 		                else  //none
 		                    opt.holidays[opt.holidays.length] = d;
-		            }
-		            else
-		            {
-		                if (opt.holidays.indexOf(d)!="-1")  // holiday
-		                    opt.holidays.splice(opt.holidays.indexOf(d),1);
-		                else  //none
-		                    opt.holidays[opt.holidays.length] = d;
-		            }
+		            //}
+		            //else
+		            //{
+		            //    if (opt.holidays.indexOf(d)!="-1")  // holiday
+		            //        opt.holidays.splice(opt.holidays.indexOf(d),1);
+		            //    else  //none
+		            //        opt.holidays[opt.holidays.length] = d;
+		            //}
 		                
 		            savedata();
 		            render();
@@ -94,13 +95,13 @@ jQuery(function(){
                     if (opt.workingDates[d.getDay()]==0) //nonworking
                         if (c.indexOf("nonworking")=="-1")
                             c.push("nonworking"); 
-                    if (opt.fixedreservation && opt.startReservationWeekly[d.getDay()]==0) //nonworking
+                    if (opt.startReservationWeekly[d.getDay()]==0) //nonworking
                         if (c.indexOf("nonworking")=="-1")
                             c.push("nonworking");
                     if (opt.holidays.indexOf($.datepicker.formatDate(opt.dformat, d))!="-1")
                         if (c.indexOf("holidays")=="-1")
                             c.push("holidays");
-                    if (opt.fixedreservation && opt.startreservation.indexOf($.datepicker.formatDate(opt.dformat, d))!="-1")
+                    if (opt.startreservation.indexOf($.datepicker.formatDate(opt.dformat, d))!="-1")
                         if (c.indexOf("startreservation")=="-1")
                             c.push("startreservation");
                     return [true,c.join(" ")];
@@ -146,5 +147,5 @@ jQuery(function(){
 		this.reload = function(){render();};
         return this;
 	}
-})(jQuery);
+})(myjQuery);
 });

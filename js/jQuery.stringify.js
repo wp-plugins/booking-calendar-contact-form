@@ -1,4 +1,5 @@
-jQuery(function(){
+myjQuery = (typeof myjQuery != 'undefined' ) ? myjQuery : jQuery;
+myjQuery(function(){
 (function($) {
 $.extend({
     
@@ -42,5 +43,5 @@ $.extend({
         }
     }
 });
-})(jQuery);
+})(myjQuery);
 });

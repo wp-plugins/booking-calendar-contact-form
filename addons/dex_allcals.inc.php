@@ -57,11 +57,12 @@ var pathCalendar_full = pathCalendar + "/wp-content/plugins/<?php echo basename(
  var dex_current_calendar_item;
  function dex_do_init(id)
  {
-    jQuery(function(){
+    myjQuery = (typeof myjQuery != 'undefined' ) ? myjQuery : jQuery;
+    myjQuery(function(){
     (function($) {
        dex_current_calendar_item = id;
        document.getElementById("kcalarea"+dex_current_calendar_item).style.display = "";        
-       $calendarjQuery = jQuery.noConflict();    
+       $calendarjQuery = myjQuery;    
        $calendarjQuery(function() {
        $calendarjQuery("#kcalarea"+id).rcalendar({"calendarId":-1,
                                                    "partialDate":<?php echo dex_bccf_get_option('calendar_mode',DEX_BCCF_DEFAULT_CALENDAR_MODE); ?>,
@@ -81,8 +82,8 @@ var pathCalendar_full = pathCalendar + "/wp-content/plugins/<?php echo basename(
                                                    "numberOfMonths":<?php echo dex_bccf_get_option('calendar_pages',3); ?>
                                                    });
        });       
-    })(jQuery);
-    });    
+    })(myjQuery);
+    });
  }
  dex_do_init(<?php echo $myrows[0]->id; ?>);
 </script>

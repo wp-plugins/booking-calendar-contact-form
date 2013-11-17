@@ -36,7 +36,7 @@ for ($k=1;$k<100;$k++)
 <link href="<?php echo plugins_url('css/style.css', __FILE__); ?>" type="text/css" rel="stylesheet" />
 <link href="<?php echo plugins_url('css/calendar.css', __FILE__); ?>" type="text/css" rel="stylesheet" />
 <link href="<?php echo plugins_url('css/admin.css', __FILE__); ?>" type="text/css" rel="stylesheet" />
-
+ 
 <script type="text/javascript"> 
   if (false)
   {
@@ -44,6 +44,7 @@ for ($k=1;$k<100;$k++)
     document.write ("<"+"script type='text/javascript' src='http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.20/jquery-ui.min.js'></"+"script>");
   }
 </script>
+
 
 <div class="wrap">
 <h2>Booking Calendar Contact Form - Manage Calendar Availability</h2>
@@ -116,26 +117,26 @@ for ($k=1;$k<100;$k++)
    <div id="cal<?php echo CP_BCCF_CALENDAR_ID; ?>" class="rcalendar"><span style="color:#009900">Loading calendar data...</span></em></div>
 <script type="text/javascript" src="<?php echo plugins_url('js/languages/jquery.ui.datepicker-'.$calendar_language.'.js', __FILE__); ?>"></script>
 
-<script type="text/javascript">
-  jQuery(function(){
-  (function($) {     
-     $calendarjQuery = jQuery.noConflict();
-     $calendarjQuery(function() {
-     $calendarjQuery("#cal<?php echo CP_BCCF_CALENDAR_ID; ?>").rcalendar({"calendarId":<?php echo CP_BCCF_CALENDAR_ID; ?>,
-                                         "partialDate":<?php echo dex_bccf_get_option('calendar_mode',DEX_BCCF_DEFAULT_CALENDAR_MODE); ?>,
-                                         "edition":true,
-                                         //"minDate":"<?php echo $calendar_mindate;?>",
-                                         //"maxDate":"<?php echo $calendar_maxdate;?>",
-                                         "dformat":"<?php echo $dformat;?>",
-                                         "language":"<?php echo $calendar_language?>",
-                                         "firstDay":<?php echo dex_bccf_get_option('calendar_weekday', DEX_BCCF_DEFAULT_CALENDAR_WEEKDAY); ?>,
-                                         "numberOfMonths":<?php echo dex_bccf_get_option('calendar_pages',DEX_BCCF_DEFAULT_CALENDAR_PAGES); ?>
-                                         });
-
-     });
-  })(jQuery);
-  });
-</script>
+   <script type="text/javascript">
+    jQuery(function(){
+    (function($) {   
+        $calendarjQuery = jQuery.noConflict();
+        $calendarjQuery(function() {
+        $calendarjQuery("#cal<?php echo CP_BCCF_CALENDAR_ID; ?>").rcalendar({"calendarId":<?php echo CP_BCCF_CALENDAR_ID; ?>,
+                                            "partialDate":<?php echo dex_bccf_get_option('calendar_mode',DEX_BCCF_DEFAULT_CALENDAR_MODE); ?>,
+                                            "edition":true,
+                                            //"minDate":"<?php echo $calendar_mindate;?>",
+                                            //"maxDate":"<?php echo $calendar_maxdate;?>",
+                                            "dformat":"<?php echo $dformat;?>",
+                                            "language":"<?php echo $calendar_language?>",
+                                            "firstDay":<?php echo dex_bccf_get_option('calendar_weekday', DEX_BCCF_DEFAULT_CALENDAR_WEEKDAY); ?>,
+                                            "numberOfMonths":<?php echo dex_bccf_get_option('calendar_pages',DEX_BCCF_DEFAULT_CALENDAR_PAGES); ?>
+                                            });
+       
+        });
+    })(jQuery);
+    });
+   </script>
 
    <div style="clear:both;height:20px" ></div>
 
@@ -360,6 +361,19 @@ for ($k=1;$k<100;$k++)
          <em style="font-size:11px;">Working dates are the dates that accept bookings.</em>
          </div>
          <br />
+         <div><strong>Start Reservation Date</strong></div>
+         <div>
+         <?php $cfmode = dex_bccf_get_option('calendar_startresdays', '1111111'); if ($cfmode == '') $cfmode = '1111111'; ?>
+         <input type="checkbox" class="srCheck" value="1" name="sd1" id="c0" <?php echo ($cfmode[0]=='1'?'checked="checked"':''); ?> /> Su &nbsp; &nbsp; &nbsp;
+         <input type="checkbox" class="srCheck" value="1" name="sd2" id="c1" <?php echo ($cfmode[1]=='1'?'checked="checked"':''); ?> /> Mo &nbsp; &nbsp; &nbsp;
+         <input type="checkbox" class="srCheck" value="1" name="sd3" id="c2" <?php echo ($cfmode[2]=='1'?'checked="checked"':''); ?> /> Tu &nbsp; &nbsp; &nbsp;
+         <input type="checkbox" class="srCheck" value="1" name="sd4" id="c3" <?php echo ($cfmode[3]=='1'?'checked="checked"':''); ?> /> We &nbsp; &nbsp; &nbsp;
+         <input type="checkbox" class="srCheck" value="1" name="sd5" id="c4" <?php echo ($cfmode[4]=='1'?'checked="checked"':''); ?> /> Th &nbsp; &nbsp; &nbsp;
+         <input type="checkbox" class="srCheck" value="1" name="sd6" id="c5" <?php echo ($cfmode[5]=='1'?'checked="checked"':''); ?> /> Fr &nbsp; &nbsp; &nbsp;
+         <input type="checkbox" class="srCheck" value="1" name="sd7" id="c6" <?php echo ($cfmode[6]=='1'?'checked="checked"':''); ?> /> Sa &nbsp; &nbsp; &nbsp;
+         <br /><em style="font-size:11px;">Use this for allowing specific weekdays as start of the reservation.</em>
+         </div> 
+         <br />
          <div style="background:#E2EFF8;border: 1px dotted #888888;padding:10px;">
              <div><strong><input type="checkbox" value="1" name="calendar_fixedmode" <?php echo esc_attr((dex_bccf_get_option('calendar_fixedmode', '')=='1'?'checked="checked"':'')); ?> id="fixedreservation"> Enable Fixed Reservation Length?</strong>
                  <br />&nbsp;&nbsp;&nbsp;&nbsp; <em style="font-size:11px;">Use this for allowing only bookings of a specific number of days.</em>
@@ -372,18 +386,7 @@ for ($k=1;$k<100;$k++)
                   <?php for ($k=1;$k<30;$k++) echo '<option value="'.$k.'"'.($k.""==$v?' selected ':'').'>'.$k.'</option>'; ?>
                  </select>
                  <br /><br />
-                 <div><strong>Start Reservation Date</strong></div>
-                 <div>
-                 <?php $cfmode = dex_bccf_get_option('calendar_startresdays', '1111111'); if ($cfmode == '') $cfmode = '1111111'; ?>
-                 <input type="checkbox" class="srCheck" value="1" name="sd1" id="c0" <?php echo ($cfmode[0]=='1'?'checked="checked"':''); ?> /> Su &nbsp; &nbsp;
-                 <input type="checkbox" class="srCheck" value="1" name="sd2" id="c1" <?php echo ($cfmode[1]=='1'?'checked="checked"':''); ?> /> Mo &nbsp; &nbsp;
-                 <input type="checkbox" class="srCheck" value="1" name="sd3" id="c2" <?php echo ($cfmode[2]=='1'?'checked="checked"':''); ?> /> Tu &nbsp; &nbsp;
-                 <input type="checkbox" class="srCheck" value="1" name="sd4" id="c3" <?php echo ($cfmode[3]=='1'?'checked="checked"':''); ?> /> We &nbsp; &nbsp;
-                 <input type="checkbox" class="srCheck" value="1" name="sd5" id="c4" <?php echo ($cfmode[4]=='1'?'checked="checked"':''); ?> /> Th &nbsp; &nbsp;
-                 <input type="checkbox" class="srCheck" value="1" name="sd6" id="c5" <?php echo ($cfmode[5]=='1'?'checked="checked"':''); ?> /> Fr &nbsp; &nbsp;
-                 <input type="checkbox" class="srCheck" value="1" name="sd7" id="c6" <?php echo ($cfmode[6]=='1'?'checked="checked"':''); ?> /> Sa &nbsp; &nbsp;
-                 <br /><em style="font-size:11px;">Use this for allowing specific weekdays as start of the reservation.</em>
-                 </div>
+                 
 
              </div>
          </div>
@@ -396,7 +399,7 @@ for ($k=1;$k<100;$k++)
           
           <div style="margin-top:5px;margin-left:10px;"><div style="float:left;width:20px;height:20px;margin-right:10px;background-color:#FEA69A;"></div> <strong>Non-available dates:</strong> Click once to mark the date as non-available.</div>
           <div style="clear:both"></div>
-          <div id="startreslegend" style="margin-top:5px;margin-left:10px;<?php echo (dex_bccf_get_option('calendar_fixedmode', '')=='1'?'':'display:none;'); ?>"><div style="float:left;width:20px;height:20px;margin-right:10px;background-color:#80BF92;"></div> <strong>Start reservation dates:</strong> Click twice to mark the date as start date.</div>          
+          <div id="startreslegend" style="margin-top:5px;margin-left:10px;"><div style="float:left;width:20px;height:20px;margin-right:10px;background-color:#80BF92;"></div> <strong>Start reservation dates:</strong> Click twice to mark the date as start date.</div>          
           <div style="clear:both"></div>
           <div style="margin-left:35px;"><em style="font-size:11px;">Every time a date is cliked it status changes. Click it to mark/unmark it.</em></div>
         </td>
@@ -466,6 +469,40 @@ for ($k=1;$k<100;$k++)
          <em style="font-size:11px;">Suplement will be added once for bookings between those nights.</em>
         </td>
        </tr>
+       
+
+        <tr valign="top">
+         <td colspan="4" style="padding:3px;background-color:#E2EFF8;color:#666666;font-weight:bold;text-align:left">
+           DEPOSIT PAYMENT (OPTIONAL)
+         </td>
+        </tr>        
+
+       <tr>
+        <td valign="top" colspan="2">
+        
+         <?php $v = dex_bccf_get_option('calendar_depositenable', '0'); if ($v=='') $v = '0'; ?>
+         <strong>Enable deposit payment?:</strong>
+         <select name="calendar_depositenable">
+          <option value="0" <?php if ($v=='0') echo ' selected'; ?>>No</option>
+          <option value="1" <?php if ($v=='1') echo ' selected'; ?>>Yes</option>
+         </select>
+         &nbsp;&nbsp;
+         <strong>Deposit Amount:</strong>
+         <input type="text" size="5" name="calendar_depositamount" size="40" value="<?php $v = dex_bccf_get_option('calendar_depositamount', '0'); echo esc_attr(($v==''?'0':$v)); ?>" />
+         &nbsp;&nbsp;
+         <?php $v = dex_bccf_get_option('calendar_deposittype', '0'); if ($v=='') $v = '0'; ?>
+         <strong>Deposit type:</strong>
+         <select name="calendar_deposittype">
+          <option value="0" <?php if ($v=='0') echo ' selected'; ?>>Percent</option>
+          <option value="1" <?php if ($v=='1') echo ' selected'; ?>>Fixed</option>
+         </select>
+         <br />
+         <em style="font-size:11px;">If enabled, the customer will have to pay at PayPal only the deposit amount.</em>
+         <br /> 
+         
+        </td>
+       </tr>
+       
 
         <tr valign="top">
          <td colspan="4" style="padding:3px;background-color:#E2EFF8;color:#666666;font-weight:bold;text-align:left">
@@ -551,58 +588,11 @@ for ($k=1;$k<100;$k++)
  </div>
 
  <div id="metabox_basic_settings" class="postbox" >
-  <h3 class='hndle' style="padding:5px;"><span>Optional Services/Items Field</span></h3>
-  <div class="inside">
-  <?php for ($k=1;$k<=1; $k++) { ?>
-    <fieldset style="border: 1px solid #888888;">
-     <legend><strong>Optional Services Field #<?php echo $k; ?></strong></legend>
-     <table class="form-table">
-        <tr valign="top" colspan="2">
-        <th scope="row">
-         <?php
-           $flabel = dex_bccf_get_option('cp_cal_checkboxes_label'.$k, 'Service');
-           if ($flabel == '') $flabel = 'Service';
-         ?>
-        Field Label: <input type="text" readonly disabled name="cp_cal_checkboxes_label<?php echo $k; ?>" value="<?php echo esc_attr($flabel); ?>" />
-        </th>
-        </tr>
-        <tr valign="top">
-        <td colspan="2">
-          <strong>If enabled, use the services/items field as:</strong><br />
-          <?php $option = dex_bccf_get_option('cp_cal_checkboxes_type'.$k, DEX_BCCF_DEFAULT_CP_CAL_CHECKBOXES_TYPE); ?>
-          <select name="cp_cal_checkboxes_type<?php echo $k; ?>">
-           <option value="0"<?php if ($option == '0') echo ' selected'; ?>>Additional items field. The item price will be added ONCE to the above prices.</option>
-           <option value="4"<?php if ($option == '4') echo ' selected'; ?>>Additional items field per day. The item price will be added for each day to the above prices.</option>
-           <option value="1"<?php if ($option == '1') echo ' selected'; ?>>Price per day field. This price will overwrite the above prices.</option>
-           <option value="2"<?php if ($option == '2') echo ' selected'; ?>>Fixed price. This price will overwrite the above prices.</option>
-          </select>
-        </td>
-        </tr>
-     </table>
-     <table class="form-table">
-        <tr valign="top">
-        <th scope="row" style="width:390px;" >Options (drop-down select, one item per line with format: <span style="color:#ff0000">price | title</span>)<br />
-            <textarea style="width:385px;color:#666666;background-color:#efefef;" wrap="on" rows="4" name="cp_cal_checkboxesnok<?php echo $k; ?>" readonly disabled style="color:#999999;">This feature isn't available in this version. Please check the plugin's page for other versions.</textarea>
-            <input type="hidden" name="cp_cal_checkboxes<?php echo $k; ?>" value="<?php echo esc_attr(dex_bccf_get_option('cp_cal_checkboxes'.$k, DEX_BCCF_DEFAULT_CP_CAL_CHECKBOXES)); ?>">
-        </th>
-        <td>
-        <em>Note: This is an optional field that appears only if some option is specified.</em>
-        <br /><u><strong>Sample Format:</strong></u><br />
-        <?php echo str_replace("\n", "<br />", DEX_BCCF_DEFAULT_EXPLAIN_CP_CAL_CHECKBOXES); ?></td>
-        </tr>
-     </table>
-    </fieldset>
-  <?php } ?>
-  </div>
- </div>
-
-
- <div id="metabox_basic_settings" class="postbox" >
   <h3 class='hndle' style="padding:5px;"><span>Form Builder</span></h3>
   <div class="inside">
-
+  
      <em>* Note: The Form Builder isn't available in this version. For a version with a fully functional Form Builder <a href="http://wordpress.dwbooster.com/calendars/booking-calendar-contact-form#download">check the pro version</a>.</em>
-     
+
      <input type="hidden" name="form_structure" id="form_structure" size="180" value="<?php echo str_replace("\r","",str_replace("\n","",esc_attr(dex_bccf_cleanJSON(dex_bccf_get_option('form_structure', DEX_BCCF_DEFAULT_form_structure))))); ?>" />
 
 
@@ -721,6 +711,52 @@ for ($k=1;$k<100;$k++)
   </div>
  </div>
 
+
+ <div id="metabox_basic_settings" class="postbox" >
+  <h3 class='hndle' style="padding:5px;"><span>Optional Services/Items Field</span></h3>
+  <div class="inside">
+  <?php for ($k=1;$k<=1; $k++) { ?>
+    <fieldset style="border: 1px solid #888888;">
+     <legend><strong>Optional Services Field #<?php echo $k; ?></strong></legend>
+     <table class="form-table">
+        <tr valign="top" colspan="2">
+        <th scope="row">
+         <?php
+           $flabel = dex_bccf_get_option('cp_cal_checkboxes_label'.$k, 'Service');
+           if ($flabel == '') $flabel = 'Service';
+         ?>
+        Field Label: <input type="text" readonly disabled name="cp_cal_checkboxes_label<?php echo $k; ?>" value="<?php echo esc_attr($flabel); ?>" />
+        </th>
+        </tr>
+        <tr valign="top">
+        <td colspan="2">
+          <strong>If enabled, use the services/items field as:</strong><br />
+          <?php $option = dex_bccf_get_option('cp_cal_checkboxes_type'.$k, DEX_BCCF_DEFAULT_CP_CAL_CHECKBOXES_TYPE); ?>
+          <select name="cp_cal_checkboxes_type<?php echo $k; ?>">
+           <option value="0"<?php if ($option == '0') echo ' selected'; ?>>Additional items field. The item price will be added ONCE to the above prices.</option>
+           <option value="4"<?php if ($option == '4') echo ' selected'; ?>>Additional items field per day. The item price will be added for each day to the above prices.</option>
+           <option value="1"<?php if ($option == '1') echo ' selected'; ?>>Price per day field. This price will overwrite the above prices.</option>
+           <option value="2"<?php if ($option == '2') echo ' selected'; ?>>Fixed price. This price will overwrite the above prices.</option>
+          </select>
+        </td>
+        </tr>
+     </table>
+     <table class="form-table">
+        <tr valign="top">
+        <th scope="row" style="width:390px;" >Options (drop-down select, one item per line with format: <span style="color:#ff0000">price | title</span>)<br />
+            <textarea style="width:385px;color:#666666;background-color:#efefef;" wrap="on" rows="4" name="cp_cal_checkboxesnok<?php echo $k; ?>" readonly disabled style="color:#999999;">This feature isn't available in this version. Please check the plugin's page for other versions.</textarea>
+            <input type="hidden" name="cp_cal_checkboxes<?php echo $k; ?>" value="<?php echo esc_attr(dex_bccf_get_option('cp_cal_checkboxes'.$k, DEX_BCCF_DEFAULT_CP_CAL_CHECKBOXES)); ?>">
+        </th>
+        <td>
+        <em>Note: This is an optional field that appears only if some option is specified.</em>
+        <br /><u><strong>Sample Format:</strong></u><br />
+        <?php echo str_replace("\n", "<br />", DEX_BCCF_DEFAULT_EXPLAIN_CP_CAL_CHECKBOXES); ?></td>
+        </tr>
+     </table>
+    </fieldset>
+  <?php } ?>
+  </div>
+ </div>
 
  <div id="metabox_basic_settings" class="postbox" >
   <h3 class='hndle' style="padding:5px;"><span>Notification Settings to Administrator(s)</span></h3>
@@ -943,13 +979,10 @@ for ($k=1;$k<100;$k++)
       {
       }
   }
-  dex_updatemaxslots(); 
+  dex_updatemaxslots();
+  
 
 </script>
-
-
-<script type="text/javascript" src="<?php echo plugins_url('js/jquery.rcalendar.js', __FILE__); ?>"></script>
-<script type="text/javascript" src="<?php echo plugins_url('js/jquery.rcalendaradmin.js', __FILE__); ?>"></script>
 
 
 <?php } else { ?>

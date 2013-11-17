@@ -1,5 +1,5 @@
 /* Canadian-French initialisation for the jQuery UI date picker plugin. */
-jQuery(function ($) {
+myjQuery = (typeof myjQuery != 'undefined' ) ? myjQuery : jQuery;myjQuery(function(){ (function($) {
 	$.datepicker.regional['fr-CA'] = {
 		closeText: 'Fermer',
 		prevText: 'Précédent',
@@ -19,4 +19,4 @@ jQuery(function ($) {
 		showMonthAfterYear: false,
 		yearSuffix: ''
 	};
-}(jQuery)); });
+}(myjQuery)); });

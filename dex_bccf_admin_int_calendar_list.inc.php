@@ -47,7 +47,7 @@ if ($message) echo "<div id='setting-error-settings_updated' class='updated sett
 <h2>Booking Calendar Contact Form</h2>
 
 <script type="text/javascript">
-
+ 
  function cp_updateItem(id)
  {
     var calname = document.getElementById("calname_"+id).value;
@@ -91,13 +91,13 @@ if ($message) echo "<div id='setting-error-settings_updated' class='updated sett
   
   <table cellspacing="1"> 
    <tr>
-    <th align="left">ID</th><th align="left">Item Name</th><th align="left">Owner</th><th align="left">Feed</th><th align="left">&nbsp; &nbsp; Options</th><th align="left">Shorttag for Pages and Posts</th>
+    <th align="left">ID</th><th align="left">Item Name</th><th align="left">Owner</th><th align="left">Feed</th><th align="left">&nbsp; &nbsp; Options</th><th align="left">Shorttag for Pages and Posts</th>    
    </tr> 
 <?php  
 
   $users = $wpdb->get_results( "SELECT user_login,ID FROM ".$wpdb->users." ORDER BY ID DESC" );                                                                     
 
-  $myrows = $wpdb->get_results( "SELECT * FROM ".DEX_BCCF_CONFIG_TABLE_NAME );                                                                     
+  $myrows = $wpdb->get_results( "SELECT * FROM ".$wpdb->prefix ."bccf_reservation_calendars" );                                                                     
   foreach ($myrows as $item)   
       if (cp_bccf_is_administrator() || ($current_user->ID == $item->conwer))
       {
@@ -130,7 +130,7 @@ if ($message) echo "<div id='setting-error-settings_updated' class='updated sett
                                <input type="button" name="calupdate_<?php echo $item->id; ?>" value="Update" onclick="cp_updateItem(<?php echo $item->id; ?>);" /> &nbsp; 
                              <?php } ?>    
                              <input type="button" name="calmanage_<?php echo $item->id; ?>" value="Settings " onclick="cp_manageSettings(<?php echo $item->id; ?>);" /> &nbsp; 
-                             <input type="button" name="calbookings_<?php echo $item->id; ?>" value="Bookings / Contacts" onclick="cp_BookingsList(<?php echo $item->id; ?>);" /> &nbsp;                             
+                             <input type="button" name="calbookings_<?php echo $item->id; ?>" value="Bookings / Contacts" onclick="cp_BookingsList(<?php echo $item->id; ?>);" /> &nbsp; 
     </td>
     <td style="font-size:11px;" nowrap>[CP_BCCF_FORM calendar="<?php echo $item->id; ?>"]</td> 
    </tr>
