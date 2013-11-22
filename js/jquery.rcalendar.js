@@ -190,7 +190,8 @@ myjQuery(function(){
                         selectedDates.l = $.datepicker.parseDate(opt.dformat,d);
                         selectedDates.u = "";
                         var tmpdate = new Date(selectedDates.l.getTime());
-                        tmpdate.setDate(tmpdate.getDate() + opt.fixedReservationDates_length);
+                        
+                        tmpdate.setDate(tmpdate.getDate() + opt.fixedReservationDates_length - ((opt.partialDate)?0:1));
                         d = $.datepicker.formatDate(opt.dformat, tmpdate);
                     }                            
                     if (selectedDates.l=="" || (selectedDates.l!="" && selectedDates.u!=""))
@@ -223,7 +224,8 @@ myjQuery(function(){
                             }
                             tmpdate.setDate(tmpdate.getDate() + 1);    
                         }
-                        if (isPossible && (dl.toString()!=du.toString()))
+                        //if (isPossible && (dl.toString()!=du.toString()))
+                        if (isPossible && (!opt.partialDate || (dl.toString()!=du.toString()) ) )
                         {
                             selectedDates.l = dl;
                             selectedDates.u = du;
