@@ -1110,7 +1110,6 @@ function dex_bccf_save_options()
 
 
     $data = array(
-         'form_structure' => $_POST['form_structure'],
          'calendar_language' => $_POST["calendar_language"],
          'calendar_dateformat' => $_POST["calendar_dateformat"],
          'calendar_overlapped' => $_POST["calendar_overlapped"],
