@@ -74,7 +74,7 @@ var pathCalendar_full = pathCalendar + "/wp-content/plugins/<?php echo basename(
 <?php
   echo $l_calendar.':<br /><select name="dex_item" id="dex_item" onchange="dex_updateItem()">';
   foreach ($myrows as $item)
-      echo '<option value='.$item->id.'>'.$item->uname.'</option>';
+      echo '<option value='.$item->id.'>'.__($item->uname).'</option>';
   echo '</select>';
 ?>
 <br /><br />
@@ -127,7 +127,7 @@ myjQuery = (typeof myjQuery != 'undefined' ) ? myjQuery : jQuery;
 	    			                                "startReservationWeekly":<?php echo $startReservationWeekly;?>,
 	    			                                "startReservationDates":<?php echo $startReservationDates;?>,
 	    			                                "fixedReservationDates":<?php echo ((dex_bccf_get_option('calendar_fixedmode', '')=='1'?'true':'false'));?>,
-	    			                                "fixedReservationDates_length":<?php echo dex_bccf_get_option('calendar_fixedreslength','1');?>,
+	    			                                "fixedReservationDates_length":<?php $v=dex_bccf_get_option('calendar_fixedreslength','1'); if ($v=='') echo '1'; else echo $v; ?>,
                                                     "language":"<?php echo $calendar_language?>",
                                                     "firstDay":<?php echo dex_bccf_get_option('calendar_weekday', DEX_BCCF_DEFAULT_CALENDAR_WEEKDAY); ?>,
                                                     "numberOfMonths":<?php echo dex_bccf_get_option('calendar_pages',DEX_BCCF_DEFAULT_CALENDAR_PAGES); ?>
@@ -248,7 +248,7 @@ myjQuery = (typeof myjQuery != 'undefined' ) ? myjQuery : jQuery;
          echo '<div class="fields" id="field-c1"><label>';
          $flabel = dex_bccf_get_option('cp_cal_checkboxes_label'.$k, 'Service');
          if ($flabel == '') $flabel = 'Service';
-         echo $flabel; //$l_service;
+         echo __($flabel); //$l_service;
          echo ':</label><div class="dfield"><select name="services'.$k.'"  id="dex_services'.$k.'" onchange="updatedate()">'.$dex_buffer[$k].'</select></div><div class="clearer"></div></div>';
       }
    if (dex_bccf_get_option('enable_paypal',DEX_BCCF_DEFAULT_ENABLE_PAYPAL) == '2')
