@@ -1,7 +1,7 @@
 === Booking Calendar Contact Form ===
 Contributors: codepeople
 Donate link: http://wordpress.dwbooster.com/calendars/booking-calendar-contact-form
-Tags: contact form,booking form,reservation form,calendar,form,payment form,paypal form,booking calendar,reservation calendar,calendar form,booking
+Tags: contact form,booking form,reservation form,calendar,form,payment form,paypal form,booking calendar,reservation calendar,calendar form,booking,book
 Requires at least: 3.0.5
 Tested up to: 3.8
 Stable tag: trunk
