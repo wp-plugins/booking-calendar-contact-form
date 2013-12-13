@@ -5,7 +5,7 @@
 <form class="cpp_form" name="dex_bccf_pform_allcals" id="dex_bccf_pform_allcals" action="" method="post">
 <script>
 var pathCalendar = "<?php echo cp_bccf_get_site_url(); ?>/";
-var pathCalendar_full = pathCalendar + "/wp-content/plugins/<?php echo basename(dirname(__FILE__));?>/css/images/corners";
+var pathCalendar_full = pathCalendar + "wp-content/plugins/booking-calendar-contact-form/css/images/corners";
 </script>
 <?php
     $option_overlapped = dex_bccf_get_option('calendar_overlapped', DEX_BCCF_DEFAULT_CALENDAR_OVERLAPPED); 

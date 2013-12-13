@@ -111,7 +111,7 @@ for ($k=1;$k<100;$k++)
 
    <script>
    var pathCalendar = "<?php echo cp_bccf_get_site_url(); ?>/";
-   var pathCalendar_full = pathCalendar + "/wp-content/plugins/<?php echo basename(dirname(__FILE__));?>/css/images/corners";
+   var pathCalendar_full = pathCalendar + "wp-content/plugins/<?php echo basename(dirname(__FILE__));?>/css/images/corners";
    </script>
 
    <div id="cal<?php echo CP_BCCF_CALENDAR_ID; ?>" class="rcalendar"><span style="color:#009900">Loading calendar data...</span></em></div>

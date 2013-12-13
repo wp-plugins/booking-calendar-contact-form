@@ -31,7 +31,7 @@
 <?php if ($option_calendar_enabled != 'false') { ?>
 <script>
 var pathCalendar = "<?php echo cp_bccf_get_site_url(); ?>/";
-var pathCalendar_full = pathCalendar + "/wp-content/plugins/<?php echo basename(dirname(__FILE__));?>/css/images/corners";
+var pathCalendar_full = pathCalendar + "wp-content/plugins/<?php echo basename(dirname(__FILE__));?>/css/images/corners";
 </script>
 <?php
     $option_overlapped = dex_bccf_get_option('calendar_overlapped', DEX_BCCF_DEFAULT_CALENDAR_OVERLAPPED);
