@@ -6,6 +6,7 @@ myjQuery(function(){
                                          "partialDate":false,
                                          "edition":false,
                                          "numberOfMonths":2,
+                                         firstDay:0,
                                          workingDates:[1,1,1,1,1,1,1]
                                          });
                                          
@@ -61,6 +62,7 @@ myjQuery(function(){
 		var createCalendar = function()
 		{
             $("#dp"+opt.id).datepicker({
+                firstDay:opt.firstDay,
                 showOtherMonths: true,
                 dateFormat:opt.dformat,
                 numberOfMonths:opt.numberOfMonths,

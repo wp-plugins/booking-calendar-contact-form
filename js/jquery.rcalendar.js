@@ -44,7 +44,7 @@ myjQuery(function(){
 		{
 		    opt.colors = opt.partial_colors;
 		    opt.defaultColor = opt.partial_defaultColor;
-		}
+		}		
 		opt.id = $(this).attr("id");
 		var id = $(this).attr("id");
 		var timeOut = true;
@@ -177,7 +177,6 @@ myjQuery(function(){
             if ($("#dp"+opt.id)) $("#dp"+opt.id).datepicker("destroy");
             cleanDatepicker();
             $("#dp"+opt.id).datepicker({
-                firstDay:opt.firstDay,
                 showOtherMonths: false,
                 numberOfMonths:opt.numberOfMonths,
                 onSelect: function(d,inst) {
@@ -329,10 +328,7 @@ myjQuery(function(){
                                         
                                         $('#'+opt.id+' .specialDateRight.'+dStringClass[i].d).css("background-color","#"+dStringClass[i].co_r);
                                         $('#'+opt.id+' .specialDateLeft.'+dStringClass[i].d).css("background-color","#"+dStringClass[i].co_l);
-                                        if (dStringClass[i].co_l!=dStringClass[i].co_r)
-                                            $('#'+opt.id+' .specialDateMiddle.'+dStringClass[i].d).css("background-image","url("+pathCalendar_full+"/c_"+dStringClass[i].co_r+"x"+dStringClass[i].co_l+".png)")
-                                        else 
-                                            $('#'+opt.id+' .specialDateMiddle.'+dStringClass[i].d).css("background-color","#"+dStringClass[i].co_l);   
+                                        $('#'+opt.id+' .specialDateMiddle.'+dStringClass[i].d).css("background-color","#"+dStringClass[i].c).css("background-image","url("+pathCalendar_full+"/c_"+dStringClass[i].co_r+"x"+dStringClass[i].co_l+".png)")
                                         if ((selectedDates.l!="") && (dStringClass[i].co_r!="") && (dStringClass[i].n==1) && (dStringClass[i].d == opt.id+"dmy"+(selectedDates.l.getMonth()+1)+"_"+selectedDates.l.getDate()+"_"+selectedDates.l.getFullYear()))
                                             $('#'+opt.id+' .specialDateLeft.'+dStringClass[i].d).css("background-color","none").css("background-image","url(wp-content/plugins/booking-calendar-contact-form/css/images/corners/c_"+dStringClass[i].co_r+"x"+opt.defaultColor+".png)");
                                         //else
@@ -417,7 +413,8 @@ myjQuery(function(){
                 $("#dp"+opt.id).datepicker("option", $.datepicker.regional[opt.language]); 
                 $("#dp"+opt.id).datepicker("option", "dateFormat", opt.dformat );
                 $("#dp"+opt.id).datepicker("option", "minDate", opt.minDate );
-                $("#dp"+opt.id).datepicker("option", "maxDate", opt.maxDate );                
+                $("#dp"+opt.id).datepicker("option", "maxDate", opt.maxDate );
+                $("#dp"+opt.id).datepicker("option", "firstDay", opt.firstDay );
                 $.datepicker.setDefaults($.datepicker.regional['']); 
                 $(".myover").remove();
         };
