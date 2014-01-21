@@ -167,7 +167,7 @@ When this mode is enabled, the customer only has to select the start day for the
 
 = Form Builder =
 
-The form builder is fully available only in the pro version. If allows to fully customize the form: add, edit and remove fields.
+The form builder is fully available only in the pro version. If allows to fully customizing the form: add, edit and remove fields.
 
 
 = Submit Button =
@@ -182,7 +182,7 @@ Use this area for translating of setting custom validation messages for the form
 
 = Price Configuration =
 
-This administration section allows to setup most of the price structure for the bookings. The following settings fields are available:
+This administration section allows setup most of the price structure for the bookings. The following settings fields are available:
 
 * Currency: The currency used at PayPal. Example currency codes: USD, EUR, GBP, CAD, AUD, NZD, CHF, MXN, CZK, DKK, NOK, SEK, HKD, SGD, HUF, ILS, JPY, PLN
 * Default request cost (per day): The default request cost for each day. This amount is the fee per day, for example if the value specified here is us$25 and the reservation is for 4 days then the payment amount will be us$100.
