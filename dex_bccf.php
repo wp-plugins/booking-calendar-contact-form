@@ -32,7 +32,7 @@ define('DEX_BCCF_DEFAULT_CALENDAR_OVERLAPPED', 'false');
 define('DEX_BCCF_DEFAULT_CALENDAR_ENABLED', 'true');
 
 define('DEX_BCCF_DEFAULT_cu_user_email_field', 'email');
-define('TDE_BCCFCALENDAR_DEFAULT_COLOR', '00FFFF');
+define('TDE_BCCFCALENDAR_DEFAULT_COLOR', '6FF');
 
 define('DEX_BCCF_DEFAULT_ENABLE_PAYPAL', 1);
 define('DEX_BCCF_DEFAULT_PAYPAL_EMAIL','put_your@email_here.com');

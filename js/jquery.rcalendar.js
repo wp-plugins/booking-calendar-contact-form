@@ -328,7 +328,10 @@ myjQuery(function(){
                                         
                                         $('#'+opt.id+' .specialDateRight.'+dStringClass[i].d).css("background-color","#"+dStringClass[i].co_r);
                                         $('#'+opt.id+' .specialDateLeft.'+dStringClass[i].d).css("background-color","#"+dStringClass[i].co_l);
-                                        $('#'+opt.id+' .specialDateMiddle.'+dStringClass[i].d).css("background-color","#"+dStringClass[i].c).css("background-image","url("+pathCalendar_full+"/c_"+dStringClass[i].co_r+"x"+dStringClass[i].co_l+".png)")
+                                        if (dStringClass[i].co_l!=dStringClass[i].co_r)
+                                            $('#'+opt.id+' .specialDateMiddle.'+dStringClass[i].d).css("background-image","url("+pathCalendar_full+"/c_"+dStringClass[i].co_r+"x"+dStringClass[i].co_l+".png)")
+                                        else 
+                                            $('#'+opt.id+' .specialDateMiddle.'+dStringClass[i].d).css("background-color","#"+dStringClass[i].co_l);   
                                         if ((selectedDates.l!="") && (dStringClass[i].co_r!="") && (dStringClass[i].n==1) && (dStringClass[i].d == opt.id+"dmy"+(selectedDates.l.getMonth()+1)+"_"+selectedDates.l.getDate()+"_"+selectedDates.l.getFullYear()))
                                             $('#'+opt.id+' .specialDateLeft.'+dStringClass[i].d).css("background-color","none").css("background-image","url(wp-content/plugins/booking-calendar-contact-form/css/images/corners/c_"+dStringClass[i].co_r+"x"+opt.defaultColor+".png)");
                                         //else
