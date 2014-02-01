@@ -216,7 +216,7 @@ myjQuery(function(){
                         var tmpdate = new Date(dl.getTime());
                         while (tmpdate<=du)
                         {
-                            if ((opt.workingDates[tmpdate.getDay()]==0)  || (opt.holidayDates.indexOf($.datepicker.formatDate('yy-mm-dd', tmpdate))!="-1"))
+                            if ((opt.workingDates[tmpdate.getDay()]==0)  || (opt.holidayDates.length>0 && opt.holidayDates.indexOf($.datepicker.formatDate('yy-mm-dd', tmpdate))!="-1"))
                             {
                                 isPossible = false;
                                 tmpdate = new Date(du.getTime());
@@ -399,7 +399,7 @@ myjQuery(function(){
                         ((n>1 && opt.partialDate) 
                         || (n>0 && !opt.partialDate))
                         || (opt.workingDates[d.getDay()]==0 && (opt.startReservationDates.indexOf($.datepicker.formatDate('yy-mm-dd', d))=="-1"))
-                        || (opt.holidayDates.indexOf($.datepicker.formatDate('yy-mm-dd', d))!="-1")
+                        || (opt.holidayDates.length>0 && opt.holidayDates.indexOf($.datepicker.formatDate('yy-mm-dd', d))!="-1")
                         || (opt.startReservationWeekly[d.getDay()]==0 && (opt.startReservationDates.indexOf($.datepicker.formatDate('yy-mm-dd', d))=="-1"))
                         //|| (
                         //(opt.fixedReservationDates)
