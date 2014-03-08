@@ -763,6 +763,7 @@ function dex_bccf_check_posted_data()
 <input type="hidden" name="item_number" value="<?php echo $item_number; ?>" />
 <input type="hidden" name="amount" value="<?php echo $price; ?>" />
 <input type="hidden" name="page_style" value="Primary" />
+<input type="hidden" name="charset" value="utf-8">
 <input type="hidden" name="no_shipping" value="1" />
 <input type="hidden" name="return" value="<?php echo dex_bccf_get_option('url_ok', DEX_BCCF_DEFAULT_OK_URL); ?>">
 <input type="hidden" name="cancel_return" value="<?php echo dex_bccf_get_option('url_cancel', DEX_BCCF_DEFAULT_CANCEL_URL); ?>" />
