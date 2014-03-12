@@ -333,7 +333,7 @@ myjQuery(function(){
                                         else 
                                             $('#'+opt.id+' .specialDateMiddle.'+dStringClass[i].d).css("background-color","#"+dStringClass[i].co_l);   
                                         if ((selectedDates.l!="") && (dStringClass[i].co_r!="") && (dStringClass[i].n==1) && (dStringClass[i].d == opt.id+"dmy"+(selectedDates.l.getMonth()+1)+"_"+selectedDates.l.getDate()+"_"+selectedDates.l.getFullYear()))
-                                            $('#'+opt.id+' .specialDateLeft.'+dStringClass[i].d).css("background-color","none").css("background-image","url(wp-content/plugins/booking-calendar-contact-form/css/images/corners/c_"+dStringClass[i].co_r+"x"+opt.defaultColor+".png)");
+                                            $('#'+opt.id+' .specialDateLeft.'+dStringClass[i].d).css("background-color","none").css("background-image","url("+pathCalendar_full+"/c_"+dStringClass[i].co_r+"x"+opt.defaultColor+".png)");
                                         //else
                                         //    
                                         if ((selectedDates.u!="") && (dStringClass[i].co_l!="") && (dStringClass[i].n==1) && (dStringClass[i].d == opt.id+"dmy"+(selectedDates.u.getMonth()+1)+"_"+selectedDates.u.getDate()+"_"+selectedDates.u.getFullYear()))
