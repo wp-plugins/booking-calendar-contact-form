@@ -262,3 +262,4 @@ Setup area for the built-in antispam captcha verification. Settings fields:
 * Compatible the latest WP and jQuery versions
 * Replaced YUI calendar with a jQuery calendar
 * Added support for weekly bookings
+* Update for getting tags again into the listing
