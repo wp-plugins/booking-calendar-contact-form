@@ -77,3 +77,10 @@ z-index:1000;
 .ui-tooltip.uh-tooltip{width:250px;font-size:10px;font-weight:normal;padding:5px;}
 #fbuilder input[type="checkbox"]{-webkit-appearance:checkbox!important;}
 #fbuilder input[type="radio"]{-webkit-appearance:radio!important;}
+
+#dex_bccf_pform tr th,#dex_bccf_pform thead th {padding: 0px;}
+#dex_bccf_pform tr td {border-top: none;padding: 0px;}
+#dex_bccf_pform tr td, #dex_bccf_pform tr th, #dex_bccf_pform thead th
+{border:none;}
+#dex_bccf_pform tr td:last-child, #dex_bccf_pform tr th:last-child
+{border-right:none;}
