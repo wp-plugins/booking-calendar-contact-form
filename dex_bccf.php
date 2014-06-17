@@ -1357,11 +1357,11 @@ function dex_bccf_autodetect_language()
 {
     $basename = '/js/languages/jquery.ui.datepicker-';
     
-    $options = array (WPLANG,
-                      strtolower(WPLANG),
-                      substr(strtolower(WPLANG),0,2)."-".substr(strtoupper(WPLANG),strlen(strtoupper(WPLANG))-2,2),
-                      substr(strtolower(WPLANG),0,2),
-                      substr(strtolower(WPLANG),strlen(strtolower(WPLANG))-2,2)                      
+    $options = array (get_bloginfo('language'),
+                      strtolower(get_bloginfo('language')),
+                      substr(strtolower(get_bloginfo('language')),0,2)."-".substr(strtoupper(get_bloginfo('language')),strlen(strtoupper(get_bloginfo('language')))-2,2),
+                      substr(strtolower(get_bloginfo('language')),0,2),
+                      substr(strtolower(get_bloginfo('language')),strlen(strtolower(get_bloginfo('language')))-2,2)                      
                       );
     foreach ($options as $option)
         if (file_exists(dirname( __FILE__ ).$basename.$option.'.js'))
