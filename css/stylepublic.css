@@ -84,3 +84,5 @@ z-index:1000;
 {border:none;}
 #dex_bccf_pform tr td:last-child, #dex_bccf_pform tr th:last-child
 {border-right:none;}
+
+#dex_bccf_pform .rcalendar .ui-datepicker td.specialDateStart{border:1px solid red}
