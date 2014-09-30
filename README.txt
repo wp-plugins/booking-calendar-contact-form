@@ -106,6 +106,12 @@ A: If you don't want to edit the MO/PO files then just edit the texts that are a
 
 A: Yes, use the settings fields "Minimum number of nights to be booked" and "Maximum number of nights to be booked" for that purpose. You can also specify a fixed reservation length if you want to allow only bookings of a specific number of days.
 
+= Q: The booking calendar form doesn't appear. Solution? =
+
+A: If the booking calendar form doesn't appear in the public website (in some cases only the captcha appear) then change the script load method to direct, this is the solution in most cases.
+
+That can be changed in the "troubleshoot area" located below the list of booking calendars/items.
+
 
 == Other Notes ==
 
