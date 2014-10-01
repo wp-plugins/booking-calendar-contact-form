@@ -112,6 +112,14 @@ A: If the booking calendar form doesn't appear in the public website (in some ca
 
 That can be changed in the "troubleshoot area" located below the list of booking calendars/items.
 
+= Q: Can the booking calendar notification emails be customized? =
+
+A: In addition to the possibility of editing the email contents you can use the following tags:
+
+**<%startdate%>:** Start date for the booking.
+**<%enddate%>:** End date for the booking.
+**<%totalcost%>:** Total cost.
+**<%email%>, <%subject%>, <%message%>, <%fieldname1%>, <%fieldname2%>, ...:** Data entered on each field.
 
 == Other Notes ==
 
