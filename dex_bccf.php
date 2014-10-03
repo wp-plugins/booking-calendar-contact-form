@@ -235,6 +235,7 @@ function _dex_bccf_install() {
                    "`max_slots` varchar(20) DEFAULT '0' NOT NULL ,".
                    "`paypal_product_name` varchar(255) DEFAULT '' NOT NULL,".
                    "`currency` varchar(10) DEFAULT '' NOT NULL,".
+                   "`request_taxes` varchar(20) DEFAULT '' NOT NULL ,".
                    "`url_ok` text,".
                    "`url_cancel` text,".
                    "`paypal_language` varchar(10) DEFAULT '' NOT NULL,".
@@ -672,6 +673,8 @@ function dex_bccf_check_posted_data()
     //-------------------------------------------------    
     $price = dex_bccf_caculate_price_overall(strtotime($_POST["dateAndTime_s"]), strtotime($_POST["dateAndTime_e"]), CP_BCCF_CALENDAR_ID, @$default_price, $services_formatted);
 
+    $taxes = trim(str_replace("%","",dex_bccf_get_option('request_taxes', '0')));
+
     // check discount codes
     //-------------------------------------------------
     $discount_note = "";
@@ -762,6 +765,9 @@ function dex_bccf_check_posted_data()
 <input type="hidden" name="item_name" value="<?php echo dex_bccf_get_option('paypal_product_name', DEX_BCCF_DEFAULT_PRODUCT_NAME).($services_text!=''?", ".str_replace("\n\n",", ",$services_text).". ":"").$discount_note; ?>" />
 <input type="hidden" name="item_number" value="<?php echo $item_number; ?>" />
 <input type="hidden" name="amount" value="<?php echo $price; ?>" />
+<?php if ($taxes != '0' && $taxes != '') { ?>
+<input type="hidden" name="tax_rate"  value="<?php echo $taxes; ?>" />
+<?php } ?>
 <input type="hidden" name="page_style" value="Primary" />
 <input type="hidden" name="charset" value="utf-8">
 <input type="hidden" name="no_shipping" value="1" />
@@ -1091,7 +1097,9 @@ function dex_bccf_save_options()
     
     dex_bccf_add_field_verify(DEX_BCCF_CONFIG_TABLE_NAME, "calendar_depositenable", "varchar(20) DEFAULT '' NOT NULL");
     dex_bccf_add_field_verify(DEX_BCCF_CONFIG_TABLE_NAME, "calendar_depositamount", "varchar(20) DEFAULT '' NOT NULL");
-    dex_bccf_add_field_verify(DEX_BCCF_CONFIG_TABLE_NAME, "calendar_deposittype", "varchar(20) DEFAULT '' NOT NULL");    
+    dex_bccf_add_field_verify(DEX_BCCF_CONFIG_TABLE_NAME, "calendar_deposittype", "varchar(20) DEFAULT '' NOT NULL"); 
+    
+    dex_bccf_add_field_verify(DEX_BCCF_CONFIG_TABLE_NAME,'request_taxes'," varchar(20) NOT NULL default ''");    
     
     $calendar_holidaysdays = (@$_POST["wd1"]?"1":"0").(@$_POST["wd2"]?"1":"0").(@$_POST["wd3"]?"1":"0").(@$_POST["wd4"]?"1":"0").(@$_POST["wd5"]?"1":"0").(@$_POST["wd6"]?"1":"0").(@$_POST["wd7"]?"1":"0");
     $calendar_startresdays = (@$_POST["sd1"]?"1":"0").(@$_POST["sd2"]?"1":"0").(@$_POST["sd3"]?"1":"0").(@$_POST["sd4"]?"1":"0").(@$_POST["sd5"]?"1":"0").(@$_POST["sd6"]?"1":"0").(@$_POST["sd7"]?"1":"0");    
@@ -1145,6 +1153,7 @@ function dex_bccf_save_options()
          'url_ok' => $_POST["url_ok"],
          'url_cancel' => $_POST["url_cancel"],
          'paypal_language' => $_POST["paypal_language"],
+         'request_taxes' => $_POST["request_taxes"],
 
          'notification_from_email' => $_POST["notification_from_email"],
          'notification_destination_email' => $_POST["notification_destination_email"],

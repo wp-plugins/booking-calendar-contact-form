@@ -115,7 +115,7 @@ for ($k=1;$k<100;$k++)
    </script>
 
    <div id="cal<?php echo CP_BCCF_CALENDAR_ID; ?>" class="rcalendar"><span style="color:#009900">Loading calendar data...</span></em></div>
-<script type="text/javascript" src="<?php echo plugins_url('js/languages/jquery.ui.datepicker-'.$calendar_language.'.js', __FILE__); ?>"></script>
+<?php if ($calendar_language != '') { ?><script type="text/javascript" src="<?php echo plugins_url('js/languages/jquery.ui.datepicker-'.$calendar_language.'.js', __FILE__); ?>"></script><?php } ?>
 
    <script type="text/javascript">
     jQuery(function(){
@@ -573,6 +573,12 @@ for ($k=1;$k<100;$k++)
         <tr valign="top">
         <th scope="row">Paypal language</th>
         <td><input type="text" name="paypal_language" value="<?php echo esc_attr(dex_bccf_get_option('paypal_language',DEX_BCCF_DEFAULT_PAYPAL_LANGUAGE)); ?>" /></td>
+        </tr>
+
+        
+        <tr valign="top">
+        <th scope="row">Taxes (applied at Paypal)</th>
+        <td><input type="text" name="request_taxes" value="<?php echo esc_attr(dex_bccf_get_option('request_taxes','0')); ?>" /></td>
         </tr>
 
         <tr valign="top">
