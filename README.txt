@@ -116,10 +116,10 @@ That can be changed in the "troubleshoot area" located below the list of booking
 
 A: In addition to the possibility of editing the email contents you can use the following tags:
 
-**<%startdate%>:** Start date for the booking.
-**<%enddate%>:** End date for the booking.
-**<%totalcost%>:** Total cost.
-**<%email%>, <%subject%>, <%message%>, <%fieldname1%>, <%fieldname2%>, ...:** Data entered on each field.
+**&lt;%startdate%&gt;:** Start date for the booking.
+**&lt;%enddate%%&gt;:** End date for the booking.
+**&lt;%totalcost%%&gt;:** Total cost.
+**&lt;%email%%&gt;, &lt;%subject%%&gt;, &lt;%message%%&gt;, &lt;%fieldname1%%&gt;, &lt;%fieldname2%&gt;, ...:** Data entered on each field.
 
 == Other Notes ==
 
