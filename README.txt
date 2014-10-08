@@ -118,7 +118,7 @@ A: In addition to the possibility of editing the email contents you can use the 
 
 * **&lt;%startdate%&gt;:** Start date for the booking.
 * **&lt;%enddate%%&gt;:** End date for the booking.
-** *&lt;%totalcost%%&gt;:** Total cost.
+* **&lt;%totalcost%%&gt;:** Total cost.
 * **&lt;%email%%&gt;, &lt;%subject%%&gt;, &lt;%message%%&gt;, &lt;%fieldname1%%&gt;, &lt;%fieldname2%&gt;, ...:** Data entered on each field.
 
 == Other Notes ==
