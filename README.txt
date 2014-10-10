@@ -214,6 +214,7 @@ Settings related to the PayPal payment processing. The settings fields are:
 * URL to return after successful payment: After the Paypal payment the user may go back to a page into your website (usually a "thank you" page). Paste here the complete address of that page. Important note: This field is used as the "acknowledgment / thank you message" even if the Paypal feature isn't used (pro version).
 * URL to return after an incomplete or cancelled payment: After a canceled/incomplete Paypal payment the user may go back to a page into your website, usually a page with more instructions or requesting feedback. Paste here the complete address of that page.
 * Paypal language: The language that will be used for the Paypal payment. It's any Paypal supported language.
+* Taxes (applied at Paypal): Specify a number (percent) for adding taxes at PayPal (example: enter 10 for a 10%, don't include the % symbol).
 * Discount Codes: Available only in pro version. Adds a field for entering discount codes and apply them to the price.
 
 = Optional Services/Items Field =
