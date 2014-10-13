@@ -270,11 +270,33 @@ Setup area for the built-in antispam captcha verification. Settings fields:
 * First stable version released.
 * More configuration options added.
 
+= 1.0.1 =
+* Interface modifications.
+* Fix for iCal format bug (the events weren't marked as all day events)
+* Compatible the latest WP and jQuery versions
+* Replaced YUI calendar with a jQuery calendar
+* Added support for weekly bookings
+* New language translations
+* Several bug fixes and new features for deposit payments
+* Fixed encoding issues at paypal
+* Fixed bug in the address of the corner images for partial days mode.
+* CSS styles updates to avoid conflicts with theme stykes
+* New options for customizing the emails
+* New feature for applying taxes
+
+
 == Upgrade Notice ==
 
 = 1.0.1 =
 * Interface modifications.
+* Fix for iCal format bug (the events weren't marked as all day events)
 * Compatible the latest WP and jQuery versions
 * Replaced YUI calendar with a jQuery calendar
 * Added support for weekly bookings
-* Update for getting tags again into the listing
+* New language translations
+* Several bug fixes and new features for deposit payments
+* Fixed encoding issues at paypal
+* Fixed bug in the address of the corner images for partial days mode.
+* CSS styles updates to avoid conflicts with theme stykes
+* New options for customizing the emails
+* New feature for applying taxe
