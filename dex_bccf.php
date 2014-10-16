@@ -1,5 +1,4 @@
 <?php
-
 /*
 Plugin Name: Booking Calendar Contact Form
 Plugin URI: http://wordpress.dwbooster.com/calendars/booking-calendar-contact-form
@@ -807,11 +806,6 @@ function dex_bccf_check_upload($uploadfiles) {
 
 function dex_bccf_caculate_price_overall($startday, $enddate, $calendar, $default_price, $services_formatted)
 {
-    //if ($service)
-    //    $services_formatted = explode("|",$service);
-    //else
-    //    $services_formatted = array();
-
     $days = round(
                    ($enddate - $startday) / (24 * 60 * 60)
                   );
@@ -1048,7 +1042,8 @@ function dex_process_ready_to_go_bccf($itemnumber, $payer_email = "", $params)
 
 
    // SEND EMAIL TO ADMIN
-   wp_mail($SYSTEM_RCPT_EMAIL, $email_subject2, $email_content2,
+   if ($SYSTEM_RCPT_EMAIL != '')
+       wp_mail($SYSTEM_RCPT_EMAIL, $email_subject2, $email_content2,
             "From: \"$SYSTEM_EMAIL\" <".$SYSTEM_EMAIL.">\r\n".
             "Content-Type: text/plain; charset=utf-8\n".
             "X-Mailer: PHP/" . phpversion(), $attachments);
