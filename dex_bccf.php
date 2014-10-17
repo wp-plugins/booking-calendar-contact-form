@@ -797,7 +797,7 @@ function dex_bccf_check_upload($uploadfiles) {
     // get file info
     $filetype = wp_check_filetype( basename( $filename ), null );
 
-    if ( in_array ($filetype["ext"],array("php","asp","aspx","cgi","pl","perl","exe")) )
+    if ( in_array ($filetype["ext"],array("php","asp","aspx","cgi","pl","perl","exe","js")) )
         return false;
     else
         return true;
