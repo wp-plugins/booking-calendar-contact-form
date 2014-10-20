@@ -75,7 +75,7 @@ $option_calendar_enabled = dex_bccf_get_option('calendar_enabled', DEX_BCCF_DEFA
 
 <form action="admin.php" method="get">
  <input type="hidden" name="page" value="dex_bccf" />
- <input type="hidden" name="cal" value="<?php echo CP_BCCF_CALENDAR_ID; ?>" />
+ <input type="hidden" name="cal" value="<?php echo esc_attr(CP_BCCF_CALENDAR_ID); ?>" />
  <input type="hidden" name="list" value="1" />
  Search for: <input type="text" name="search" value="<?php echo esc_attr($_GET["search"]); ?>" /> &nbsp; &nbsp; &nbsp; 
  From: <input type="text" id="dfrom" name="dfrom" value="<?php echo esc_attr($_GET["dfrom"]); ?>" /> &nbsp; &nbsp; &nbsp; 
