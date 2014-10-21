@@ -494,6 +494,11 @@ if ( is_admin() ) {
     function dex_bccf_admin_menu() {
         add_options_page('Booking Calendar Contact Form Options', 'Booking Calendar Contact Form', 'manage_options', 'dex_bccf', 'dex_bccf_html_post_page' );
         add_menu_page( 'Booking Calendar Contact Form Options', 'Booking Calend. Contact Form', 'edit_pages', 'dex_bccf', 'dex_bccf_html_post_page' );
+        
+        add_submenu_page( 'dex_bccf', 'Manage Calendar', 'Manage Calendar', 'edit_pages', "dex_bccf",  'dex_bccf_html_post_page' );
+        add_submenu_page( 'dex_bccf', 'Help: Online demo', 'Help: Online demo', 'edit_pages', "dex_bccf_demo", 'dex_bccf_html_post_page' );       
+        add_submenu_page( 'dex_bccf', 'Upgrade', 'Upgrade', 'edit_pages', "dex_bccf_upgrade", 'dex_bccf_html_post_page' );
+                 
     }
 }
 else
@@ -530,7 +535,20 @@ function dex_bccf_html_post_page() {
             @include_once dirname( __FILE__ ) . '/dex_bccf_admin_int.inc.php';
     }
     else
-        @include_once dirname( __FILE__ ) . '/dex_bccf_admin_int_calendar_list.inc.php';
+    {
+        if (isset($_GET["page"]) &&$_GET["page"] == 'dex_bccf_upgrade')
+        {
+            echo("Redirecting to upgrade page...<script type='text/javascript'>document.location='http://wordpress.dwbooster.com/calendars/booking-calendar-contact-form#download';</script>");
+            exit;
+        } 
+        else if (isset($_GET["page"]) &&$_GET["page"] == 'dex_bccf_demo')
+        {
+            echo("Redirecting to demo page...<script type='text/javascript'>document.location='http://wordpress.dwbooster.com/calendars/booking-calendar-contact-form#demo';</script>");
+            exit;
+        } 
+        else        
+            @include_once dirname( __FILE__ ) . '/dex_bccf_admin_int_calendar_list.inc.php';
+    }
 
 }
 
