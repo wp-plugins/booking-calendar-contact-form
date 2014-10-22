@@ -280,7 +280,7 @@ Setup area for the built-in antispam captcha verification. Settings fields:
 * Several bug fixes and new features for deposit payments
 * Fixed encoding issues at paypal
 * Fixed bug in the address of the corner images for partial days mode.
-* CSS styles updates to avoid conflicts with theme stykes
+* CSS styles updates to avoid conflicts with theme styles
 * New options for customizing the emails
 * New feature for applying taxes
 
@@ -299,4 +299,4 @@ Setup area for the built-in antispam captcha verification. Settings fields:
 * Fixed bug in the address of the corner images for partial days mode.
 * CSS styles updates to avoid conflicts with theme stykes
 * New options for customizing the emails
-* New feature for applying taxe
+* New feature for applying taxes
