@@ -79,7 +79,7 @@ var pathCalendar_full = pathCalendar + "wp-content/plugins/booking-calendar-cont
 	   			                                "fixedReservationDates_length":<?php echo dex_bccf_get_option('calendar_fixedreslength','1');?>,				                                
                                                    "language":"<?php echo $calendar_language?>",
                                                    "firstDay":<?php echo dex_bccf_get_option('calendar_weekday', DEX_BCCF_DEFAULT_CALENDAR_WEEKDAY); ?>,
-                                                   "numberOfMonths":<?php echo dex_bccf_get_option('calendar_pages',3); ?>
+                                                   "numberOfMonths":<?php echo dex_bccf_get_option('calendar_pages',2); ?>
                                                    });
        });       
     })(myjQuery);
