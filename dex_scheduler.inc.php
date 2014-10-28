@@ -215,7 +215,7 @@ myjQuery = (typeof myjQuery != 'undefined' ) ? myjQuery : jQuery;
         url: "<?php echo cp_bccf_get_site_url(); ?>?inAdmin=1"+String.fromCharCode(38)+"hdcaptcha_dex_bccf_post="+$dexQuery("#hdcaptcha_dex_bccf_post").val(),
         async: false
     }).responseText;
-    if (result == "captchafailed")
+    if (result.indexOf("captchafailed") != -1)
     {
         $dexQuery("#dex_bccf_captchaimg").attr('src', $dexQuery("#dex_bccf_captchaimg").attr('src')+'&'+Date());
         alert('<?php echo dex_bccf_get_option('cv_text_enter_valid_captcha', DEX_BCCF_DEFAULT_dexcv_text_enter_valid_captcha); ?>');
