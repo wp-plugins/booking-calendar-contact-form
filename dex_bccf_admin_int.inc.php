@@ -894,7 +894,7 @@ for ($k=1;$k<100;$k++)
 
 <p class="submit"><input type="submit" name="submit" id="submit" class="button-primary" value="Save Changes"  /></p>
 
-[<a href="http://wordpress.dwbooster.com/support" target="_blank">Request Custom Modifications</a>] | [<a href="http://wordpress.dwbooster.com/calendars/booking-calendar-contact-form" target="_blank">Help</a>]
+[<a href="http://wordpress.dwbooster.com/support?product=booking-calendar-contact-form&ref=dashboard" target="_blank">Request Custom Modifications</a>] | [<a href="http://wordpress.dwbooster.com/calendars/booking-calendar-contact-form" target="_blank">Help</a>]
 </form>
 </div>
 <script type="text/javascript">
