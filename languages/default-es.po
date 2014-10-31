@@ -85,7 +85,7 @@ msgstr "Precio"
 
 #: dex_scheduler.inc.php:16
 msgid "Coupon code (optional)"
-msgstr "Cupón de descuento (opcional)"
+msgstr "Código de descuento (opcional)"
 
 #: dex_scheduler.inc.php:17
 msgid "Service"
