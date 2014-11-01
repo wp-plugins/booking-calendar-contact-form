@@ -627,6 +627,10 @@ function dex_bccf_check_posted_data()
            ( (strtolower($_GET['hdcaptcha_dex_bccf_post']) != strtolower($_SESSION['rand_code'])) ||
              ($_SESSION['rand_code'] == '')
            )
+           &&
+           ( (md5(strtolower($_GET['hdcaptcha_dex_bccf_post'])) != ($_COOKIE['rand_code'])) ||
+             ($_COOKIE['rand_code'] == '')
+           )
        )
     {
         $_SESSION['rand_code'] = '';
