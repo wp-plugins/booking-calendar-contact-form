@@ -300,3 +300,5 @@ Setup area for the built-in antispam captcha verification. Settings fields:
 * CSS styles updates to avoid conflicts with theme stykes
 * New options for customizing the emails
 * New feature for applying taxes
+
+Important note: If you are using the Professional version don't update via the WP dashboard but using your personal update link. Contact us if you need further information: http://wordpress.dwbooster.com/support
