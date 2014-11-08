@@ -121,8 +121,8 @@ echo paginate_links(  array(
 	  <tr class='<?php if (!($i%2)) { ?>alternate <?php } ?>author-self status-draft format-default iedit' valign="top">
 	    <td width="1%"><?php echo $events[$i]->id; ?></td>
 		<td><?php echo substr($events[$i]->datatime_s,0,10); ?><?php if ($option_calendar_enabled != 'false') { ?> - <?php echo substr($events[$i]->datatime_e,0,10); ?><?php } ?></td>
-		<td><?php echo $events[$i]->title; ?></td>
-		<td><?php echo str_replace("<br /><br />","<br />",$events[$i]->description); ?></td>
+		<td><?php echo str_replace('<','&lt;',$events[$i]->title); ?></td>
+		<td><?php echo str_replace("<br /><br />","<br />", str_replace('<','&lt;',$events[$i]->description) ); ?></td>
 		<td>		  
 		  <input type="button" name="caldelete_<?php echo $events[$i]->id; ?>" value="Delete" onclick="cp_deleteMessageItem(<?php echo $events[$i]->id; ?>);" />                             
 		</td>		
