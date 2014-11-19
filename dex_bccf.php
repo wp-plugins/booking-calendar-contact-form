@@ -797,7 +797,7 @@ function dex_bccf_check_posted_data()
 <input type="hidden" name="no_note" value="1" />
 <input type="hidden" name="currency_code" value="<?php echo dex_bccf_get_option('currency', DEX_BCCF_DEFAULT_CURRENCY); ?>" />
 <input type="hidden" name="lc" value="<?php echo dex_bccf_get_option('paypal_language', DEX_BCCF_DEFAULT_PAYPAL_LANGUAGE); ?>" />
-<input type="hidden" name="bn" value="PP-BuyNowBF" />
+<input type="hidden" name="bn" value="NetFactorSL_SI_Custom" />
 <input type="hidden" name="notify_url" value="<?php echo cp_bccf_get_FULL_site_url(); ?>/?dex_bccf=ipn&ipncheck=1&itemnumber=<?php echo $item_number; ?>" />
 <input type="hidden" name="ipn_test" value="1" />
 <input class="pbutton" type="hidden" value="Buy Now" />
