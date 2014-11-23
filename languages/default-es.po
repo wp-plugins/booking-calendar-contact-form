@@ -2,17 +2,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Booking Calendar Contact Form\n"
 "POT-Creation-Date: 2013-09-01 17:05+0100\n"
-"PO-Revision-Date: 2014-10-27 10:56+0100\n"
+"PO-Revision-Date: 2013-09-01 17:08+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 1.6.9\n"
+"X-Generator: Poedit 1.5.5\n"
 "X-Poedit-KeywordsList: _;gettext;gettext_noop;_e;__\n"
 "X-Poedit-Basepath: C:\\xampp\\htdocs\\wp3.6\\wp-content\\plugins\\booking-"
 "calendar-contact-form\\\n"
-"Language: es\n"
 "X-Poedit-SearchPath-0: .\n"
 
 #: dex_bccf.php:418
@@ -81,11 +80,11 @@ msgstr "Por favor seleccione fechas de inicio y fin"
 
 #: dex_scheduler.inc.php:15
 msgid "Cost"
-msgstr "Precio"
+msgstr "Costo"
 
 #: dex_scheduler.inc.php:16
 msgid "Coupon code (optional)"
-msgstr "Código de descuento (opcional)"
+msgstr "Cupón de descuento (opcional)"
 
 #: dex_scheduler.inc.php:17
 msgid "Service"

@@ -16,7 +16,7 @@ $message = "";
 
 if (isset($_GET['ld']) && $_GET['ld'] != '')
 {
-    $wpdb->query('DELETE FROM `'.DEX_BCCF_CALENDARS_TABLE_NAME.'` WHERE id='.$_GET['ld']);       
+    $wpdb->query('DELETE FROM `'.DEX_BCCF_CALENDARS_TABLE_NAME.'` WHERE id='.intval($_GET['ld']));       
     $message = "Item deleted";
 }
 
