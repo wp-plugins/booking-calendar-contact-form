@@ -3,23 +3,23 @@
   // Start:: Language constants, translate below:
   // -----------------------------------------------
 
-  $l_calendar        = __("Calendar");
-  $l_min_nights      = __("The minimum number of nights to book is");
-  $l_max_nights      = __("The maximum number of nights to book is");
-  $l_select_dates    = __("Select start and end dates");
-  $l_p_select        = __("Please select start and end dates");
-  $l_select_start    = __("Select Start Date");
-  $l_select_end      = __("Select End Date");
-  $l_cancel_c        = __("Cancel Selection");
-  $l_sucess          = __("Successfully");
-  $l_cost            = __("Cost");
-  $l_coupon          = __("Coupon code (optional)");
-  $l_service         = __("Service");
-  $l_sec_code        = __("Please enter the security code");
-  $l_sec_code_low    = __("Security Code (lowercase letters)");  
-  $l_payment_options = __("Payment options");
+  $l_calendar        = __("Calendar",'bccf');
+  $l_min_nights      = __("The minimum number of nights to book is",'bccf');
+  $l_max_nights      = __("The maximum number of nights to book is",'bccf');
+  $l_select_dates    = __("Select start and end dates",'bccf');
+  $l_p_select        = __("Please select start and end dates",'bccf');
+  $l_select_start    = __("Select Start Date",'bccf');
+  $l_select_end      = __("Select End Date",'bccf');
+  $l_cancel_c        = __("Cancel Selection",'bccf');
+  $l_sucess          = __("Successfully",'bccf');
+  $l_cost            = __("Cost",'bccf');
+  $l_coupon          = __("Coupon code (optional)",'bccf');
+  $l_service         = __("Service",'bccf');
+  $l_sec_code        = __("Please enter the security code",'bccf');
+  $l_sec_code_low    = __("Security Code (lowercase letters)",'bccf');  
+  $l_payment_options = __("Payment options",'bccf');
   
-  $l_continue        = __($button_label);
+  $l_continue        = __($button_label,'bccf');
 
   // End:: Language constants.
   // -----------------------------------------------
@@ -74,7 +74,7 @@ var pathCalendar_full = pathCalendar + "wp-content/plugins/<?php echo basename(d
 <?php
   echo $l_calendar.':<br /><select name="dex_item" id="dex_item" onchange="dex_updateItem()">';
   foreach ($myrows as $item)
-      echo '<option value='.$item->id.'>'.__($item->uname).'</option>';
+      echo '<option value='.$item->id.'>'.__($item->uname,'bccf').'</option>';
   echo '</select>';
 ?>
 <br /><br />
@@ -248,7 +248,7 @@ myjQuery = (typeof myjQuery != 'undefined' ) ? myjQuery : jQuery;
          echo '<div class="fields" id="field-c1"><label>';
          $flabel = dex_bccf_get_option('cp_cal_checkboxes_label'.$k, 'Service');
          if ($flabel == '') $flabel = 'Service';
-         echo __($flabel); //$l_service;
+         echo __($flabel,'bccf'); //$l_service;
          echo ':</label><div class="dfield"><select name="services'.$k.'"  id="dex_services'.$k.'" onchange="updatedate()">'.$dex_buffer[$k].'</select></div><div class="clearer"></div></div>';
       }
    if (dex_bccf_get_option('enable_paypal',DEX_BCCF_DEFAULT_ENABLE_PAYPAL) == '2')
@@ -256,8 +256,8 @@ myjQuery = (typeof myjQuery != 'undefined' ) ? myjQuery : jQuery;
 ?>   <div class="fields" id="field-c0">
          <label><?php echo $l_payment_options; ?></label>
          <div class="dfield">
-           <input type="radio" name="bccf_payment_option_paypal" value="1" checked> <?php echo __(dex_bccf_get_option('enable_paypal_option_yes',DEX_BCCF_DEFAULT_PAYPAL_OPTION_YES)); ?><br />
-           <input type="radio" name="bccf_payment_option_paypal" value="0"> <?php echo  __(dex_bccf_get_option('enable_paypal_option_no',DEX_BCCF_DEFAULT_PAYPAL_OPTION_NO)); ?>
+           <input type="radio" name="bccf_payment_option_paypal" value="1" checked> <?php echo __(dex_bccf_get_option('enable_paypal_option_yes',DEX_BCCF_DEFAULT_PAYPAL_OPTION_YES),'bccf'); ?><br />
+           <input type="radio" name="bccf_payment_option_paypal" value="0"> <?php echo  __(dex_bccf_get_option('enable_paypal_option_no',DEX_BCCF_DEFAULT_PAYPAL_OPTION_NO),'bccf'); ?>
          </div>
          <div class="clearer"></div>
       </div>

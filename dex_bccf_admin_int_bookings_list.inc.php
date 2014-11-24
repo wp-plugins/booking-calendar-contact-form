@@ -97,8 +97,8 @@ echo paginate_links(  array(
     'end_size'     => 1,
     'mid_size'     => 2,
     'prev_next'    => True,
-    'prev_text'    => __('&laquo; Previous'),
-    'next_text'    => __('Next &raquo;'),
+    'prev_text'    => '&laquo; '.__('Previous','bccf'),
+    'next_text'    => __('Next','bccf').' &raquo;',
     'type'         => 'plain',
     'add_args'     => False
     ) );

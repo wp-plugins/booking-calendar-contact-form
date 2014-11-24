@@ -11,7 +11,7 @@ License: GPL
 
 
 /* initialization / install / uninstall functions */
-load_plugin_textdomain( 'default', false, dirname( plugin_basename( __FILE__ ) ) . '/languages/' );
+
 define('DEX_BCCF_DEFAULT_form_structure', '[[{"name":"email","index":0,"title":"Email","ftype":"femail","userhelp":"","csslayout":"","required":true,"predefined":"","size":"medium"},{"name":"subject","index":1,"title":"Subject","required":true,"ftype":"ftext","userhelp":"","csslayout":"","predefined":"","size":"medium"},{"name":"message","index":2,"size":"large","required":true,"title":"Message","ftype":"ftextarea","userhelp":"","csslayout":"","predefined":""}],[{"title":"","description":"","formlayout":"top_aligned"}]]');
 
 define('DEX_BCCF_DEFAULT_DEFER_SCRIPTS_LOADING', (get_option('CP_BCCF_LOAD_SCRIPTS',"1") == "1"?true:false));
@@ -127,7 +127,7 @@ register_activation_hook(__FILE__,'dex_bccf_install');
 register_deactivation_hook( __FILE__, 'dex_bccf_remove' );
 
 function dex_bccf_plugin_init() {
-  load_plugin_textdomain( 'default', false, dirname( plugin_basename( __FILE__ ) ) . '/languages/' );
+  load_plugin_textdomain( 'bccf', false, dirname( plugin_basename( __FILE__ ) ) . '/languages/' );
 }
 add_action('plugins_loaded', 'dex_bccf_plugin_init');
 
@@ -380,7 +380,7 @@ function dex_bccf_get_public_form() {
         foreach ($services as $item)
             if (trim($item) != '')
             {
-                $dex_buffer[$k] .= '<option value="'.esc_attr($item).'">'.__(trim(substr($item,strpos($item,"|")+1))).'</option>';
+                $dex_buffer[$k] .= '<option value="'.esc_attr($item).'">'.__(trim(substr($item,strpos($item,"|")+1)),'bccf').'</option>';
             }
     }
 
@@ -411,14 +411,14 @@ function dex_bccf_get_public_form() {
         // localize script
         wp_localize_script('dex_bccf_builder_script', 'dex_bccf_fbuilder_config', array('obj'  	=>
         '{"pub":true,"messages": {
-        	                	"required": "'.str_replace(array('"'),array('\\"'),__(dex_bccf_get_option('vs_text_is_required', DEX_BCCF_DEFAULT_vs_text_is_required))).'",
-        	                	"email": "'.str_replace(array('"'),array('\\"'),__(dex_bccf_get_option('vs_text_is_email', DEX_BCCF_DEFAULT_vs_text_is_email))).'",
-        	                	"datemmddyyyy": "'.str_replace(array('"'),array('\\"'),__(dex_bccf_get_option('vs_text_datemmddyyyy', DEX_BCCF_DEFAULT_vs_text_datemmddyyyy))).'",
-        	                	"dateddmmyyyy": "'.str_replace(array('"'),array('\\"'),__(dex_bccf_get_option('vs_text_dateddmmyyyy', DEX_BCCF_DEFAULT_vs_text_dateddmmyyyy))).'",
-        	                	"number": "'.str_replace(array('"'),array('\\"'),__(dex_bccf_get_option('vs_text_number', DEX_BCCF_DEFAULT_vs_text_number))).'",
-        	                	"digits": "'.str_replace(array('"'),array('\\"'),__(dex_bccf_get_option('vs_text_digits', DEX_BCCF_DEFAULT_vs_text_digits))).'",
-        	                	"max": "'.str_replace(array('"'),array('\\"'),__(dex_bccf_get_option('vs_text_max', DEX_BCCF_DEFAULT_vs_text_max))).'",
-        	                	"min": "'.str_replace(array('"'),array('\\"'),__(dex_bccf_get_option('vs_text_min', DEX_BCCF_DEFAULT_vs_text_min))).'",
+        	                	"required": "'.str_replace(array('"'),array('\\"'),__(dex_bccf_get_option('vs_text_is_required', DEX_BCCF_DEFAULT_vs_text_is_required),'bccf')).'",
+        	                	"email": "'.str_replace(array('"'),array('\\"'),__(dex_bccf_get_option('vs_text_is_email', DEX_BCCF_DEFAULT_vs_text_is_email),'bccf')).'",
+        	                	"datemmddyyyy": "'.str_replace(array('"'),array('\\"'),__(dex_bccf_get_option('vs_text_datemmddyyyy', DEX_BCCF_DEFAULT_vs_text_datemmddyyyy),'bccf')).'",
+        	                	"dateddmmyyyy": "'.str_replace(array('"'),array('\\"'),__(dex_bccf_get_option('vs_text_dateddmmyyyy', DEX_BCCF_DEFAULT_vs_text_dateddmmyyyy),'bccf')).'",
+        	                	"number": "'.str_replace(array('"'),array('\\"'),__(dex_bccf_get_option('vs_text_number', DEX_BCCF_DEFAULT_vs_text_number),'bccf')).'",
+        	                	"digits": "'.str_replace(array('"'),array('\\"'),__(dex_bccf_get_option('vs_text_digits', DEX_BCCF_DEFAULT_vs_text_digits),'bccf')).'",
+        	                	"max": "'.str_replace(array('"'),array('\\"'),__(dex_bccf_get_option('vs_text_max', DEX_BCCF_DEFAULT_vs_text_max),'bccf')).'",
+        	                	"min": "'.str_replace(array('"'),array('\\"'),__(dex_bccf_get_option('vs_text_min', DEX_BCCF_DEFAULT_vs_text_min),'bccf')).'",
     	                    	"previous": "'.str_replace(array('"'),array('\\"'),$previous_label).'",
     	                    	"next": "'.str_replace(array('"'),array('\\"'),$next_label).'"
         	                }}'
@@ -508,20 +508,20 @@ else
 }
 
 function dex_bccf_settingsLink($links) {
-    $settings_link = '<a href="options-general.php?page=dex_bccf">'.__('Settings').'</a>';
+    $settings_link = '<a href="options-general.php?page=dex_bccf">'.__('Settings','bccf').'</a>';
 	array_unshift($links, $settings_link);
 	return $links;
 }
 
 
 function dex_bccf_helpLink($links) {
-    $help_link = '<a href="http://wordpress.dwbooster.com/calendars/booking-calendar-contact-form">'.__('Help').'</a>';
+    $help_link = '<a href="http://wordpress.dwbooster.com/calendars/booking-calendar-contact-form">'.__('Help','bccf').'</a>';
 	array_unshift($links, $help_link);
 	return $links;
 }
 
 function dex_bccf_customAdjustmentsLink($links) {
-    $customAdjustments_link = '<a href="http://wordpress.dwbooster.com/contact-us">'.__('Request custom changes').'</a>';
+    $customAdjustments_link = '<a href="http://wordpress.dwbooster.com/contact-us">'.__('Request custom changes','bccf').'</a>';
 	array_unshift($links, $customAdjustments_link);
 	return $links;
 }
@@ -553,7 +553,7 @@ function dex_bccf_html_post_page() {
 }
 
 function set_dex_bccf_insert_button() {
-    print '<a href="javascript:send_to_editor(\'[CP_BCCF_FORM]\')" title="'.__('Insert Booking Calendar').'"><img hspace="5" src="'.plugins_url('/images/dex_apps.gif', __FILE__).'" alt="'.__('Insert  Reservation Calendar').'" /></a>';
+    print '<a href="javascript:send_to_editor(\'[CP_BCCF_FORM]\')" title="'.__('Insert Booking Calendar','bccf').'"><img hspace="5" src="'.plugins_url('/images/dex_apps.gif', __FILE__).'" alt="'.__('Insert  Booking Calendar','bccf').'" /></a>';
 }
 
 function set_dex_bccf_insert_adminScripts($hook) {
@@ -1004,10 +1004,10 @@ function dex_process_ready_to_go_bccf($itemnumber, $payer_email = "", $params)
    $SYSTEM_RCPT_EMAIL = dex_bccf_get_option('notification_destination_email', DEX_BCCF_DEFAULT_PAYPAL_EMAIL);
 
 
-   $email_subject1 = __(dex_bccf_get_option('email_subject_confirmation_to_user', DEX_BCCF_DEFAULT_SUBJECT_CONFIRMATION_EMAIL));
-   $email_content1 = __(dex_bccf_get_option('email_confirmation_to_user', DEX_BCCF_DEFAULT_CONFIRMATION_EMAIL));
-   $email_subject2 = __(dex_bccf_get_option('email_subject_notification_to_admin', DEX_BCCF_DEFAULT_SUBJECT_NOTIFICATION_EMAIL));
-   $email_content2 = __(dex_bccf_get_option('email_notification_to_admin', DEX_BCCF_DEFAULT_NOTIFICATION_EMAIL));
+   $email_subject1 = __(dex_bccf_get_option('email_subject_confirmation_to_user', DEX_BCCF_DEFAULT_SUBJECT_CONFIRMATION_EMAIL),'bccf');
+   $email_content1 = __(dex_bccf_get_option('email_confirmation_to_user', DEX_BCCF_DEFAULT_CONFIRMATION_EMAIL),'bccf');
+   $email_subject2 = __(dex_bccf_get_option('email_subject_notification_to_admin', DEX_BCCF_DEFAULT_SUBJECT_NOTIFICATION_EMAIL),'bccf');
+   $email_content2 = __(dex_bccf_get_option('email_notification_to_admin', DEX_BCCF_DEFAULT_NOTIFICATION_EMAIL),'bccf');
 
    $option_calendar_enabled = dex_bccf_get_option('calendar_enabled', DEX_BCCF_DEFAULT_CALENDAR_ENABLED);
    if ($option_calendar_enabled != 'false')
@@ -1374,7 +1374,7 @@ function dex_bccf_translate_json($str)
 {
     $form_data = json_decode(dex_bccf_cleanJSON($str));        
     for ($i=0; $i < count($form_data[0]); $i++)    
-        $form_data[0][$i]->title = __($form_data[0][$i]->title);   
+        $form_data[0][$i]->title = __($form_data[0][$i]->title,'bccf');   
     $str = json_encode($form_data);
     return $str;
 }
@@ -1390,8 +1390,13 @@ function dex_bccf_autodetect_language()
                       substr(strtolower(get_bloginfo('language')),strlen(strtolower(get_bloginfo('language')))-2,2)                      
                       );
     foreach ($options as $option)
+    {
         if (file_exists(dirname( __FILE__ ).$basename.$option.'.js'))
             return $option;
+        $option = str_replace ("-","_", $option);    
+        if (file_exists(dirname( __FILE__ ).$basename.$option.'.js'))
+            return $option;
+    }  
     return '';
 }
 
