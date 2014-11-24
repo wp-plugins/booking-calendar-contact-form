@@ -255,6 +255,17 @@ Setup area for the built-in antispam captcha verification. Settings fields:
 * Border: Border color.
 * Font: Base font used to render the text. Four options already included.
 
+= Language Support =
+
+The Booking Calendar Contact Form plugin is compatible with all charsets. The troubleshoot area contains options to change the encoding of the plugin database tables if needed.
+
+Translations are supported through PO/MO files located in the Booking Calendar Contact Form  plugin folder "languages".
+
+The following translations are already included in the plugin:
+
+* English
+* Spanish
+
 
 == Screenshots ==
 
