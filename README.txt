@@ -267,6 +267,7 @@ The following translations are already included in the plugin:
 * Spanish
 * French
 * Italian
+* German
 
 
 == Screenshots ==
