@@ -269,6 +269,7 @@ The following translations are already included in the plugin:
 * Italian
 * German
 * Portuguese
+* Portuguese(Brasil)
 
 
 == Screenshots ==
