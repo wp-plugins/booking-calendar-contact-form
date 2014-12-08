@@ -273,6 +273,7 @@ The following translations are already included in the plugin:
 * Russian
 * Czech
 * Danish
+* Finnish
 
 
 == Screenshots ==
