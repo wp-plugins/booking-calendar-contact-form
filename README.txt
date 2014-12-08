@@ -275,6 +275,7 @@ The following translations are already included in the plugin:
 * Danish
 * Finnish
 * Dutch
+* Polish
 
 
 == Screenshots ==
