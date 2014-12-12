@@ -279,6 +279,7 @@ The following translations are already included in the plugin:
 * Slovak
 * Swedish
 * Turkish
+* Catalan
 
 
 == Screenshots ==
