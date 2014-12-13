@@ -280,6 +280,7 @@ The following translations are already included in the plugin:
 * Swedish
 * Turkish
 * Catalan
+* Albanian (sq)
 
 
 == Screenshots ==
