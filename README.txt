@@ -281,6 +281,7 @@ The following translations are already included in the plugin:
 * Turkish
 * Catalan
 * Albanian (sq)
+* Arabic
 
 
 == Screenshots ==
