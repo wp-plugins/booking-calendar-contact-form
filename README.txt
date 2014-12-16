@@ -284,6 +284,7 @@ The following translations are already included in the plugin:
 * Albanian (sq)
 * Arabic (ar)
 * Armenian (hy_AM)
+* Azerbaijani (az)
 
 
 == Screenshots ==
