@@ -282,6 +282,7 @@ The following translations are already included in the plugin:
 * Catalan
 * Albanian (sq)
 * Arabic
+* Afrikaans
 
 
 == Screenshots ==
