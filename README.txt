@@ -280,9 +280,10 @@ The following translations are already included in the plugin:
 * Swedish
 * Turkish
 * Catalan
+* Afrikaans (af)
 * Albanian (sq)
-* Arabic
-* Afrikaans
+* Arabic (ar)
+* Armenian (hy_AM)
 
 
 == Screenshots ==
