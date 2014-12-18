@@ -279,7 +279,6 @@ The following translations are already included in the plugin:
 * Slovak
 * Swedish
 * Turkish
-* Catalan
 * Afrikaans (af)
 * Albanian (sq)
 * Arabic (ar)
@@ -289,6 +288,8 @@ The following translations are already included in the plugin:
 * Belarusian (be_BY)
 * Bosnian
 * Bulgarian
+* Catalan (ca)
+* Chinese (China zh_CN)
 
 
 == Screenshots ==
