@@ -290,6 +290,7 @@ The following translations are already included in the plugin:
 * Bulgarian
 * Catalan (ca)
 * Chinese (China zh_CN)
+* Chinese (Taiwan zh_TW)
 
 
 == Screenshots ==
