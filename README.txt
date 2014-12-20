@@ -292,6 +292,7 @@ The following translations are already included in the plugin:
 * Czech (cs_CZ)
 * Danish (da_DK)
 * Dutch (nl_NL)
+* Esperanto (eo_EO)
 
 
 == Screenshots ==
