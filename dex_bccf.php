@@ -435,18 +435,23 @@ function dex_bccf_get_public_form() {
 
     $button_label = dex_bccf_get_option('vs_text_submitbtn', 'Continue');
     $button_label = ($button_label==''?'Continue':$button_label);
-    define('DEX_AUTH_INCLUDE', true);
+    define('DEX_AUTH_INCLUDE', true);       
     
     if (!DEX_BCCF_DEFAULT_DEFER_SCRIPTS_LOADING) {
+        
+        $prefix_ui = '';
+        if (file_exists(dirname( __FILE__ ).'/../../../wp-includes/js/jquery/ui/jquery.ui.core.min.js'))
+            $prefix_ui = 'jquery.ui.'; 
+                    
 ?>
 <?php $plugin_url = plugins_url('', __FILE__); ?>
 <script> if( typeof jQuery != 'undefined' ) var jQueryBK = jQuery.noConflict(); </script>
 <script type='text/javascript' src='<?php echo $plugin_url.'/../../../wp-includes/js/jquery/jquery.js'; ?>'></script>
-<script type='text/javascript' src='<?php echo $plugin_url.'/../../../wp-includes/js/jquery/ui/jquery.ui.core.min.js'; ?>'></script>
-<script type='text/javascript' src='<?php echo $plugin_url.'/../../../wp-includes/js/jquery/ui/jquery.ui.datepicker.min.js'; ?>'></script>
-<script type='text/javascript' src='<?php echo $plugin_url.'/../../../wp-includes/js/jquery/ui/jquery.ui.widget.min.js'; ?>'></script>
-<script type='text/javascript' src='<?php echo $plugin_url.'/../../../wp-includes/js/jquery/ui/jquery.ui.position.min.js'; ?>'></script>
-<script type='text/javascript' src='<?php echo $plugin_url.'/../../../wp-includes/js/jquery/ui/jquery.ui.tooltip.min.js'; ?>'></script>
+<script type='text/javascript' src='<?php echo $plugin_url.'/../../../wp-includes/js/jquery/ui/'.$prefix_ui.'core.min.js'; ?>'></script>
+<script type='text/javascript' src='<?php echo $plugin_url.'/../../../wp-includes/js/jquery/ui/'.$prefix_ui.'datepicker.min.js'; ?>'></script>
+<script type='text/javascript' src='<?php echo $plugin_url.'/../../../wp-includes/js/jquery/ui/'.$prefix_ui.'widget.min.js'; ?>'></script>
+<script type='text/javascript' src='<?php echo $plugin_url.'/../../../wp-includes/js/jquery/ui/'.$prefix_ui.'position.min.js'; ?>'></script>
+<script type='text/javascript' src='<?php echo $plugin_url.'/../../../wp-includes/js/jquery/ui/'.$prefix_ui.'tooltip.min.js'; ?>'></script>
 <script> 
         var myjQuery = jQuery.noConflict( ); 
         if( typeof jQueryBK != 'undefined' ) {jQuery = jQueryBK;};
