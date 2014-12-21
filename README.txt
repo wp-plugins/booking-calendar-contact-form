@@ -293,6 +293,7 @@ The following translations are already included in the plugin:
 * Danish (da_DK)
 * Dutch (nl_NL)
 * Esperanto (eo_EO)
+* Estonian (et)
 
 
 == Screenshots ==
