@@ -294,6 +294,7 @@ The following translations are already included in the plugin:
 * Estonian (et)
 * Finnish (fi)
 * French (fr_FR)
+* Galician (gl_ES)
 
 
 == Screenshots ==
