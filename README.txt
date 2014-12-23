@@ -266,7 +266,6 @@ The following translations are already included in the plugin:
 * English
 * Spanish
 * Italian
-* German
 * Portuguese
 * Portuguese(Brasil)
 * Russian
@@ -296,6 +295,8 @@ The following translations are already included in the plugin:
 * French (fr_FR)
 * Galician (gl_ES)
 * Georgian (ka_GE)
+* German (de_DE)
+* Greek (el)
 
 
 == Screenshots ==
