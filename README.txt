@@ -298,6 +298,7 @@ The following translations are already included in the plugin:
 * German (de_DE)
 * Greek (el)
 * Hebrew (he_IL)
+* Hindi (hi_IN)
 
 
 == Screenshots ==
