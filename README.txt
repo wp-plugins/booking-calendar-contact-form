@@ -300,6 +300,7 @@ The following translations are already included in the plugin:
 * Hebrew (he_IL)
 * Hindi (hi_IN)
 * Hungarian (hu_HU)
+* Indonesian (id_ID)
 
 
 == Screenshots ==
