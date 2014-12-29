@@ -301,6 +301,7 @@ The following translations are already included in the plugin:
 * Hindi (hi_IN)
 * Hungarian (hu_HU)
 * Indonesian (id_ID)
+* Japanese (ja)
 
 
 == Screenshots ==
