@@ -302,6 +302,7 @@ The following translations are already included in the plugin:
 * Hungarian (hu_HU)
 * Indonesian (id_ID)
 * Japanese (ja)
+* Korean (ko_KR)
 
 
 == Screenshots ==
