@@ -307,6 +307,7 @@ The following translations are already included in the plugin:
 * Lithuanian (lt_LT)
 * Macedonian (mk_MK)
 * Malay (ms_MY)
+* Malayalam (ml_IN)
 
 
 == Screenshots ==
