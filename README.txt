@@ -310,6 +310,7 @@ The following translations are already included in the plugin:
 * Malayalam (ml_IN)
 * Norwegian (nb_NO)
 * Persian (fa_IR)
+* Romanian (ro_RO)
 
 
 == Screenshots ==
