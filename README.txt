@@ -309,6 +309,7 @@ The following translations are already included in the plugin:
 * Malay (ms_MY)
 * Malayalam (ml_IN)
 * Norwegian (nb_NO)
+* Persian (fa_IR)
 
 
 == Screenshots ==
