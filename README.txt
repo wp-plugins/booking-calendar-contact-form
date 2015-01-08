@@ -311,6 +311,7 @@ The following translations are already included in the plugin:
 * Norwegian (nb_NO)
 * Persian (fa_IR)
 * Romanian (ro_RO)
+* Serbian (sr_RS)
 
 
 == Screenshots ==
