@@ -61,6 +61,64 @@ What isn't included in the free version described here?
 
 For information about the pro version check the plugin's page: http://wordpress.dwbooster.com/calendars/booking-calendar-contact-form
 
+= Language Support =
+
+The Booking Calendar Contact Form plugin is compatible with all charsets. The troubleshoot area contains options to change the encoding of the plugin database tables if needed.
+
+Translations are supported through PO/MO files located in the Booking Calendar Contact Form  plugin folder "languages".
+
+The following translations are already included in the plugin:
+
+* English
+* Spanish
+* Italian
+* Portuguese
+* Portuguese(Brasil)
+* Russian
+* Polish
+* Slovak
+* Swedish
+* Turkish
+* Afrikaans (af)
+* Albanian (sq)
+* Arabic (ar)
+* Armenian (hy_AM)
+* Azerbaijani (az)
+* Basque (eu)
+* Belarusian (be_BY)
+* Bosnian
+* Bulgarian
+* Catalan (ca)
+* Chinese (China zh_CN)
+* Chinese (Taiwan zh_TW)
+* Croatian (hr)
+* Czech (cs_CZ)
+* Danish (da_DK)
+* Dutch (nl_NL)
+* Esperanto (eo_EO)
+* Estonian (et)
+* Finnish (fi)
+* French (fr_FR)
+* Galician (gl_ES)
+* Georgian (ka_GE)
+* German (de_DE)
+* Greek (el)
+* Hebrew (he_IL)
+* Hindi (hi_IN)
+* Hungarian (hu_HU)
+* Indonesian (id_ID)
+* Japanese (ja)
+* Korean (ko_KR)
+* Latvian (lv)
+* Lithuanian (lt_LT)
+* Macedonian (mk_MK)
+* Malay (ms_MY)
+* Malayalam (ml_IN)
+* Norwegian (nb_NO)
+* Persian (fa_IR)
+* Romanian (ro_RO)
+* Serbian (sr_RS)
+
 
 == Installation ==
 
@@ -255,63 +313,6 @@ Setup area for the built-in antispam captcha verification. Settings fields:
 * Border: Border color.
 * Font: Base font used to render the text. Four options already included.
 
-= Language Support =
-
-The Booking Calendar Contact Form plugin is compatible with all charsets. The troubleshoot area contains options to change the encoding of the plugin database tables if needed.
-
-Translations are supported through PO/MO files located in the Booking Calendar Contact Form  plugin folder "languages".
-
-The following translations are already included in the plugin:
-
-* English
-* Spanish
-* Italian
-* Portuguese
-* Portuguese(Brasil)
-* Russian
-* Polish
-* Slovak
-* Swedish
-* Turkish
-* Afrikaans (af)
-* Albanian (sq)
-* Arabic (ar)
-* Armenian (hy_AM)
-* Azerbaijani (az)
-* Basque (eu)
-* Belarusian (be_BY)
-* Bosnian
-* Bulgarian
-* Catalan (ca)
-* Chinese (China zh_CN)
-* Chinese (Taiwan zh_TW)
-* Croatian (hr)
-* Czech (cs_CZ)
-* Danish (da_DK)
-* Dutch (nl_NL)
-* Esperanto (eo_EO)
-* Estonian (et)
-* Finnish (fi)
-* French (fr_FR)
-* Galician (gl_ES)
-* Georgian (ka_GE)
-* German (de_DE)
-* Greek (el)
-* Hebrew (he_IL)
-* Hindi (hi_IN)
-* Hungarian (hu_HU)
-* Indonesian (id_ID)
-* Japanese (ja)
-* Korean (ko_KR)
-* Latvian (lv)
-* Lithuanian (lt_LT)
-* Macedonian (mk_MK)
-* Malay (ms_MY)
-* Malayalam (ml_IN)
-* Norwegian (nb_NO)
-* Persian (fa_IR)
-* Romanian (ro_RO)
-* Serbian (sr_RS)
 
 
 == Screenshots ==
