@@ -118,6 +118,7 @@ The following translations are already included in the plugin:
 * Persian (fa_IR)
 * Romanian (ro_RO)
 * Serbian (sr_RS)
+* Slovene (sl_SI)
 
 
 == Installation ==
