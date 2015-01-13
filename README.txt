@@ -70,14 +70,6 @@ Translations are supported through PO/MO files located in the Booking Calendar C
 The following translations are already included in the plugin:
 
 * English
-* Spanish
-* Italian
-* Portuguese
-* Portuguese(Brasil)
-* Russian
-* Polish
-* Slovak
-* Swedish
 * Turkish
 * Afrikaans (af)
 * Albanian (sq)
@@ -107,6 +99,7 @@ The following translations are already included in the plugin:
 * Hindi (hi_IN)
 * Hungarian (hu_HU)
 * Indonesian (id_ID)
+* Italian (it_IT)
 * Japanese (ja)
 * Korean (ko_KR)
 * Latvian (lv)
@@ -116,9 +109,17 @@ The following translations are already included in the plugin:
 * Malayalam (ml_IN)
 * Norwegian (nb_NO)
 * Persian (fa_IR)
+* Polish (pl_PL)
+* Portuguese Brazil(pt_BR)
+* Portuguese (pt_PT)
+* Russian (ru_RU)
 * Romanian (ro_RO)
 * Serbian (sr_RS)
+* Slovak (sk_SK)
 * Slovene (sl_SI)
+* Spanish (es_ES)
+* Swedish (sv_SE)
+* Turkish (tr_TR)
 
 
 == Installation ==
