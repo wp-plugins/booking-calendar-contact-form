@@ -120,6 +120,7 @@ The following translations are already included in the plugin:
 * Spanish (es_ES)
 * Swedish (sv_SE)
 * Turkish (tr_TR)
+* Tamil (ta)
 
 
 == Installation ==
