@@ -348,20 +348,16 @@ Setup area for the built-in antispam captcha verification. Settings fields:
 * New feature for applying taxes
 
 
+Important note: If you are using the Professional version don't update via the WP dashboard but using your personal update link. Contact us if you need further information: http://wordpress.dwbooster.com/support
+
 == Upgrade Notice ==
 
-= 1.0.1 =
-* Interface modifications.
-* Fix for iCal format bug (the events weren't marked as all day events)
-* Compatible the latest WP and jQuery versions
-* Replaced YUI calendar with a jQuery calendar
-* Added support for weekly bookings
+Very Important Note: If you are using the Professional version don't update via the WP dashboard but using your personal update link. Contact us if you need further information: http://wordpress.dwbooster.com/support
+
+= 1.0.2 =
+* Compatible with the latest WordPress versions
 * New language translations
-* Several bug fixes and new features for deposit payments
-* Fixed encoding issues at PayPal
-* Fixed bug in the address of the corner images for partial days mode.
-* CSS styles updates to avoid conflicts with theme stykes
-* New options for customizing the emails
-* New feature for applying taxes
+* Fixed bugs in the language traslations
+* Interface updates
 
 Important note: If you are using the Professional version don't update via the WP dashboard but using your personal update link. Contact us if you need further information: http://wordpress.dwbooster.com/support
