@@ -122,6 +122,7 @@ The following translations are already included in the plugin:
 * Turkish (tr_TR)
 * Tamil (ta)
 * Thai (th)
+* Ukrainian (uk)
 
 
 == Installation ==
