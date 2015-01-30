@@ -81,6 +81,7 @@ The following translations are already included in the plugin:
 * Bosnian
 * Bulgarian
 * Catalan (ca)
+* Central Kurdish (ckb)
 * Chinese (China zh_CN)
 * Chinese (Taiwan zh_TW)
 * Croatian (hr)
