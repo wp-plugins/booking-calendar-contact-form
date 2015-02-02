@@ -440,7 +440,7 @@ function dex_bccf_get_public_form() {
     if (!DEX_BCCF_DEFAULT_DEFER_SCRIPTS_LOADING) {
         
         $prefix_ui = '';
-        if (file_exists(dirname( __FILE__ ).'/../../../wp-includes/js/jquery/ui/jquery.ui.core.min.js'))
+        if (@file_exists(dirname( __FILE__ ).'/../../../wp-includes/js/jquery/ui/jquery.ui.core.min.js'))
             $prefix_ui = 'jquery.ui.'; 
                     
 ?>
