@@ -81,7 +81,7 @@ The following translations are already included in the plugin:
 * Bosnian
 * Bulgarian
 * Catalan (ca)
-* Central Kurdish (ckb)
+* Central Kurdish   (ckb)
 * Chinese (China zh_CN)
 * Chinese (Taiwan zh_TW)
 * Croatian (hr)
@@ -351,6 +351,13 @@ Setup area for the built-in antispam captcha verification. Settings fields:
 * New feature for applying taxes
 
 
+= 1.0.2 =
+* Compatible with the latest WordPress versions
+* New language translations
+* Fixed bugs in the language traslations
+* Interface updates
+* Fixed warning that appeared with PHP safe mode restrictions 
+
 Important note: If you are using the Professional version don't update via the WP dashboard but using your personal update link. Contact us if you need further information: http://wordpress.dwbooster.com/support
 
 == Upgrade Notice ==
@@ -362,5 +369,6 @@ Very Important Note: If you are using the Professional version don't update via 
 * New language translations
 * Fixed bugs in the language traslations
 * Interface updates
+* Fixed warning that appeared with PHP safe mode restrictions 
 
 Important note: If you are using the Professional version don't update via the WP dashboard but using your personal update link. Contact us if you need further information: http://wordpress.dwbooster.com/support
