@@ -10,7 +10,7 @@ if (!defined('CP_BCCF_CALENDAR_ID'))
     define ('CP_BCCF_CALENDAR_ID',intval($_GET["cal"]));
 
 global $wpdb;
-$mycalendarrows = $wpdb->get_results( 'SELECT * FROM '.DEX_BCCF_CONFIG_TABLE_NAME .' WHERE `'.TDE_BCCFCONFIG_ID.'`='.CP_BCCF_CALENDAR_ID);
+$mycalendarrows = $wpdb->get_results( 'SELECT * FROM '.DEX_BCCF_CONFIG_TABLE_NAME .' WHERE `'.TDE_BCCFCONFIG_ID.'`='.intval(CP_BCCF_CALENDAR_ID));
 
 $message = "";
 
