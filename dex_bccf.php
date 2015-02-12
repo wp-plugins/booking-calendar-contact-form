@@ -983,10 +983,10 @@ function dex_bccf_check_IPN_verification() {
 	if ($payment_type == 'echeck' && $payment_status != 'Pending')
 	    return;
 
-    $myrows = $wpdb->get_results( "SELECT * FROM ".DEX_BCCF_TABLE_NAME." WHERE id=".$itemnumber );
+    $myrows = $wpdb->get_results( "SELECT * FROM ".DEX_BCCF_TABLE_NAME." WHERE id=".intval($itemnumber) );
     $params = unserialize($myrows[0]->buffered_date);
 
-    dex_process_ready_to_go_bccf($_GET["itemnumber"], $payer_email, $params);
+    dex_process_ready_to_go_bccf(intval($_GET["itemnumber"]), $payer_email, $params);
 
     echo 'OK';
 
