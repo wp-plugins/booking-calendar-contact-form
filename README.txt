@@ -356,7 +356,8 @@ Setup area for the built-in antispam captcha verification. Settings fields:
 * New language translations
 * Fixed bugs in the language traslations
 * Interface updates
-* Fixed warning that appeared with PHP safe mode restrictions 
+* Fixed warning that appeared with PHP safe mode restrictions
+* Sanitized GET parameters used in queries 
 
 Important note: If you are using the Professional version don't update via the WP dashboard but using your personal update link. Contact us if you need further information: http://wordpress.dwbooster.com/support
 
@@ -370,5 +371,6 @@ Very Important Note: If you are using the Professional version don't update via 
 * Fixed bugs in the language traslations
 * Interface updates
 * Fixed warning that appeared with PHP safe mode restrictions 
+* Sanitized GET parameters used in queries
 
 Important note: If you are using the Professional version don't update via the WP dashboard but using your personal update link. Contact us if you need further information: http://wordpress.dwbooster.com/support
