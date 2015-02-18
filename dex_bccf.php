@@ -1352,7 +1352,7 @@ function dex_bccf_calendar_delete($ret) {
 function cp_bccf_get_site_url()
 {
     $url = parse_url(get_site_url());
-    $url = rtrim($url["path"],"/");
+    $url = rtrim(@$url["path"],"/");
     return $url;
 }
 
