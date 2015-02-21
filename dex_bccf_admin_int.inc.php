@@ -110,7 +110,7 @@ for ($k=1;$k<100;$k++)
 
 
    <script>
-   var pathCalendar = "<?php echo cp_bccf_get_site_url(); ?>/";
+   var pathCalendar = "<?php echo cp_bccf_get_site_url(true); ?>/";
    var pathCalendar_full = pathCalendar + "wp-content/plugins/<?php echo basename(dirname(__FILE__));?>/css/images/corners";
    </script>
 
@@ -932,7 +932,7 @@ for ($k=1;$k<100;$k++)
                     dateFormat: 'yy-mm-dd'
                  });
   });
-  $j('#dex_noseasons_availmsg').load('<?php echo cp_bccf_get_site_url(); ?>/?dex_bccf=loadseasonprices&inAdmin=1&dex_item=<?php echo CP_BCCF_CALENDAR_ID; ?>');
+  $j('#dex_noseasons_availmsg').load('<?php echo cp_bccf_get_site_url(true); ?>/?dex_bccf=loadseasonprices&inAdmin=1&dex_item=<?php echo CP_BCCF_CALENDAR_ID; ?>');
   $j('#dex_dc_subcseasons').click (function() {
                                var code = $j('#dex_dc_price').val();
                                var dfrom = $j('#dex_dc_season_dfrom').val();
@@ -945,12 +945,12 @@ for ($k=1;$k<100;$k++)
                                if (dfrom == '') { alert('Please enter an expiration date for the code'); return; }
                                if (dto == '') { alert('Please enter an expiration date for the code'); return; }
                                var params = '&add=1&dto='+encodeURI(dto)+'&dfrom='+encodeURI(dfrom)+'&price='+encodeURI(code);
-                               $j('#dex_noseasons_availmsg').load('<?php echo cp_bccf_get_site_url(); ?>/?dex_bccf=loadseasonprices&inAdmin=1&dex_item=<?php echo CP_BCCF_CALENDAR_ID; ?>'+params);
+                               $j('#dex_noseasons_availmsg').load('<?php echo cp_bccf_get_site_url(true); ?>/?dex_bccf=loadseasonprices&inAdmin=1&dex_item=<?php echo CP_BCCF_CALENDAR_ID; ?>'+params);
                                $j('#dex_dc_price').val();
                              });
   function dex_delete_season_price(id)
   {
-     $j('#dex_noseasons_availmsg').load('<?php echo cp_bccf_get_site_url(); ?>/?dex_bccf=loadseasonprices&inAdmin=1&dex_item=<?php echo CP_BCCF_CALENDAR_ID; ?>&delete=1&code='+id);
+     $j('#dex_noseasons_availmsg').load('<?php echo cp_bccf_get_site_url(true); ?>/?dex_bccf=loadseasonprices&inAdmin=1&dex_item=<?php echo CP_BCCF_CALENDAR_ID; ?>&delete=1&code='+id);
   }
 
   function showcurrencies()
