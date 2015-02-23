@@ -1232,7 +1232,7 @@ function dex_bccf_calendar_ajaxevent() {
     if ( ! isset( $_GET['dex_bccf_calendar_load2'] ))
 		return;
 
-	@ob_clean();
+	//@ob_clean();
     header("Cache-Control: no-store, no-cache, must-revalidate");
     header("Pragma: no-cache");
 
