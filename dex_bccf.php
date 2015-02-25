@@ -189,8 +189,8 @@ function _dex_bccf_install() {
          email VARCHAR(250) DEFAULT '' NOT NULL,
          phone VARCHAR(250) DEFAULT '' NOT NULL,
          notifyto VARCHAR(250) DEFAULT '' NOT NULL,
-         question text,
-         buffered_date text,
+         question mediumtext,
+         buffered_date mediumtext,
          UNIQUE KEY id (id)
          );";
     $wpdb->query($sql);
@@ -206,7 +206,7 @@ function _dex_bccf_install() {
                    "`".TDE_BCCFCONFIG_MSG."` varchar(255) NOT NULL default '',".
                    "`".TDE_BCCFCALDELETED_FIELD."` tinyint(3) unsigned default NULL,".
                    "`conwer` INT NOT NULL,".
-                   "`form_structure` text,".
+                   "`form_structure` mediumtext,".
                    "`calendar_language` varchar(10) DEFAULT '' NOT NULL,".
                    "`calendar_mode` varchar(10) DEFAULT '' NOT NULL,".
                    "`calendar_dateformat` varchar(10) DEFAULT '',".
@@ -295,7 +295,7 @@ function _dex_bccf_install() {
                    "`".TDE_BCCFDATA_DATETIME_S."`datetime NOT NULL default '0000-00-00 00:00:00',".
                    "`".TDE_BCCFDATA_DATETIME_E."`datetime NOT NULL default '0000-00-00 00:00:00',".
                    "`".TDE_BCCFDATA_TITLE."` varchar(250) default NULL,".
-                   "`".TDE_BCCFDATA_DESCRIPTION."` text,".
+                   "`".TDE_BCCFDATA_DESCRIPTION."` mediumtext,".
                    "`viadmin` varchar(10) DEFAULT '0' NOT NULL,".
                    "`color` varchar(10),".
                    "PRIMARY KEY (`".TDE_BCCFDATA_ID."`)) ;";
