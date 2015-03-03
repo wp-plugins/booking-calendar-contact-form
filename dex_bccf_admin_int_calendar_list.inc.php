@@ -12,7 +12,7 @@ global $wpdb;
 $message = "";
 if (isset($_GET['u']) && $_GET['u'] != '')
 {
-    $wpdb->query('UPDATE `'.DEX_BCCF_CONFIG_TABLE_NAME.'` SET conwer='.$_GET["owner"].',`'.TDE_BCCFCALDELETED_FIELD.'`='.$_GET["public"].',`'.TDE_BCCFCONFIG_USER.'`="'.$_GET["name"].'" WHERE `'.TDE_BCCFCONFIG_ID.'`='.$_GET['u']);           
+    $wpdb->query('UPDATE `'.DEX_BCCF_CONFIG_TABLE_NAME.'` SET conwer='.intval($_GET["owner"]).',`'.TDE_BCCFCALDELETED_FIELD.'`='.intval($_GET["public"]).',`'.TDE_BCCFCONFIG_USER.'`="'.$_GET["name"].'" WHERE `'.TDE_BCCFCONFIG_ID.'`='.intval($_GET['u']));           
     $message = "Item updated";        
 }
 else if (isset($_GET['ac']) && $_GET['ac'] == 'st')

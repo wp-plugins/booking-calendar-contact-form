@@ -33,7 +33,7 @@ $records_per_page = 50;
 $cond = '';
 if (is_numeric($_GET["search"]))
 {
-    if ($_GET["search"] != '') $cond .= " AND (title like '%".esc_sql($_GET["search"])."%' OR description LIKE '%".esc_sql($_GET["search"])."%' OR id=".$_GET["search"].")";
+    if ($_GET["search"] != '') $cond .= " AND (title like '%".esc_sql($_GET["search"])."%' OR description LIKE '%".esc_sql($_GET["search"])."%' OR id=".intval($_GET["search"]).")";
 }
 else
 {
