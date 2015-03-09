@@ -20,7 +20,7 @@ else if (isset($_GET['ac']) && $_GET['ac'] == 'st')
     update_option( 'CP_BCCF_LOAD_SCRIPTS', ($_GET["scr"]=="1"?"0":"1") );   
     if ($_GET["chs"] != '')
     {
-        $target_charset = $_GET["chs"];
+        $target_charset = esc_sql($_GET["chs"]);
         $tables = array( $wpdb->prefix.DEX_BCCF_TABLE_NAME_NO_PREFIX, $wpdb->prefix.DEX_BCCF_CALENDARS_TABLE_NAME_NO_PREFIX, $wpdb->prefix.DEX_BCCF_CONFIG_TABLE_NAME_NO_PREFIX );                
         foreach ($tables as $tab)
         {  
