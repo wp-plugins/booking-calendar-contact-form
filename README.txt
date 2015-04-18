@@ -361,20 +361,24 @@ Setup area for the built-in antispam captcha verification. Settings fields:
 * Fixed issue with the site home URL in WP with folders in non-default locations
 * Fixed bug in the url generated for the IPN under HTTPS connections
 
+= 1.0.3 =
+* Fixed bug in the function that generates the url for the ipn notification.
+* Update for SQL issues - sanitized values.
+* Update to make the IPN work over SSL connections.
+* Fixed bug in email processing.
+* Updates to minimize conflicts with third party themes and plugins.
+
 Important note: If you are using the Professional version don't update via the WP dashboard but using your personal update link. Contact us if you need further information: http://wordpress.dwbooster.com/support
 
 == Upgrade Notice ==
 
 Very Important Note: If you are using the Professional version don't update via the WP dashboard but using your personal update link. Contact us if you need further information: http://wordpress.dwbooster.com/support
 
-= 1.0.2 =
-* Compatible with the latest WordPress versions
-* New language translations
-* Fixed bugs in the language traslations
-* Interface updates
-* Fixed warning that appeared with PHP safe mode restrictions 
-* Sanitized GET parameters used in queries
-* Fixed issue with the site home URL in WP with folders in non-default locations
-* Fixed bug in the url generated for the IPN under HTTPS connections
+= 1.0.3 =
+* Fixed bug in the function that generates the url for the ipn notification.
+* Update for SQL issues - sanitized values.
+* Update to make the IPN work over SSL connections.
+* Fixed bug in email processing.
+* Updates to minimize conflicts with third party themes and plugins.
 
 Important note: If you are using the Professional version don't update via the WP dashboard but using your personal update link. Contact us if you need further information: http://wordpress.dwbooster.com/support

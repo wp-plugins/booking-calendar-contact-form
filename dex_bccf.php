@@ -3,7 +3,7 @@
 Plugin Name: Booking Calendar Contact Form
 Plugin URI: http://wordpress.dwbooster.com/calendars/booking-calendar-contact-form
 Description: Create a booking form with a reservation calendar or a classic contact form, connected to a PayPal payment button.
-Version: 1.0.2
+Version: 1.0.3
 Author: CodePeople.net
 Author URI: http://codepeople.net
 License: GPL
