@@ -367,6 +367,7 @@ Setup area for the built-in antispam captcha verification. Settings fields:
 * Update to make the IPN work over SSL connections.
 * Fixed bug in email processing.
 * Updates to minimize conflicts with third party themes and plugins.
+* Compatible with the latest WordPress 4.2.x version
 
 Important note: If you are using the Professional version don't update via the WP dashboard but using your personal update link. Contact us if you need further information: http://wordpress.dwbooster.com/support
 
