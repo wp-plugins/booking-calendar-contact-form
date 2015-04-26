@@ -1170,7 +1170,7 @@ function dex_bccf_save_options()
          'enable_paypal' => @$_POST["enable_paypal"],
          'paypal_email' => $_POST["paypal_email"],
          'request_cost' => $_POST["request_cost"],
-         'max_slots' => $_POST["max_slots"],
+         'max_slots' => @$_POST["max_slots"],
          'paypal_product_name' => $_POST["paypal_product_name"],
          'currency' => $_POST["currency"],
          'url_ok' => $_POST["url_ok"],
