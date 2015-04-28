@@ -12,7 +12,7 @@ myjQuery = (typeof myjQuery != 'undefined' ) ? myjQuery : jQuery;myjQuery(functi
 		'Xul','Ago','Set','Out','Nov','Dec'],
 		dayNames: ['Domingo','Luns','Martes','Mércores','Xoves','Venres','Sábado'],
 		dayNamesShort: ['Dom','Lun','Mar','Mér','Xov','Ven','Sáb'],
-		dayNamesMin: ['Do','Lu','Ma','Mé','Xo','Ve','Sá'],
+		dayNamesMin: ['Do','Lu','Ma','Me','Xo','Ve','Sa'],
 		weekHeader: 'Sm',
 		dateFormat: 'dd/mm/yy',
 		firstDay: 1,
