@@ -1188,7 +1188,7 @@ function dex_bccf_save_options()
          'enable_paypal_option_yes' => (@$_POST['enable_paypal_option_yes']?$_POST['enable_paypal_option_yes']:DEX_BCCF_DEFAULT_PAYPAL_OPTION_YES),
          'enable_paypal_option_no' => (@$_POST['enable_paypal_option_no']?$_POST['enable_paypal_option_no']:DEX_BCCF_DEFAULT_PAYPAL_OPTION_NO),
 
-         'vs_use_validation' => $_POST['vs_use_validation'],
+         //'vs_use_validation' => $_POST['vs_use_validation'],
          'vs_text_is_required' => $_POST['vs_text_is_required'],
          'vs_text_is_email' => $_POST['vs_text_is_email'],
          'vs_text_datemmddyyyy' => $_POST['vs_text_datemmddyyyy'],
