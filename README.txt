@@ -367,7 +367,11 @@ Setup area for the built-in antispam captcha verification. Settings fields:
 * Update to make the IPN work over SSL connections.
 * Fixed bug in email processing.
 * Updates to minimize conflicts with third party themes and plugins.
-* Compatible with the latest WordPress 4.2.x version
+
+= 1.0.4 =
+* New feature to show/hide the calculated cost below the calendar
+* CSS update to avoid conflicts with the new WP default theme
+* Compatible with the latest WordPress 4.2.1 version
 
 Important note: If you are using the Professional version don't update via the WP dashboard but using your personal update link. Contact us if you need further information: http://wordpress.dwbooster.com/support
 
@@ -375,11 +379,9 @@ Important note: If you are using the Professional version don't update via the W
 
 Very Important Note: If you are using the Professional version don't update via the WP dashboard but using your personal update link. Contact us if you need further information: http://wordpress.dwbooster.com/support
 
-= 1.0.3 =
-* Fixed bug in the function that generates the url for the ipn notification.
-* Update for SQL issues - sanitized values.
-* Update to make the IPN work over SSL connections.
-* Fixed bug in email processing.
-* Updates to minimize conflicts with third party themes and plugins.
+= 1.0.4 =
+* New feature to show/hide the calculated cost below the calendar
+* CSS update to avoid conflicts with the new WP default theme
+* Compatible with the latest WordPress 4.2.1 version
 
 Important note: If you are using the Professional version don't update via the WP dashboard but using your personal update link. Contact us if you need further information: http://wordpress.dwbooster.com/support
