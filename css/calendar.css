@@ -114,3 +114,5 @@
 .comboColor .listColor.partialDate{position:absolute;left:24px;border:1px solid black;padding:1px;background:#fff;width:145px}
 .comboColor .listColor div {float:left;width:20px;height:20px;border:1px solid white;margin:1px;}
 .comboColor .listColor div:hover {border:1px solid black;}
+
+a.ui-datepicker-prev, a.ui-datepicker-next  { border: 0px; }

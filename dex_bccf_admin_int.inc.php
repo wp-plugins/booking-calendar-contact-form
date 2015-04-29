@@ -299,6 +299,14 @@ for ($k=1;$k<100;$k++)
        </tr>
        <tr>
         <td valign="top" colspan="4">
+           <div style="width:190px;float:left"> 
+          <strong>Show cost below calendar?</strong><br />
+             <?php $value = dex_bccf_get_option('calendar_showcost','1'); ?>
+             <select name="calendar_showcost">
+               <option value="1" <?php if ($value == '1') echo ' selected="selected"'; ?>>Yes</option>
+               <option value="0" <?php if ($value == '0') echo ' selected="selected"'; ?>>No</option>
+             </select>            
+           </div>            
            <div style="width:140px;float:left"> 
              <strong>Reservation Mode</strong><br />
              <?php $value = dex_bccf_get_option('calendar_mode',DEX_BCCF_DEFAULT_CALENDAR_MODE); ?>

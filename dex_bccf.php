@@ -227,6 +227,7 @@ function _dex_bccf_install() {
                    "`calendar_holidaysdays` varchar(20) DEFAULT '1111111' NOT NULL,".
                    "`calendar_startresdays` varchar(20) DEFAULT '1111111' NOT NULL,".
                    "`calendar_fixedreslength` varchar(20) DEFAULT '1' NOT NULL,".
+                   "`calendar_showcost` varchar(1) DEFAULT '1' NOT NULL,".
                    // paypal
                    "`enable_paypal` varchar(10) DEFAULT '' NOT NULL,".
                    "`paypal_email` varchar(255) DEFAULT '' NOT NULL ,".
@@ -1121,6 +1122,7 @@ function dex_bccf_save_options()
     dex_bccf_add_field_verify(DEX_BCCF_CONFIG_TABLE_NAME, "calendar_depositenable", "varchar(20) DEFAULT '' NOT NULL");
     dex_bccf_add_field_verify(DEX_BCCF_CONFIG_TABLE_NAME, "calendar_depositamount", "varchar(20) DEFAULT '' NOT NULL");
     dex_bccf_add_field_verify(DEX_BCCF_CONFIG_TABLE_NAME, "calendar_deposittype", "varchar(20) DEFAULT '' NOT NULL"); 
+    dex_bccf_add_field_verify(DEX_BCCF_CONFIG_TABLE_NAME, "calendar_showcost", "varchar(1) DEFAULT '' NOT NULL");
     
     dex_bccf_add_field_verify(DEX_BCCF_CONFIG_TABLE_NAME,'request_taxes'," varchar(20) NOT NULL default ''");    
     
@@ -1164,6 +1166,7 @@ function dex_bccf_save_options()
          
          'calendar_startres' => @$_POST["calendar_startres"],
          'calendar_holidays' => @$_POST["calendar_holidays"],
+         'calendar_showcost' => $_POST["calendar_showcost"],
 
          'cu_user_email_field' => $_POST['cu_user_email_field'],
 

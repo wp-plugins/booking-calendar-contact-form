@@ -86,7 +86,7 @@ var pathCalendar_full = pathCalendar + "wp-content/plugins/<?php echo basename(d
   foreach ($myrows as $item)
       echo '<div id="calarea'.$item->id.'" style="display:none" class="rcalendar"></div>';
 ?>
-<div id="bccf_display_price">
+<div id="bccf_display_price" <?php if (dex_bccf_get_option('calendar_showcost','1') == '0') echo 'style="display:none"'; ?>>
 Price:
 </div>
 <?php } else { ?><input name="dex_item" id="dex_item" type="hidden" value="<?php echo $myrows[0]->id; ?>" /><?php } ?>
