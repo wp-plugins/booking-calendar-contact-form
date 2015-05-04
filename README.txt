@@ -181,6 +181,7 @@ That can be changed in the "troubleshoot area" located below the list of booking
 
 A: In addition to the possibility of editing the email contents you can use the following tags:
 
+* **&lt;%itemnumber%&gt;:** Request ID.
 * **&lt;%startdate%&gt;:** Start date for the booking.
 * **&lt;%enddate%%&gt;:** End date for the booking.
 * **&lt;%totalcost%%&gt;:** Total cost.
