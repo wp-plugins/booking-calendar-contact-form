@@ -372,7 +372,7 @@ Setup area for the built-in antispam captcha verification. Settings fields:
 = 1.0.4 =
 * New feature to show/hide the calculated cost below the calendar
 * CSS update to avoid conflicts with the new WP default theme
-* Compatible with the latest WordPress 4.2.1 version
+* Compatible with the latest WordPress 4.2.2 version
 
 Important note: If you are using the Professional version don't update via the WP dashboard but using your personal update link. Contact us if you need further information: http://wordpress.dwbooster.com/support
 
@@ -383,6 +383,6 @@ Very Important Note: If you are using the Professional version don't update via 
 = 1.0.4 =
 * New feature to show/hide the calculated cost below the calendar
 * CSS update to avoid conflicts with the new WP default theme
-* Compatible with the latest WordPress 4.2.1 version
+* Compatible with the latest WordPress 4.2.2 version
 
 Important note: If you are using the Professional version don't update via the WP dashboard but using your personal update link. Contact us if you need further information: http://wordpress.dwbooster.com/support
