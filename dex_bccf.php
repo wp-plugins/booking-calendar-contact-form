@@ -1405,6 +1405,7 @@ function dex_bccf_translate_json($str)
     {
         $form_data[0][$i]->title = __($form_data[0][$i]->title,'bccf');   
         $form_data[0][$i]->userhelpTooltip = __($form_data[0][$i]->userhelpTooltip,'bccf'); 
+        $form_data[0][$i]->userhelp = __($form_data[0][$i]->userhelp,'bccf'); 
         if ($form_data[0][$i]->ftype == 'fCommentArea')
             $form_data[0][$i]->userhelp = __($form_data[0][$i]->userhelp,'bccf');   
         else 
