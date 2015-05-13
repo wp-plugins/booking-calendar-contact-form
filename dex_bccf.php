@@ -1331,7 +1331,7 @@ function dex_bccf_calendar_add($ret) {
     dex_bccf_add_field_verify(TDE_BCCFCALENDAR_DATA_TABLE, "color", "varchar(10)");
 
     $wpdb->query("insert into ".TDE_BCCFCALENDAR_DATA_TABLE."(viadmin,reservation_calendar_id,datatime_s,datatime_e,title,description,color) ".
-                " values(1,".esc_sql($calid).",'".esc_sql($_POST["startdate"])."','".esc_sql($_POST["enddate"])."','".esc_sql($_POST["title"])."','".esc_sql($_POST["description"])."','".esc_sql($_POST["color"])."')");
+                " values(1,".intval($calid).",'".esc_sql($_POST["startdate"])."','".esc_sql($_POST["enddate"])."','".esc_sql($_POST["title"])."','".esc_sql($_POST["description"])."','".esc_sql($_POST["color"])."')");
     $ret['events'][0] = array("id"=>$wpdb->insert_id,"dl"=>date("m/d/Y", strtotime($_POST["startdate"])),"du"=>date("m/d/Y", strtotime($_POST["enddate"])),"title"=>$_POST["title"],"description"=>$_POST["description"],"c"=>$_POST["color"]);
     return $ret;
 }
@@ -1342,13 +1342,13 @@ function dex_bccf_calendar_update($ret) {
     dex_bccf_add_field_verify(TDE_BCCFCALENDAR_DATA_TABLE, "viadmin", "varchar(10) DEFAULT '0' NOT NULL");
     dex_bccf_add_field_verify(TDE_BCCFCALENDAR_DATA_TABLE, "color", "varchar(10)");
 
-    $wpdb->query("update ".TDE_BCCFCALENDAR_DATA_TABLE." set title='".esc_sql($_POST["title"])."',description='".esc_sql($_POST["description"])."',color='".esc_sql($_POST["color"])."' where id=".esc_sql($_POST["id"]) );
+    $wpdb->query("update ".TDE_BCCFCALENDAR_DATA_TABLE." set title='".esc_sql($_POST["title"])."',description='".esc_sql($_POST["description"])."',color='".esc_sql($_POST["color"])."' where id=".intval($_POST["id"]) );
     return $ret;
 }
 
 function dex_bccf_calendar_delete($ret) {
     global $wpdb;
-    $wpdb->query( "delete from ".TDE_BCCFCALENDAR_DATA_TABLE." where id=".esc_sql($_POST["id"]) );
+    $wpdb->query( "delete from ".TDE_BCCFCALENDAR_DATA_TABLE." where id=".intval($_POST["id"]) );
     return $ret;
 }
 
