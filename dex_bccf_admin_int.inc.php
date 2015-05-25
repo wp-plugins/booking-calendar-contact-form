@@ -110,7 +110,7 @@ for ($k=1;$k<100;$k++)
 
 
    <script>
-   var pathCalendar = "<?php echo cp_bccf_get_site_url(true); ?>/";
+   var pathCalendar = "<?php echo cp_bccf_get_site_url(); ?>/";
    var pathCalendar_full = pathCalendar + "wp-content/plugins/<?php echo basename(dirname(__FILE__));?>/css/images/corners";
    </script>
 
