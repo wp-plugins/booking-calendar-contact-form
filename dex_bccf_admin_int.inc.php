@@ -227,7 +227,7 @@ for ($k=1;$k<100;$k++)
 <option <?php if ($v == 'hu') echo 'selected'; ?> value="hu">Hungarian</option>
 <option <?php if ($v == 'is') echo 'selected'; ?> value="is">Icelandic</option>
 <option <?php if ($v == 'id') echo 'selected'; ?> value="id">Indonesian</option>
-<option <?php if ($v == 'it') echo 'selected'; ?> value="it">Italian</option>
+<option <?php if ($v == 'it') echo 'selected'; ?> value="it_IT">Italian</option>
 <option <?php if ($v == 'it-CH') echo 'selected'; ?> value="it-CH">Italian (Switzerland)</option>
 <option <?php if ($v == 'ja') echo 'selected'; ?> value="ja">Japanese</option>
 <option <?php if ($v == 'kk') echo 'selected'; ?> value="kk">Kazakh</option>
