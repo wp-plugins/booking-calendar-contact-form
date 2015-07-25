@@ -69,7 +69,7 @@ myjQuery(function(){
 		    $(".myover").remove();
             $(".myoverAdd").dialog( "close" );
 		    td.append("<div class=\""+classn+"\" >"+eventText+"</div>");
-                $("."+classn).dialog({width:opt.dialogWidth,
+                $("."+classn).dialog({width:opt.dialogWidth, height: 300,
                   close: function( event, ui ) {
                     if ($(this).hasClass("myoverAdd"))
                     {

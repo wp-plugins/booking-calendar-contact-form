@@ -183,8 +183,8 @@ myjQuery = (typeof myjQuery != 'undefined' ) ? myjQuery : jQuery;
  function doValidate(form)
  {
     $dexQuery = (typeof myjQuery != 'undefined' ) ? myjQuery : jQuery;<?php if ($option_calendar_enabled != 'false') { ?>
-    var d1 = new Date(document.getElementById("selYear_startcalarea"+dex_current_calendar_item ).value,document.getElementById("selMonth_startcalarea"+dex_current_calendar_item ).value,document.getElementById("selDay_startcalarea"+dex_current_calendar_item ).value);
-    var d2 = new Date(document.getElementById("selYear_endcalarea"+dex_current_calendar_item ).value,document.getElementById("selMonth_endcalarea"+dex_current_calendar_item ).value,document.getElementById("selDay_endcalarea"+dex_current_calendar_item ).value);
+    var d1 = new Date(document.getElementById("selYear_startcalarea"+dex_current_calendar_item ).value,document.getElementById("selMonth_startcalarea"+dex_current_calendar_item ).value-1,document.getElementById("selDay_startcalarea"+dex_current_calendar_item ).value);
+    var d2 = new Date(document.getElementById("selYear_endcalarea"+dex_current_calendar_item ).value,document.getElementById("selMonth_endcalarea"+dex_current_calendar_item ).value-1,document.getElementById("selDay_endcalarea"+dex_current_calendar_item ).value);
     var ONE_DAY = 1000 * 60 * 60 * 24;
     var nights = Math.round(Math.abs(d2.getTime() - d1.getTime()) / ONE_DAY)<?php if (dex_bccf_get_option('calendar_mode',DEX_BCCF_DEFAULT_CALENDAR_MODE) == 'false') echo '+1'; ?>;<?php
     $minn = dex_bccf_get_option('calendar_minnights', '0'); if ($minn == '') $minn = '0';
