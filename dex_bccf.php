@@ -726,7 +726,7 @@ function dex_bccf_check_posted_data()
     $params["startdate"] = $_POST["Date_s"];
     $params["enddate"] = $_POST["Date_e"];
     $params["discount"] = @$discount_note;
-    $params["coupon"] = ($coupon?$coupon->code:"");
+    $params["coupon"] = "";
     $params["service"] = $services_text;
     $params["totalcost"] = dex_bccf_get_option('currency', DEX_BCCF_DEFAULT_CURRENCY).' '.$price;
 
