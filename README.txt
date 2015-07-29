@@ -374,15 +374,29 @@ Setup area for the built-in antispam captcha verification. Settings fields:
 * CSS update to avoid conflicts with the new WP default theme
 * Compatible with the latest WordPress 4.2.2 version
 
-Important note: If you are using the Professional version don't update via the WP dashboard but using your personal update link. Contact us if you need further information: http://wordpress.dwbooster.com/support
+= 1.0.5 =
+* Fixed notice warning in not active feature.
+* Fixed bug in date calculation.
+* Fixed IPN address under SSL connections.
+* CSS update to fix the floating dialog height.
+* Fixed conflict of captcha image with zLib library
+* Fixed bug in the path calculated for the admin area.
+* Translations updated.
+* Improved security.
+* Compatible with the latest WordPress 4.2.3 
+
 
 == Upgrade Notice ==
 
-Very Important Note: If you are using the Professional version don't update via the WP dashboard but using your personal update link. Contact us if you need further information: http://wordpress.dwbooster.com/support
-
-= 1.0.4 =
-* New feature to show/hide the calculated cost below the calendar
-* CSS update to avoid conflicts with the new WP default theme
-* Compatible with the latest WordPress 4.2.2 version
+= 1.0.5 =
+* Fixed notice warning in not active feature.
+* Fixed bug in date calculation.
+* Fixed IPN address under SSL connections.
+* CSS update to fix the floating dialog height.
+* Fixed conflict of captcha image with zLib library
+* Fixed bug in the path calculated for the admin area.
+* Translations updated.
+* Improved security.
+* Compatible with the latest WordPress 4.2.3 
 
 Important note: If you are using the Professional version don't update via the WP dashboard but using your personal update link. Contact us if you need further information: http://wordpress.dwbooster.com/support
