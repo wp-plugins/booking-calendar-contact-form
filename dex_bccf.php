@@ -1236,9 +1236,12 @@ function dex_bccf_calendar_ajaxevent() {
     if ( ! isset( $_GET['dex_bccf_calendar_load2'] ))
 		return;
 
-	//@ob_clean();
-    header("Cache-Control: no-store, no-cache, must-revalidate");
-    header("Pragma: no-cache");
+	if (!ini_get("zlib.output_compression")) 
+	{ 
+	    @ob_clean();
+        header("Cache-Control: no-store, no-cache, must-revalidate");
+        header("Pragma: no-cache");
+    }    
 
     $ret = array();
     $ret['events'] = array();
