@@ -44,7 +44,7 @@ if ($message) echo "<div id='setting-error-settings_updated' class='updated sett
 
 ?>
 <div class="wrap">
-<h2>Booking Calendar Contact Form</h2>
+<h1>Booking Calendar Contact Form</h1>
 
 <script type="text/javascript">
  

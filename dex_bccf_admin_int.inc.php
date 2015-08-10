@@ -47,7 +47,7 @@ for ($k=1;$k<100;$k++)
 
 
 <div class="wrap">
-<h2>Booking Calendar Contact Form - Manage Calendar Availability</h2>
+<h1>Booking Calendar Contact Form - Manage Calendar Availability</h1>
 
 <input type="button" name="backbtn" value="Back to items list..." onclick="document.location='admin.php?page=dex_bccf';">
 

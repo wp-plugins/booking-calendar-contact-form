@@ -62,7 +62,7 @@ $option_calendar_enabled = dex_bccf_get_option('calendar_enabled', DEX_BCCF_DEFA
  }
 </script>
 <div class="wrap">
-<h2>Booking Calendar Contact Form - Bookings List</h2>
+<h1>Booking Calendar Contact Form - Bookings List</h1>
 
 <input type="button" name="backbtn" value="Back to items list..." onclick="document.location='admin.php?page=dex_bccf';">
 
